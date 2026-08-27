@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-27T04:03:53.908Z",
+  "measuredAt": "2026-08-27T09:15:05.340Z",
   "scope": "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
   "conditions": {
     "nativeWebMcp": true,
@@ -14,6 +14,7 @@
       "version": "0.0.3",
       "commandExitCode": 0,
       "matchedCorrectCalls": 2,
+      "rejectedWrongArgumentControls": 2,
       "collateralDefectsPresentAfterMatchedCall": 2
     },
     "webmcpEvalsPlusManualPlaywright": {
@@ -34,10 +35,10 @@
     }
   },
   "commandDurationsMs": {
-    "evals": 5223,
-    "manualDefect": 16140,
-    "manualFixed": 7382,
-    "actionProofUi": 10962
+    "evals": 4537,
+    "manualDefect": 18007,
+    "manualFixed": 6581,
+    "actionProofUi": 12912
   },
   "success": true
 }

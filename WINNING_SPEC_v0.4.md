@@ -1,6 +1,6 @@
 # ActionProof Top-10 gate specification v0.4
 
-2026-08-27 JST / TSUCHIYA LAB / **Pre-implementation gate result: PASS. Full product implementation remains unauthorized.**
+2026-08-27 JST / TSUCHIYA LAB / **Historical pre-implementation gate: PASS. Full implementation was later authorized in `GO_DECISION.md`.**
 
 This version preserves [v0.3](WINNING_SPEC_v0.3.md) as the concept-selection history and replaces it only for the bounded ActionProof gate described here. The code in this folder is a fictional, disposable gate prototype, not a production product or a customer incident.
 
@@ -60,7 +60,7 @@ The prototype registers two imperative tools with `document.modelContext.registe
 3. invokes it with `document.modelContext.executeTool()`;
 4. records the result separately from the independent observed state.
 
-The automated browser test launches installed Chrome with `--enable-features=WebMCP,WebMCPTesting` and requires the UI to display `Native WebMCP active`. A feature-detected local harness exists only so the visual prototype remains reviewable in browsers without the experimental API; it is explicitly labeled `WebMCP-compatible local harness` and is not presented as a native run.
+The automated browser test launches installed Chrome with `--enable-features=WebMCP,WebMCPTesting` and requires the UI to display `Native WebMCP · 1 context-matched tool`. A feature-detected local harness exists only so the visual prototype remains reviewable in browsers without the experimental API; it is explicitly labeled `WebMCP-compatible local harness` and is not presented as a native run.
 
 Removing WebMCP materially changes the demonstrated job: a normal UI test can exercise the human button path, but it does not prove the separately exposed WebMCP write path. A direct JavaScript callback is not accepted as native evidence. At the same time, Playwright plus native WebMCP execution remains a competent implementation alternative; ActionProof's claim is reduced assertion authoring and an intent-first effect artifact, not exclusive detection capability.
 
@@ -106,7 +106,7 @@ Native WebMCP getTools/executeTool          │
         │                                  │
         ├──── Tool result (PASSED/FAILED)  │
         ▼                                  ▼
-Independent post-action snapshot ── State diff
+Application-owned post-action snapshot ── State diff (independent of return payload)
                                            │
                          ┌─────────────────┼──────────────────┐
                          ▼                 ▼                  ▼
@@ -144,7 +144,7 @@ With the seeded defect, both Alice and Bob become Editors. The same `generateEff
 
 | GO condition | Result | Concrete evidence |
 |---|---:|---|
-| 1. WebMCP-native architecture | **PASS** | `src/webmcp/bridge.ts`; Chrome E2E requires `Native WebMCP active`; action is discovered and invoked with current `document.modelContext` APIs |
+| 1. WebMCP-native architecture | **PASS** | `src/webmcp/bridge.ts`; Chrome E2E requires `Native WebMCP · 1 context-matched tool`; action is discovered and invoked with current `document.modelContext` APIs |
 | 2. Effect-contract generation | **PASS** | `src/core/effect-contract.ts`; contract expands current selection and pre-state into required, unexpected, and invariant checks without per-record assertions |
 | 3. Generalization beyond orders | **PASS** | Permission fixture plus unit/E2E tests uses the identical generator/verifier/bridge/UI |
 | 4. 20-second silent comprehension | **PASS for the implemented gate sequence** | Five visibly separated panels and deterministic 4/4/3/4/5-second reveal; E2E asserts the exact silent labels and state transition |

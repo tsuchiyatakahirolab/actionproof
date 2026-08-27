@@ -4,24 +4,24 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 
 ## 1. WebMCP Leverage
 
-- **UI:** native badge; `WebMCP` action chip; visible separation of intent, invocation, result, and observed effect.
-- **Implementation:** `src/webmcp/bridge.ts` uses `registerTool`, `getTools`, and `executeTool`; model/provider logic is not substituted for WebMCP.
-- **Test:** Playwright launches installed Chrome with `WebMCP,WebMCPTesting` and fails if native mode is absent.
+- **UI:** native badge reports exactly one context-matched tool; `WebMCP` action chip; visible separation of intent, invocation, result, and observed effect.
+- **Implementation:** `src/webmcp/bridge.ts` uses `registerTool`, `getTools`, and `executeTool`; tab changes abort the previous registration; exact enums bind arguments to visible intent; `exposedTo` is same-origin.
+- **Test:** Playwright launches installed Chrome with `WebMCP,WebMCPTesting`, fails if native mode is absent, and asserts the discoverable tool changes from only `cancel_order` to only `change_user_role` with the visible context.
 - **Video:** 17–34 seconds shows the registered action and successful native invocation; narration explains why effect verification wraps the page action boundary.
 - **Human-agent UX:** the human declares the target in UI; the agent can invoke the page tool; the application-owned adapter verifies the result without trusting the return payload.
 
 ## 2. Execution
 
 - **UI:** the 20-second screen makes `ONLY`, `success: true`, `UNEXPECTED`, `REQUESTED 1 · CHANGED 2`, and the split verdict visible at once.
-- **Implementation:** typed contract, deterministic diff, tool-failure distinction, required/unexpected/invariant checks, retained regression.
+- **Implementation:** official WebMCP type package, typed contract, exact-change-set semantics, deterministic diff, handler-side intent validation, aborting timeout/tool-failure distinction, required/unexpected/invariant checks, downloadable regression JSON.
 - **Breadth without scope creep:** the same core runs order and permission workflows.
-- **Verification:** TypeScript check, production build, 6 unit tests, 2 native Chrome E2E tests, console collection, secret scan, and deployment smoke test.
+- **Verification:** TypeScript check, production build, 8 unit tests, 2 native Chrome E2E tests, console collection, secret scan, and deployment smoke test.
 - **Video:** defect → detection → repair → identical PASS is completed on screen.
 
 ## 3. Potential Impact
 
 - **Problem:** a correct tool invocation can still produce collateral state changes; call correctness alone does not establish effect correctness.
-- **Measured evidence:** official Evals 0.0.3 matcher passed 2/2 correct calls while 2/2 seeded collateral defects remained. Four manual Playwright state assertions caught both. ActionProof generated the checks from two action bindings.
+- **Measured evidence:** official Evals 0.0.3 matcher passed 2/2 correct calls, rejected 2/2 wrong-argument negative controls, while 2/2 seeded collateral defects remained. Four manual Playwright state assertions caught both. ActionProof generated the checks from two action bindings.
 - **Honesty boundary:** the project claims no customers, incidents, universal adapters, demand, or production readiness.
 - **Reusable direction:** explicit Effect Contracts can become retained regressions for action classes in owned SaaS applications.
 

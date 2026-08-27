@@ -62,6 +62,14 @@ try {
     }, actual[0]);
 
     const trajectory = evaluateExecutionTrajectory(expected, actual);
+    const wrongArguments = {
+      ...actual[0],
+      args: {
+        ...actual[0].args,
+        [Object.keys(actual[0].args)[0]]: "__wrong_visible_target__",
+      },
+    };
+    const negativeControl = evaluateExecutionTrajectory(expected, [wrongArguments]);
     const targetActual = await page
       .locator(`[data-testid="${benchmarkCase.targetTestId}"] [data-field="${benchmarkCase.field}"]`)
       .textContent();
@@ -73,6 +81,7 @@ try {
       scenario: benchmarkCase.id,
       bridgeMode: mode,
       officialMatcherOutcome: trajectory.every((item) => item.outcome === "pass") ? "PASS" : "FAIL",
+      negativeControlWrongArgumentOutcome: negativeControl.every((item) => item.outcome === "pass") ? "PASS" : "FAIL",
       expectedCall: expected,
       actualCall: actual,
       observedState: {
@@ -100,7 +109,11 @@ await writeFile(
   `${JSON.stringify(output, null, 2)}\n`,
 );
 
-if (!results.every((result) => result.officialMatcherOutcome === "PASS" && result.collateralDefectPresent)) {
+if (!results.every((result) =>
+  result.officialMatcherOutcome === "PASS" &&
+  result.negativeControlWrongArgumentOutcome === "FAIL" &&
+  result.collateralDefectPresent
+)) {
   throw new Error("The controlled Evals comparison did not reproduce the expected call/effect gap.");
 }
 

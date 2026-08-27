@@ -14,7 +14,7 @@ ActionProof can satisfy the four requested pre-implementation conditions with a 
 
 - Both write actions are registered with `document.modelContext.registerTool()` when the API is present.
 - The native runner discovers the active page tool with `getTools()` and invokes it with `executeTool()`.
-- Playwright launches installed Chrome 151 with `--enable-features=WebMCP,WebMCPTesting` and fails unless the UI reports `Native WebMCP active`.
+- Playwright launches installed Chrome 151 with `--enable-features=WebMCP,WebMCPTesting` and fails unless the UI reports `Native WebMCP · 1 context-matched tool`.
 - Tool result and observed state are separate inputs to the verifier.
 - The non-native harness is feature-detected and visibly labeled; it is not counted as native evidence.
 
@@ -43,7 +43,7 @@ Why this is not merely a Playwright wrapper: Playwright only drives and asserts 
 
 Important limit: this is an implementation/comprehension design pass, not the independent blind-human audit required before submission. No unfamiliar reviewer responses have been collected.
 
-## Test evidence
+## Historical test evidence at gate time
 
 | Command | Result |
 |---|---|
@@ -60,6 +60,8 @@ The tests prove:
 - the permission workflow uses the same verifier;
 - disabling the seeded defect makes the identical retained order regression pass;
 - the main UI produces no console errors in the tested sequence.
+
+Current release-hold evidence has superseded these counts: 8 unit tests, 2 native Chrome E2E tests, official matcher negative controls, context-matched tool lifecycle assertions, downloadable regression verification, and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
 
 ## Strongest argument against ActionProof
 

@@ -28,19 +28,8 @@ const sleep = (milliseconds: number) =>
   new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 
 function useScenarioSnapshot(store: ScenarioStore): Snapshot {
-  const [snapshot, setSnapshot] = useState(() => store.snapshot());
-  useSyncExternalStore(
-    store.subscribe,
-    () => {
-      const next = store.snapshot();
-      if (JSON.stringify(next) !== JSON.stringify(snapshot)) {
-        setSnapshot(next);
-      }
-      return JSON.stringify(next);
-    },
-    () => JSON.stringify(snapshot),
-  );
-  return snapshot;
+  const version = useSyncExternalStore(store.subscribe, store.getVersion, store.getVersion);
+  return useMemo(() => store.snapshot(), [store, version]);
 }
 function formatJson(value: unknown): string {
   return JSON.stringify(value, null, 2);
@@ -53,6 +42,7 @@ export default function App() {
   );
   const [scenarioId, setScenarioId] = useState<"orders" | "permissions">("orders");
   const store = stores.get(scenarioId)!;
+  const definition = store.definition;
   const liveSnapshot = useScenarioSnapshot(store);
   const [displaySnapshot, setDisplaySnapshot] = useState<Snapshot>(() => store.snapshot());
   const [phase, setPhase] = useState<Phase>(0);
@@ -62,31 +52,41 @@ export default function App() {
   const [bridge, setBridge] = useState<WebMcpBridge | null>(null);
   const [bridgeMode, setBridgeMode] = useState<BridgeMode | "initializing">("initializing");
 
+  const query = new URLSearchParams(window.location.search);
   const speed = Math.max(
     0.01,
-    Number(new URLSearchParams(window.location.search).get("speed") ?? "1"),
+    Number(query.get("speed") ?? "1"),
   );
-  const autoplay = new URLSearchParams(window.location.search).get("autoplay");
+  const autoplay = query.get("autoplay");
+  const demoTiming = query.get("timing") === "demo";
   const autoplayStarted = useRef(false);
 
   useEffect(() => {
+    setBridge(null);
+    setBridgeMode("initializing");
     let active = true;
     let installedBridge: WebMcpBridge | null = null;
-    const tools: WebMcpTool[] = scenarioDefinitions.map((definition) => ({
+    const tools: WebMcpTool[] = [{
       name: definition.toolName,
       title: definition.actionLabel,
-      description: `${definition.actionLabel} for the one record explicitly selected in the visible test fixture.`,
+      description: `${definition.actionLabel}. Use only for the record explicitly selected in the visible UI: ${definition.targetId}. The intended ${definition.mutation.field} is ${String(definition.mutation.value)}.`,
       inputSchema: {
         type: "object",
         properties: Object.fromEntries(
-          Object.entries(definition.toolArguments).map(([name, value]) => [name, { type: typeof value }]),
+          Object.entries(definition.toolArguments).map(([name, value]) => [name, {
+            type: typeof value,
+            enum: [value],
+            description: name === definition.targetArgument
+              ? `Must match the record explicitly selected in the visible UI (${definition.targetId}).`
+              : `Must match the visible requested value (${String(value)}).`,
+          }]),
         ),
         required: Object.keys(definition.toolArguments),
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
-      execute: async (argumentsRecord) => stores.get(definition.id)!.executeMutation(argumentsRecord),
-    }));
+      execute: async (argumentsRecord) => store.executeMutation(argumentsRecord),
+    }];
 
     createWebMcpBridge(tools)
       .then((createdBridge) => {
@@ -99,15 +99,17 @@ export default function App() {
         }
       })
       .catch((error) => {
-        console.error("WebMCP bridge initialization failed", error);
-        setBridgeMode("webmcp-compatible-harness");
+        if (active) {
+          console.error("WebMCP bridge initialization failed", error);
+          setBridgeMode("webmcp-compatible-harness");
+        }
       });
 
     return () => {
       active = false;
       installedBridge?.dispose();
     };
-  }, [stores]);
+  }, [definition, store]);
 
   useEffect(() => {
     store.reset(true);
@@ -126,22 +128,28 @@ export default function App() {
     const before = store.snapshot();
     setDisplaySnapshot(before);
 
-    await sleep(4_000 * speed);
+    const phaseDelays = demoTiming
+      ? definition.id === "orders" && defectEnabled
+        ? [10_000, 10_000, 7_000, 13_000, 5_000]
+        : [500, 500, 500, 500, 500]
+      : [4_000, 4_000, 3_000, 4_000, 5_000].map((delay) => delay * speed);
+
+    await sleep(phaseDelays[0]);
     setPhase(1);
-    await sleep(4_000 * speed);
+    await sleep(phaseDelays[1]);
 
     const proof = await runActionProof({ store, executeTool: bridge.executeTool });
     setResult(proof);
     setRunHistory((history) => [...history, proof]);
     setPhase(2);
-    await sleep(3_000 * speed);
+    await sleep(phaseDelays[2]);
 
     setDisplaySnapshot(store.snapshot());
     setPhase(3);
-    await sleep(4_000 * speed);
+    await sleep(phaseDelays[3]);
 
     setPhase(4);
-    await sleep(5_000 * speed);
+    await sleep(phaseDelays[4]);
     setRunning(false);
   }
 
@@ -159,7 +167,6 @@ export default function App() {
     void start();
   }, [autoplay, bridge]);
 
-  const definition = store.definition;
   const records = Object.values(displaySnapshot);
   const currentResult = result;
   const unexpectedIds = new Set(
@@ -183,6 +190,22 @@ export default function App() {
       JSON.stringify(failedRun.regressionCase.arguments) === JSON.stringify(repairedRun.regressionCase.arguments),
   );
 
+  function downloadRegression(resultToDownload: VerificationResult): void {
+    const artifact = {
+      schemaVersion: "actionproof.regression.v1",
+      generatedAt: new Date().toISOString(),
+      regressionCase: resultToDownload.regressionCase,
+    };
+    const url = URL.createObjectURL(
+      new Blob([`${JSON.stringify(artifact, null, 2)}\n`], { type: "application/json" }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${resultToDownload.regressionCase.id}.json`;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -201,7 +224,7 @@ export default function App() {
             data-testid="bridge-mode"
           >
             {bridgeMode === "native-webmcp"
-              ? "Native WebMCP active"
+              ? "Native WebMCP · 1 context-matched tool"
               : bridgeMode === "initializing"
                 ? "Checking WebMCP…"
                 : "WebMCP-compatible local harness"}
@@ -213,7 +236,7 @@ export default function App() {
         <p className="eyebrow">VERIFY THE EFFECT, NOT JUST THE INVOCATION</p>
         <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
         <p>
-          A correct tool call can still cause collateral change. ActionProof checks the declared effect against independently observed state.
+          A correct tool call can still cause collateral change. ActionProof checks the declared effect against state observed independently of the tool return.
         </p>
       </section>
 
@@ -296,7 +319,7 @@ export default function App() {
               </div>
               <div>
                 <span>FORBIDDEN</span>
-                <strong>{contractPreview.forbidden.length} unselected {definition.resourceLabel} change{contractPreview.forbidden.length === 1 ? "" : "s"}</strong>
+                <strong>All other state changes</strong>
               </div>
             </div>
             <p className="contract-source">Generated from visible selection + pre-action state</p>
@@ -343,7 +366,7 @@ export default function App() {
               <span className="step-number">04</span>
               <div>
                 <span>OBSERVED EFFECT</span>
-                <strong>Independent post-action state</strong>
+                <strong>Post-action application state</strong>
               </div>
               {phase >= 3 && (
                 <span className={`observed-pill ${unexpectedIds.size ? "bad" : "good"}`}>
@@ -434,6 +457,14 @@ export default function App() {
               <strong>{currentResult.regressionCase.id}</strong>
             </div>
             <p>Same generated contract · same tool arguments · reusable after the fix</p>
+            <button
+              className="download-regression"
+              data-testid="download-regression"
+              onClick={() => downloadRegression(currentResult)}
+              type="button"
+            >
+              Download regression JSON
+            </button>
           </div>
         )}
 
@@ -450,7 +481,7 @@ export default function App() {
 
         <div className="architecture-note">
           <strong>One verifier, two workflows.</strong>
-          <span>UI selection → Effect Contract → WebMCP action → independent state diff</span>
+          <span>UI selection → Effect Contract → context-matched WebMCP action → application-state diff</span>
           <span className="live-record-count" aria-hidden="true">{Object.keys(liveSnapshot).length} records observed</span>
         </div>
       </section>
@@ -466,8 +497,8 @@ export default function App() {
         <div className="benchmark-cards">
           <article>
             <span>WebMCP Evals 0.0.3 matcher</span>
-            <strong>2 / 2 calls matched</strong>
-            <p>Both collateral defects remained after the matched calls.</p>
+            <strong>2 / 2 correct calls matched</strong>
+            <p>2/2 wrong-argument controls failed; both effect defects remained.</p>
           </article>
           <article>
             <span>Evals + manual Playwright</span>

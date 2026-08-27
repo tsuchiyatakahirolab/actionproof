@@ -71,6 +71,39 @@ describe("ActionProof effect verification", () => {
     ]);
   });
 
+  it("rejects a mutation value that differs from visible intent before side effects", async () => {
+    const store = new ScenarioStore(permissions);
+    store.reset(false);
+
+    const result = await runActionProof({
+      store,
+      executeTool: async (_name, argumentsRecord) =>
+        store.executeMutation({ ...argumentsRecord, role: "Admin" }),
+    });
+
+    expect(result.toolCall.status).toBe("FAILED");
+    expect(result.verdict).toBe("TOOL_CALL_FAILED");
+    expect(result.toolCall.error).toContain("does not match the visible intent Editor");
+    expect(result.observedChanges).toEqual([]);
+  });
+
+  it("fails closed when the WebMCP action exceeds its timeout", async () => {
+    const store = new ScenarioStore(orders);
+    let observedSignal: AbortSignal | undefined;
+    const result = await runActionProof({
+      store,
+      executeTool: async (_name, _arguments, options) => {
+        observedSignal = options?.signal;
+        return new Promise(() => undefined);
+      },
+      timeoutMs: 5,
+    });
+
+    expect(result.verdict).toBe("TOOL_CALL_FAILED");
+    expect(result.toolCall.error).toBe("WebMCP action timed out after 5 ms.");
+    expect(observedSignal?.aborted).toBe(true);
+  });
+
   it.each(scenarioDefinitions)(
     "retains the identical generated regression for defect and repair: $id",
     async (definition) => {
@@ -90,6 +123,9 @@ describe("ActionProof effect verification", () => {
       expect(failure.verdict).toBe("FAILED_EFFECT");
       expect(repaired.verdict).toBe("ACTION_PROVEN");
       expect(repaired.regressionCase).toEqual(failure.regressionCase);
+      expect(failure.regressionCase.id).toContain(
+        `__to-${String(definition.mutation.value).toLowerCase()}`,
+      );
     },
   );
 });

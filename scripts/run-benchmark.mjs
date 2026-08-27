@@ -102,6 +102,7 @@ try {
         version: evalsDetails.webmcpEvalsVersion,
         commandExitCode: evals.exitCode,
         matchedCorrectCalls: evalsDetails.results.filter((item) => item.officialMatcherOutcome === "PASS").length,
+        rejectedWrongArgumentControls: evalsDetails.results.filter((item) => item.negativeControlWrongArgumentOutcome === "FAIL").length,
         collateralDefectsPresentAfterMatchedCall: evalsDetails.results.filter((item) => item.collateralDefectPresent).length,
       },
       webmcpEvalsPlusManualPlaywright: {

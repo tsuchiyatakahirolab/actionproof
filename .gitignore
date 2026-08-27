@@ -8,5 +8,8 @@ test-results/
 !.env.example
 submission/.audio/
 submission/.recording/
+submission/private/
+submission/contact-sheet.png
+submission/frame-*.png
 
 .vercel

@@ -8,16 +8,16 @@
 - [x] `npm run build`
 - [x] `npm run test:ui`
 - [x] `npm run benchmark`
-- [x] Chrome native WebMCP badge and both workflows verified on the production URL
+- [ ] Final held build promoted and Chrome native WebMCP badge plus both workflows reverified on the production URL
 - [x] Console errors: zero in primary demo path
 - [x] Secret scan clean
-- [x] Git diff/status audited
+- [ ] Final held git diff/status audited and pushed at release time
 
 ## Public artifacts
 
 - [x] Public GitHub repository reachable and MIT license detected
-- [x] README contains setup, architecture, limitations, tests, benchmark, and judge path
-- [x] Public live URL reachable without sign-in
+- [ ] Final README revision pushed with setup, architecture, limitations, tests, benchmark, and judge path
+- [ ] Final live build promoted and reachable without sign-in
 - [ ] Public English YouTube video under three minutes with audible narration
 - [ ] Devpost links point to the final production URL, repository, and video
 

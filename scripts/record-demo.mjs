@@ -48,42 +48,42 @@ try {
   const page = await context.newPage();
   const video = page.video();
 
-  await page.goto("http://127.0.0.1:4176/");
-  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP active" }).waitFor();
-  await page.waitForTimeout(7_000);
+  await page.goto("http://127.0.0.1:4176/?timing=demo");
+  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
+  const timelineStartedAt = Date.now();
+  const waitUntil = async (milliseconds) => {
+    const remaining = timelineStartedAt + milliseconds - Date.now();
+    if (remaining > 0) await page.waitForTimeout(remaining);
+  };
+
+  await waitUntil(7_000);
 
   await page.locator(".proof-workspace").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(10_000);
-
   await page.getByTestId("run-defect").click();
-  await page.getByTestId("verdict-fail").waitFor();
+  await page.getByTestId("verdict-fail").waitFor({ timeout: 50_000 });
   await page.screenshot({ path: path.join(submissionDirectory, "thumbnail.png") });
-  await page.getByTestId("run-fixed").waitFor({ state: "visible" });
-  await page.getByTestId("run-fixed").isEnabled();
-  await page.waitForTimeout(10_000);
+  await waitUntil(57_000);
+
   await page.getByTestId("run-fixed").click();
   await page.getByTestId("verdict-pass").waitFor();
-  await page.getByTestId("run-defect").isEnabled();
-  await page.waitForTimeout(11_000);
+  await waitUntil(68_000);
 
-  await page.evaluate(() => history.replaceState({}, "", "/?speed=0.05"));
   await page.getByRole("button", { name: /Permission change/ }).click();
+  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
   await page.getByTestId("run-defect").click();
   await page.getByTestId("verdict-fail").waitFor();
-  await page.getByTestId("run-fixed").waitFor({ state: "visible" });
-  await page.waitForTimeout(2_000);
   await page.getByTestId("run-fixed").click();
   await page.getByTestId("verdict-pass").waitFor();
-  await page.waitForTimeout(2_000);
+  await waitUntil(77_000);
 
   await page.locator(".benchmark-evidence").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(12_000);
+  await waitUntil(87_000);
   await page.locator(".hero").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(4_000);
+  await waitUntil(91_000);
 
   await context.close();
   const rawVideo = await video.path();
-  browser.process()?.kill();
+  void browser.close();
   browser = undefined;
 
   const audioFiles = (await readdir(audioDirectory))
@@ -124,6 +124,6 @@ try {
   }
   console.log(`Created ${outputPath}`);
 } finally {
-  browser?.process()?.kill();
+  if (browser) void browser.close();
   vite.kill();
 }

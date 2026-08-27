@@ -6,7 +6,7 @@
 
 ## Technical summary
 
-Two correct native WebMCP calls were executed against two deterministic fake-data handlers containing the same class of seeded collateral-mutation defect. The official `webmcp-evals` 0.0.3 trajectory matcher passed both tool calls because the function names and arguments matched. Independent state reads confirmed that both calls also changed an unselected neighboring record.
+Two correct native WebMCP calls were executed against two deterministic fake-data handlers containing the same class of seeded collateral-mutation defect. The official `webmcp-evals` 0.0.3 trajectory matcher passed both tool calls because the function names and arguments matched. As a negative control, it rejected a deliberately wrong target argument in both workflows. Application-state reads performed independently of the return payload confirmed that both correct calls also changed an unselected neighboring record.
 
 Adding four concrete expected-state assertions in Playwright detected both defects; the identical assertions passed after the handler repairs. ActionProof detected both defects and passed both identical retained regressions using two action bindings and generated required/unchanged checks, with no per-record expected-state assertions in the scenario definitions.
 
@@ -19,6 +19,8 @@ This supports one narrow conclusion: **tool-call matching and post-action effect
 | Official WebMCP Evals trajectory matcher | 2/2 | 2/2 | 0/2 at the call-matching layer | Not evaluated |
 | Evals + manual Playwright state assertions | 2/2 | 2/2 | 2/2 | 2/2 |
 | ActionProof generated Effect Contracts | 2/2 | 2/2 | 2/2 | 2/2 |
+
+The official matcher also rejected 2/2 wrong-argument negative controls. This confirms the matcher invocation is discriminating; the comparison isolates an expected-call versus post-action-state coverage boundary.
 
 Authoring inputs in this fixture:
 
@@ -47,10 +49,11 @@ The benchmark does not measure wall-clock product performance. Command durations
 3. Open the plain `baseline.html` fixture with the seeded defect enabled.
 4. Invoke the registered tool through `document.modelContext.getTools()` and `executeTool()`.
 5. Score the captured name/arguments with `evaluateExecutionTrajectory()` from the installed official `webmcp-evals` 0.0.3 package.
-6. Read the post-action target and unselected-neighbor fields from the page.
-7. Run the manual Playwright suite against the defective handler. A non-zero exit is the expected detection result.
-8. Run the identical manual suite with only the defect disabled. A zero exit is required.
-9. Run the ActionProof native-Chrome UI suite. Each workflow must show `FAILED_EFFECT`, then `ACTION_PROVEN`, with the same regression case.
+6. Score a deliberately wrong target argument as a negative control; it must fail.
+7. Read the post-action target and unselected-neighbor fields from the page.
+8. Run the manual Playwright suite against the defective handler. A non-zero exit is the expected detection result.
+9. Run the identical manual suite with only the defect disabled. A zero exit is required.
+10. Run the ActionProof native-Chrome UI suite. Each workflow must show `FAILED_EFFECT`, then `ACTION_PROVEN`, with the same regression case.
 
 The deterministic matcher path deliberately excludes LLM selection variability. It measures the documented Evals expected-call layer, not an end-to-end model's probability of choosing the tool.
 

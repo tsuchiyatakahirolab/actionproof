@@ -39,6 +39,7 @@ export type EffectContract = {
   invariants: {
     entityIds: string[];
     entityCount: number;
+    exactChangeSet: true;
   };
 };
 

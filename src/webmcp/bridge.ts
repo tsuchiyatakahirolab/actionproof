@@ -1,37 +1,21 @@
 import type { Scalar } from "../core/types";
 
-export type WebMcpTool = {
-  name: string;
-  title: string;
-  description: string;
-  inputSchema: Record<string, unknown>;
-  annotations?: {
-    readOnlyHint?: boolean;
-    untrustedContentHint?: boolean;
-  };
-  execute: (input: Record<string, Scalar>) => Promise<unknown> | unknown;
+export type WebMcpTool = Omit<WebMCP.ModelContextTool, "execute"> & {
+  execute: (
+    input: Record<string, Scalar>,
+    options: WebMCP.ToolExecuteCallbackOptions,
+  ) => Promise<unknown> | unknown;
 };
 
-type RegisteredTool = {
-  name: string;
-  description: string;
-  inputSchema?: string;
-};
-
-type ModelContext = {
-  registerTool: (
-    tool: WebMcpTool,
-    options?: { signal?: AbortSignal },
-  ) => Promise<unknown>;
-  getTools: () => Promise<RegisteredTool[]>;
+type ModelContextWithExecution = WebMCP.ModelContext & {
   executeTool: (
-    tool: RegisteredTool,
+    tool: WebMCP.RegisteredTool,
     inputJson: string,
     options?: { signal?: AbortSignal },
   ) => Promise<unknown>;
 };
 
-type DocumentWithModelContext = Document & { modelContext?: ModelContext };
+type DocumentWithModelContext = Document & { modelContext?: ModelContextWithExecution };
 
 export type BridgeMode = "native-webmcp" | "webmcp-compatible-harness";
 
@@ -40,6 +24,7 @@ export type WebMcpBridge = {
   executeTool: (
     name: string,
     argumentsRecord: Record<string, Scalar>,
+    options?: { signal?: AbortSignal },
   ) => Promise<unknown>;
   dispose: () => void;
 };
@@ -55,19 +40,22 @@ export async function createWebMcpBridge(tools: WebMcpTool[]): Promise<WebMcpBri
   ) {
     await Promise.all(
       tools.map((tool) =>
-        modelContext.registerTool(tool, { signal: controller.signal }),
+        modelContext.registerTool(tool as WebMCP.ModelContextTool, {
+          signal: controller.signal,
+          exposedTo: [window.location.origin],
+        }),
       ),
     );
 
     return {
       mode: "native-webmcp",
-      executeTool: async (name, argumentsRecord) => {
+      executeTool: async (name, argumentsRecord, options) => {
         const registeredTools = await modelContext.getTools();
         const tool = registeredTools.find((candidate) => candidate.name === name);
         if (!tool) {
           throw new Error(`Native WebMCP tool ${name} is not registered.`);
         }
-        return modelContext.executeTool(tool, JSON.stringify(argumentsRecord));
+        return modelContext.executeTool(tool, JSON.stringify(argumentsRecord), options);
       },
       dispose: () => controller.abort(),
     };
@@ -76,12 +64,14 @@ export async function createWebMcpBridge(tools: WebMcpTool[]): Promise<WebMcpBri
   const harnessTools = new Map(tools.map((tool) => [tool.name, tool]));
   return {
     mode: "webmcp-compatible-harness",
-    executeTool: async (name, argumentsRecord) => {
+    executeTool: async (name, argumentsRecord, options) => {
       const tool = harnessTools.get(name);
       if (!tool) {
         throw new Error(`WebMCP harness tool ${name} is not registered.`);
       }
-      return tool.execute(argumentsRecord);
+      const signal = options?.signal ?? new AbortController().signal;
+      if (signal.aborted) throw new DOMException("WebMCP action aborted.", "AbortError");
+      return tool.execute(argumentsRecord, { signal });
     },
     dispose: () => controller.abort(),
   };

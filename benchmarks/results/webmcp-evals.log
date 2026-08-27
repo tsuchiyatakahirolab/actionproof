@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-27T04:03:19.372Z",
+  "measuredAt": "2026-08-27T09:14:27.791Z",
   "method": "Native Chrome WebMCP execution scored by the official webmcp-evals trajectory matcher; state read independently after the call.",
   "webmcpEvalsVersion": "0.0.3",
   "results": [
@@ -7,6 +7,7 @@
       "scenario": "orders",
       "bridgeMode": "native-webmcp",
       "officialMatcherOutcome": "PASS",
+      "negativeControlWrongArgumentOutcome": "FAIL",
       "expectedCall": [
         {
           "functionName": "cancel_order",
@@ -39,6 +40,7 @@
       "scenario": "permissions",
       "bridgeMode": "native-webmcp",
       "officialMatcherOutcome": "PASS",
+      "negativeControlWrongArgumentOutcome": "FAIL",
       "expectedCall": [
         {
           "functionName": "change_user_role",

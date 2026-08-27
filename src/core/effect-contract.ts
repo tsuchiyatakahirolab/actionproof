@@ -48,6 +48,7 @@ export function generateEffectContract(
     invariants: {
       entityIds: Object.keys(before).sort(),
       entityCount: Object.keys(before).length,
+      exactChangeSet: true,
     },
   };
 }
@@ -77,7 +78,12 @@ export function diffSnapshots(before: Snapshot, after: Snapshot): StateChange[] 
 }
 
 function buildRegressionId(intent: ExplicitIntent): string {
-  return `${intent.workflowId}__${intent.selectedIds.join("-")}__${intent.mutation.field}`;
+  const safe = (value: Scalar | string): string =>
+    String(value)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  return `${safe(intent.workflowId)}__${intent.selectedIds.map(safe).join("-")}__${safe(intent.mutation.field)}__to-${safe(intent.mutation.value)}`;
 }
 
 export function verifyEffect(input: {

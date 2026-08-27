@@ -18,12 +18,16 @@ const workflows = [];
 try {
   const response = await page.goto(`${url}/?speed=0.01`);
   if (!response?.ok()) throw new Error(`Production page returned ${response?.status()}.`);
-  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP active" }).waitFor();
+  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
 
   for (const workflow of ["orders", "permissions"]) {
     if (workflow === "permissions") {
       await page.getByRole("button", { name: /Permission change/ }).click();
+      await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
     }
+    const activeTools = await page.evaluate(async () =>
+      (await document.modelContext.getTools()).map((tool) => tool.name),
+    );
     await page.getByTestId("run-defect").click();
     await page.getByTestId("verdict-fail").waitFor();
     const failureText = await page.getByTestId("verdict-fail").innerText();
@@ -32,6 +36,7 @@ try {
     const lifecycleText = await page.getByTestId("regression-proof").innerText();
     workflows.push({
       workflow,
+      activeTools,
       defectDetected: failureText.includes("REAL-WORLD EFFECT FAILED"),
       identicalRegressionPassed: lifecycleText.includes("IDENTICAL REGRESSION") && lifecycleText.includes("PASS"),
     });
@@ -51,7 +56,12 @@ try {
     permissionsPolicy: headerResponse.headers.get("permissions-policy"),
     consoleErrors,
     pass:
-      workflows.every((workflow) => workflow.defectDetected && workflow.identicalRegressionPassed) &&
+      workflows.every((workflow) =>
+        workflow.defectDetected &&
+        workflow.identicalRegressionPassed &&
+        workflow.activeTools.length === 1 &&
+        workflow.activeTools[0] === (workflow.workflow === "orders" ? "cancel_order" : "change_user_role")
+      ) &&
       headerResponse.headers.get("permissions-policy") === "tools=*" &&
       consoleErrors.length === 0,
   };

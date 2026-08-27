@@ -4,6 +4,8 @@
 
 ActionProof checks whether a WebMCP action changed exactly the state the human declared—and nothing outside that Effect Contract.
 
+This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ActionProof turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
+
 The deterministic demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ActionProof generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, identifies the collateral change, retains the generated regression, and passes that identical regression after repair.
 
 ## Try it
@@ -24,12 +26,12 @@ A browser agent can choose the correct WebMCP tool, supply valid arguments, rece
 visible human selection + pre-action state
 → generated Effect Contract
 → native WebMCP tool execution
-→ independent post-action snapshot
+→ application-owned post-action snapshot, independent of the tool return
 → required / unexpected / invariant diff
 → inspectable verdict + retained regression
 ```
 
-The page registers tools with `document.modelContext.registerTool()`, discovers them with `getTools()`, and invokes them through `executeTool()`. The Run button makes the native execution deterministic for judging; an external browser agent can invoke the same registered tools. Without WebMCP there is no page-exposed action boundary for ActionProof to wrap and verify.
+The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. The Run button makes the native execution deterministic for judging; an external browser agent can invoke the same context-matched tool. Without WebMCP there is no structured page-exposed action boundary for ActionProof to wrap and verify.
 
 ## Human and agent roles
 
@@ -55,11 +57,13 @@ The repository includes a plain WebMCP fixture, official WebMCP Evals `0.0.3` tr
 
 | Layer | Measured result |
 |---|---|
-| Official Evals call matcher | 2/2 correct calls PASS; collateral defects remained in 2/2 resulting states |
+| Official Evals call matcher | 2/2 correct calls PASS; 2/2 deliberately wrong-argument controls FAIL; collateral defects remained in 2/2 resulting states |
 | Evals + manual Playwright | 4 concrete expected-state assertions detected both defects; identical assertions PASS after repair |
 | ActionProof | 2 reusable action bindings; 0 per-record expected-state assertions in scenario definitions; both generated regressions detect the defect and PASS after repair |
 
 This is a detection-coverage comparison, not a runtime-performance, universal-support, or market-demand claim. ActionProof still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
+
+Primary context: [WebMCP privacy/security discussion #45](https://github.com/webmachinelearning/webmcp/issues/45) and [Chrome's Evals for WebMCP guidance](https://developer.chrome.com/docs/ai/webmcp/evals).
 
 Run the measurement:
 
@@ -82,6 +86,7 @@ Open the printed URL. Useful deterministic demo parameters:
 - `?autoplay=defect` — automatically run the seeded defect
 - `?autoplay=repair` — automatically run the repaired handler
 - `?autoplay=both` — run defect then repair
+- `?timing=demo` — fixed submission-recording cadence (long order proof, accelerated repair/second workflow)
 
 ### Native WebMCP
 
@@ -89,7 +94,7 @@ For a local Chrome build with WebMCP testing enabled:
 
 1. Open `chrome://flags/#enable-webmcp-testing` and enable the flag, or launch Chrome with `--enable-features=WebMCP,WebMCPTesting`.
 2. Reload the app.
-3. Confirm the top badge says **Native WebMCP active**.
+3. Confirm the top badge says **Native WebMCP · 1 context-matched tool**.
 
 If the API is absent, ActionProof uses an explicitly labeled **WebMCP-compatible local harness** for UI review. Harness output is never counted as native evidence.
 
@@ -105,7 +110,7 @@ npm run benchmark   # Evals matcher + manual Playwright + ActionProof comparison
 
 Current deterministic suite:
 
-- 6 unit tests pass.
+- 8 unit tests pass, including wrong-value and timeout controls.
 - 2 native Chrome UI/E2E tests pass.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
@@ -115,7 +120,7 @@ Current deterministic suite:
 
 - `src/core/effect-contract.ts` — contract generation, state diff, verification, retained regression
 - `src/core/scenario.ts` — two fictional application bindings and deterministic defect/repair handlers
-- `src/webmcp/bridge.ts` — native imperative WebMCP registration/execution plus labeled local fallback
+- `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, same-origin exposure, and labeled local fallback
 - `src/App.tsx` — judge-first proof UI
 - `baseline.html` — plain WebMCP comparison fixture without ActionProof
 - `benchmarks/` — official matcher inputs, manual Playwright baseline, raw and summarized results
@@ -128,6 +133,7 @@ Current deterministic suite:
 - It demonstrates two action classes, not zero-configuration support for every website.
 - Effect verification is limited to the state exposed by an application-owned adapter and the contract fields it declares.
 - A passed Effect Contract is not proof that every external or delayed side effect is correct.
+- The deterministic Run control proves the native action/effect path; it does not measure an LLM's tool-selection quality.
 - The comparison does not measure LLM tool-selection quality, latency, authoring time, or customer demand.
 - The project has no customer deployment, incident history, authentication, external writes, or production authorization model.
 

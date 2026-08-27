@@ -166,6 +166,7 @@ button { font: inherit; }
 .regression-strip span { color: #6c7771; font-size: 8px; font-weight: 900; letter-spacing: .11em; }
 .regression-strip strong { font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
 .regression-strip p { margin: 0; color: #65716b; font-size: 10px; }
+.download-regression { padding: 7px 9px; color: #075943; background: white; border: 1px solid #a6cfbf; border-radius: 7px; font-size: 9px; font-weight: 800; cursor: pointer; }
 .regression-proof { margin: 0 15px 12px; display: flex; align-items: center; gap: 9px; padding: 10px 13px; border: 1px solid #c8cbc5; border-radius: 10px; background: #fffdf8; }
 .proof-node { display: flex; align-items: center; gap: 7px; min-width: 145px; }
 .proof-node > span { width: 23px; height: 23px; flex: 0 0 23px; display: grid; place-items: center; color: white; background: #8c928e; border-radius: 50%; font-size: 9px; font-weight: 900; }

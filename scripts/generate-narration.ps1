@@ -7,13 +7,13 @@ New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
 $segments = @(
   "The agent did everything right. The result was still wrong. This is ActionProof for Web M C P.",
   "The human selects only Order ten forty-two. ActionProof generates an Effect Contract: cancel this order; leave every unselected order unchanged.",
-  "The page exposes a native Web M C P tool. The call name is correct. The argument matches the visible selection.",
+  "The page exposes one context-matched native Web M C P tool. Its schema binds the argument to the visible selection.",
   "The tool returns success. At the invocation layer, everything passed.",
-  "But independent post-action state shows two orders changed. The seeded handler also cancelled unselected Order ten forty-three.",
+  "But application state, observed independently of the return, shows two orders changed. The seeded handler also cancelled unselected Order ten forty-three.",
   "ActionProof separates those facts: tool call passed; real-world effect failed. Requested one, changed two.",
   "After repairing only the handler, we rerun the identical generated contract and arguments. The retained regression passes.",
   "The same verification core catches the same defect class in permission changes, then passes the identical repair regression.",
-  "Evals passed both calls while both defects remained. Four Playwright assertions caught them. ActionProof generated the checks from two bindings.",
+  "Evals accepted both correct calls and rejected both wrong controls, while both effect defects remained. ActionProof generated state checks from two bindings.",
   "Correct call. Wrong effect."
 )
 

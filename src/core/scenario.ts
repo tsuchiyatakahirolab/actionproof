@@ -20,6 +20,7 @@ export type ScenarioDefinition = {
   actionLabel: string;
   toolName: string;
   targetArgument: string;
+  mutationArgument?: string;
   toolArguments: Record<string, Scalar>;
   mutation: { field: string; value: Scalar };
   columns: Array<{ field: string; label: string }>;
@@ -32,6 +33,7 @@ export class ScenarioStore {
   private records: Snapshot;
   private defectEnabled = true;
   private listeners = new Set<Listener>();
+  private version = 0;
 
   constructor(definition: ScenarioDefinition) {
     this.definition = definition;
@@ -50,8 +52,11 @@ export class ScenarioStore {
   };
 
   private notify(): void {
+    this.version += 1;
     this.listeners.forEach((listener) => listener());
   }
+
+  getVersion = (): number => this.version;
 
   reset(defectEnabled = true): void {
     this.defectEnabled = defectEnabled;
@@ -81,12 +86,24 @@ export class ScenarioStore {
       );
     }
 
-    this.records[this.definition.targetId][this.definition.mutation.field] =
-      this.definition.mutation.value;
+    const mutationValue = this.definition.mutationArgument
+      ? argumentsRecord[this.definition.mutationArgument]
+      : this.definition.mutation.value;
+    if (mutationValue === undefined) {
+      throw new Error(
+        `Tool argument ${this.definition.mutationArgument} is required for the requested mutation.`,
+      );
+    }
+    if (mutationValue !== this.definition.mutation.value) {
+      throw new Error(
+        `Tool value ${String(mutationValue)} does not match the visible intent ${String(this.definition.mutation.value)}.`,
+      );
+    }
+
+    this.records[this.definition.targetId][this.definition.mutation.field] = mutationValue;
 
     if (this.defectEnabled) {
-      this.records[this.definition.neighborId][this.definition.mutation.field] =
-        this.definition.mutation.value;
+      this.records[this.definition.neighborId][this.definition.mutation.field] = mutationValue;
     }
 
     this.notify();
@@ -100,23 +117,42 @@ export class ScenarioStore {
 export type ToolExecutor = (
   name: string,
   argumentsRecord: Record<string, Scalar>,
+  options?: { signal?: AbortSignal },
 ) => Promise<unknown>;
 
 export async function runActionProof(input: {
   store: ScenarioStore;
   executeTool: ToolExecutor;
+  timeoutMs?: number;
 }): Promise<VerificationResult> {
-  const { store, executeTool } = input;
+  const { store, executeTool, timeoutMs = 5_000 } = input;
   const before = store.snapshot();
   const intent = store.explicitIntent();
   const contract = generateEffectContract(intent, before);
   let toolCall: ToolCallRecord;
 
   try {
-    const result = await executeTool(
-      store.definition.toolName,
-      store.definition.toolArguments,
-    );
+    const controller = new AbortController();
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const timeoutPromise = new Promise<never>((_resolve, reject) => {
+      timeout = globalThis.setTimeout(
+        () => {
+          controller.abort();
+          reject(new Error(`WebMCP action timed out after ${timeoutMs} ms.`));
+        },
+        timeoutMs,
+      );
+    });
+    const result = await Promise.race([
+      executeTool(
+        store.definition.toolName,
+        store.definition.toolArguments,
+        { signal: controller.signal },
+      ),
+      timeoutPromise,
+    ]).finally(() => {
+      if (timeout !== undefined) globalThis.clearTimeout(timeout);
+    });
     toolCall = {
       name: store.definition.toolName,
       arguments: store.definition.toolArguments,
@@ -175,6 +211,7 @@ export const scenarioDefinitions: ScenarioDefinition[] = [
     actionLabel: "Change selected user role",
     toolName: "change_user_role",
     targetArgument: "user_id",
+    mutationArgument: "role",
     toolArguments: { user_id: "Alice", role: "Editor" },
     mutation: { field: "role", value: "Editor" },
     columns: [

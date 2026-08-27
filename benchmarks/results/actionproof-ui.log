@@ -1,11 +1,11 @@
 
 Running 2 tests using 1 worker
 
-  ok 1 tests\browser\silent-proof.spec.ts:3:1 › the seeded defect is silently legible and the repaired run passes (1.8s)
-  ok 2 tests\browser\silent-proof.spec.ts:34:1 › the second workflow uses the same UI and verifier (1.4s)
+  ok 1 tests\browser\silent-proof.spec.ts:4:1 › the seeded defect is silently legible and the repaired run passes (5.4s)
+  ok 2 tests\browser\silent-proof.spec.ts:56:1 › the second workflow uses the same UI and verifier (1.8s)
 
-  2 passed (10.0s)
-[WebServer] (node:50892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+  2 passed (11.8s)
+[WebServer] (node:34420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-(node:49232) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:10864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
