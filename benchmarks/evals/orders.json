@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Cancel only the selected order",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Cancel only Order #1042."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "cancel_order",
+        "arguments": {
+          "order_id": "#1042"
+        }
+      }
+    ]
+  }
+]

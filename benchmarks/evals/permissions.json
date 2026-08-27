@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Change only the selected user's role",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Change only Alice to Editor."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "change_user_role",
+        "arguments": {
+          "user_id": "Alice",
+          "role": "Editor"
+        }
+      }
+    ]
+  }
+]

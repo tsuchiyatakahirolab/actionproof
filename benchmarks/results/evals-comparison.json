@@ -1,0 +1,73 @@
+{
+  "measuredAt": "2026-08-26T22:36:09.231Z",
+  "method": "Native Chrome WebMCP execution scored by the official webmcp-evals trajectory matcher; state read independently after the call.",
+  "webmcpEvalsVersion": "0.0.3",
+  "results": [
+    {
+      "scenario": "orders",
+      "bridgeMode": "native-webmcp",
+      "officialMatcherOutcome": "PASS",
+      "expectedCall": [
+        {
+          "functionName": "cancel_order",
+          "arguments": {
+            "order_id": "#1042"
+          }
+        }
+      ],
+      "actualCall": [
+        {
+          "functionName": "cancel_order",
+          "args": {
+            "order_id": "#1042"
+          }
+        }
+      ],
+      "observedState": {
+        "target": {
+          "expected": "cancelled",
+          "actual": "cancelled"
+        },
+        "unselectedNeighbor": {
+          "expected": "active",
+          "actual": "cancelled"
+        }
+      },
+      "collateralDefectPresent": true
+    },
+    {
+      "scenario": "permissions",
+      "bridgeMode": "native-webmcp",
+      "officialMatcherOutcome": "PASS",
+      "expectedCall": [
+        {
+          "functionName": "change_user_role",
+          "arguments": {
+            "user_id": "Alice",
+            "role": "Editor"
+          }
+        }
+      ],
+      "actualCall": [
+        {
+          "functionName": "change_user_role",
+          "args": {
+            "user_id": "Alice",
+            "role": "Editor"
+          }
+        }
+      ],
+      "observedState": {
+        "target": {
+          "expected": "Editor",
+          "actual": "Editor"
+        },
+        "unselectedNeighbor": {
+          "expected": "Viewer",
+          "actual": "Editor"
+        }
+      },
+      "collateralDefectPresent": true
+    }
+  ]
+}

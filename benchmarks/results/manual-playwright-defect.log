@@ -1,0 +1,71 @@
+
+Running 2 tests using 1 worker
+
+
+
+[1/2] benchmarks\manual-playwright.spec.ts:5:1 › order state is exactly the intended state
+  1) benchmarks\manual-playwright.spec.ts:5:1 › order state is exactly the intended state ──────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-testid="record-1043"] [data-field="status"]')
+    Expected: "active"
+    Received: "cancelled"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-testid="record-1043"] [data-field="status"]')
+        14 × locator resolved to <td data-field="status">cancelled</td>
+           - unexpected value "cancelled"
+
+
+      11 |   await expect(page.locator('[data-testid="record-1042"] [data-field="status"]')).toHaveText("cancelled");
+      12 |   // BASELINE_EXPECTED_STATE_ASSERTION 2/4
+    > 13 |   await expect(page.locator('[data-testid="record-1043"] [data-field="status"]')).toHaveText("active");
+         |                                                                                   ^
+      14 | });
+      15 |
+      16 | test("permission state is exactly the intended state", async ({ page }) => {
+        at C:\Users\Windows\Projects\webmcp-challenge\benchmarks\manual-playwright.spec.ts:13:83
+
+    Error Context: test-results\manual-playwright-order-state-is-exactly-the-intended-state\error-context.md
+
+
+
+
+[2/2] benchmarks\manual-playwright.spec.ts:16:1 › permission state is exactly the intended state
+  2) benchmarks\manual-playwright.spec.ts:16:1 › permission state is exactly the intended state ────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-testid="record-Bob"] [data-field="role"]')
+    Expected: "Viewer"
+    Received: "Editor"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-testid="record-Bob"] [data-field="role"]')
+        14 × locator resolved to <td data-field="role">Editor</td>
+           - unexpected value "Editor"
+
+
+      22 |   await expect(page.locator('[data-testid="record-Alice"] [data-field="role"]')).toHaveText("Editor");
+      23 |   // BASELINE_EXPECTED_STATE_ASSERTION 4/4
+    > 24 |   await expect(page.locator('[data-testid="record-Bob"] [data-field="role"]')).toHaveText("Viewer");
+         |                                                                                ^
+      25 | });
+      26 |
+        at C:\Users\Windows\Projects\webmcp-challenge\benchmarks\manual-playwright.spec.ts:24:80
+
+    Error Context: test-results\manual-playwright-permissi-eded9--exactly-the-intended-state\error-context.md
+
+
+  2 failed
+    benchmarks\manual-playwright.spec.ts:5:1 › order state is exactly the intended state ───────────
+    benchmarks\manual-playwright.spec.ts:16:1 › permission state is exactly the intended state ─────
+(node:25488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:43216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
