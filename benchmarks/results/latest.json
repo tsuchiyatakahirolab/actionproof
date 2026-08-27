@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-26T22:36:38.277Z",
+  "measuredAt": "2026-08-27T04:03:53.908Z",
   "scope": "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
   "conditions": {
     "nativeWebMcp": true,
@@ -34,10 +34,10 @@
     }
   },
   "commandDurationsMs": {
-    "evals": 4427,
-    "manualDefect": 16084,
-    "manualFixed": 5308,
-    "actionProofUi": 7617
+    "evals": 5223,
+    "manualDefect": 16140,
+    "manualFixed": 7382,
+    "actionProofUi": 10962
   },
   "success": true
 }

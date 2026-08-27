@@ -2,22 +2,22 @@
 
 ## Automated evidence
 
-- [ ] `npm ci`
-- [ ] `npm run check`
-- [ ] `npm test`
-- [ ] `npm run build`
-- [ ] `npm run test:ui`
-- [ ] `npm run benchmark`
-- [ ] Chrome native WebMCP badge and both workflows verified on the production URL
-- [ ] Console errors: zero in primary demo path
-- [ ] Secret scan clean
-- [ ] Git diff/status audited
+- [x] `npm ci`
+- [x] `npm run check`
+- [x] `npm test`
+- [x] `npm run build`
+- [x] `npm run test:ui`
+- [x] `npm run benchmark`
+- [x] Chrome native WebMCP badge and both workflows verified on the production URL
+- [x] Console errors: zero in primary demo path
+- [x] Secret scan clean
+- [x] Git diff/status audited
 
 ## Public artifacts
 
-- [ ] Public GitHub repository reachable and MIT license detected
-- [ ] README contains setup, architecture, limitations, tests, benchmark, and judge path
-- [ ] Public live URL reachable without sign-in
+- [x] Public GitHub repository reachable and MIT license detected
+- [x] README contains setup, architecture, limitations, tests, benchmark, and judge path
+- [x] Public live URL reachable without sign-in
 - [ ] Public English YouTube video under three minutes with audible narration
 - [ ] Devpost links point to the final production URL, repository, and video
 

@@ -140,6 +140,8 @@ Current deterministic suite:
 - [Judging evidence map](submission/JUDGING_EVIDENCE.md)
 - [90-second demo script](submission/VIDEO_SCRIPT.md)
 - [Devpost submission copy](submission/DEVPOST_SUBMISSION.md)
+- [Final technical audit](submission/FINAL_AUDIT.md)
+- [20-second unfamiliar-reviewer form](submission/BLIND_REVIEW_FORM.md)
 
 ## License
 
