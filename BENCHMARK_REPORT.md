@@ -10,7 +10,7 @@ Two correct native WebMCP calls were executed against two deterministic fake-dat
 
 Adding four concrete expected-state assertions in Playwright detected both defects; the identical assertions passed after the handler repairs. ActionProof detected both defects and passed both identical retained regressions using two action bindings and generated required/unchanged checks, with no per-record expected-state assertions in the scenario definitions.
 
-This supports one narrow conclusion: **tool-call matching and post-action effect verification cover different failure surfaces.** It does not establish runtime superiority, lower total engineering cost, universal adapter support, or customer demand.
+This supports one narrow conclusion: **tool-call matching and post-action effect verification cover different failure surfaces.** In the product flow, that distinction becomes a release decision: the gate blocks on collateral state and clears only after the identical retained contract passes. It does not establish runtime superiority, lower total engineering cost, universal adapter support, or customer demand.
 
 ## Findings
 

@@ -23,7 +23,7 @@
 
 ## Human audits
 
-- [ ] Unfamiliar reviewer sees the final 20-second silent screen and can answer: who has the problem, what went wrong, why call checks were insufficient, and why WebMCP matters
+- [ ] Unfamiliar reviewer sees the final 20-second silent screen and can answer: who has the problem, what release decision ActionProof made, what went wrong, why call checks were insufficient, and why WebMCP matters
 - [ ] Owner watches the final uploaded video end to end with captions/audio enabled
 - [ ] Owner verifies every submission statement against the repository and measured artifacts
 

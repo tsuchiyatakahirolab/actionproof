@@ -3,6 +3,9 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const url = process.env.PRODUCTION_URL ?? "https://actionproof.vercel.app";
+const auditOutput = process.env.AUDIT_OUTPUT
+  ? path.resolve(process.env.AUDIT_OUTPUT)
+  : path.join(process.cwd(), "submission", "PRODUCTION_AUDIT.json");
 const browser = await chromium.launch({
   channel: "chrome",
   headless: true,
@@ -66,7 +69,7 @@ try {
       consoleErrors.length === 0,
   };
   await writeFile(
-    path.join(process.cwd(), "submission", "PRODUCTION_AUDIT.json"),
+    auditOutput,
     `${JSON.stringify(output, null, 2)}\n`,
   );
   console.log(JSON.stringify(output, null, 2));

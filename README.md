@@ -2,18 +2,18 @@
 
 > **The agent did everything right. The result was still wrong.**
 
-ActionProof checks whether a WebMCP action changed exactly the state the human declared—and nothing outside that Effect Contract.
+**ActionProof is a pre-release effect gate for state-changing WebMCP tools.** Before a developer or QA engineer lets a write tool ship, it proves that the observed application state matches the human-authorized Effect Contract—and that nothing else changed.
 
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ActionProof turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
-The deterministic demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ActionProof generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, identifies the collateral change, retains the generated regression, and passes that identical regression after repair.
+The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ActionProof generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a CI-ready regression artifact, and passes that identical gate after repair.
 
 ## Try it
 
 - **Live demo:** [https://actionproof.vercel.app](https://actionproof.vercel.app)
 - **Public repository:** [github.com/tsuchiyatakahirolab/actionproof](https://github.com/tsuchiyatakahirolab/actionproof)
-- **20-second proof:** open the demo, keep **Order cancellation** selected, and click **Run seeded defect**
-- **Repair proof:** click **Run repaired version**; the same regression ID, contract, and tool arguments must pass
+- **20-second proof:** open the demo, keep **Order cancellation** selected, and click **Run seeded defect**; the effect gate must block the write tool
+- **Repair proof:** click **Run repaired version**; the same regression ID, contract, and tool arguments must pass and clear the gate
 - **Second workflow:** switch to **Permission change** and repeat
 
 All records are fake, all defects are deliberately seeded, and no transaction leaves the browser fixture.
@@ -31,7 +31,7 @@ visible human selection + pre-action state
 → inspectable verdict + retained regression
 ```
 
-The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. The Run button makes the native execution deterministic for judging; an external browser agent can invoke the same context-matched tool. Without WebMCP there is no structured page-exposed action boundary for ActionProof to wrap and verify.
+The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. The Run button makes the native execution deterministic for judging; an external browser agent can invoke the same context-matched tool. Without WebMCP there is no structured page-exposed write boundary for this gate to discover and execute; it becomes an ordinary application-specific test.
 
 ## Human and agent roles
 
@@ -40,7 +40,7 @@ The page registers the one tool relevant to the visible workflow with `document.
 - The agent invokes the registered WebMCP tool.
 - The application exposes an owned post-action state adapter.
 - ActionProof compares declared and observed effects; it does not infer intent from the tool result.
-- A developer repairs the handler and reruns the retained regression unchanged.
+- A developer repairs the handler and reruns the retained regression unchanged before clearing the write tool for release.
 
 ## One core, two workflows
 
@@ -63,7 +63,17 @@ The repository includes a plain WebMCP fixture, official WebMCP Evals `0.0.3` tr
 
 This is a detection-coverage comparison, not a runtime-performance, universal-support, or market-demand claim. ActionProof still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
 
+## Integration boundary
+
+ActionProof is not zero-configuration magic. A site owner supplies two narrow, reviewable pieces: an authorized snapshot adapter for the state that matters, and one action binding that declares the intended field transition. The core then expands the current visible selection into concrete required, forbidden, and invariant checks for each run.
+
+See [the integration guide](docs/INTEGRATION.md) for the minimum adapter, binding, native execution, CI artifact, and production caveats.
+
 Primary context: [WebMCP privacy/security discussion #45](https://github.com/webmachinelearning/webmcp/issues/45) and [Chrome's Evals for WebMCP guidance](https://developer.chrome.com/docs/ai/webmcp/evals).
+
+## Build Week usage
+
+OpenAI Codex was the primary development environment for the implementation, native Chrome tests, benchmark harness, UI review, and release audit. GPT-5.6 was used for the architecture review, adversarial judging pass, test design, and submission materials. The runtime demo is deterministic and does not call a model or claim that an AI repaired the seeded handler.
 
 Run the measurement:
 
@@ -122,16 +132,18 @@ Current deterministic suite:
 - `src/core/scenario.ts` — two fictional application bindings and deterministic defect/repair handlers
 - `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, same-origin exposure, and labeled local fallback
 - `src/App.tsx` — judge-first proof UI
+- `docs/INTEGRATION.md` — bounded path from the fixture to an application-owned release gate
 - `baseline.html` — plain WebMCP comparison fixture without ActionProof
 - `benchmarks/` — official matcher inputs, manual Playwright baseline, raw and summarized results
 - `tests/browser/` — native Chrome end-to-end proof
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
+- `DOCUMENTATION.md` / `PLANS.md` — reproducible development record and release-gated execution source of truth
 
 ## Scope and limitations
 
 - This is a new, public hackathon prototype using fictional in-memory records and deterministic seeded defects.
 - It demonstrates two action classes, not zero-configuration support for every website.
-- Effect verification is limited to the state exposed by an application-owned adapter and the contract fields it declares.
+- The effect gate is limited to the state exposed by an application-owned adapter and the contract fields it declares.
 - A passed Effect Contract is not proof that every external or delayed side effect is correct.
 - The deterministic Run control proves the native action/effect path; it does not measure an LLM's tool-selection quality.
 - The comparison does not measure LLM tool-selection quality, latency, authoring time, or customer demand.
@@ -140,7 +152,8 @@ Current deterministic suite:
 ## Submission evidence
 
 - [Formal GO decision](GO_DECISION.md)
-- [Winning specification v0.4](WINNING_SPEC_v0.4.md)
+- [Current top-award release specification v0.5](WINNING_SPEC_v0.5.md)
+- [Architecture gate specification v0.4](WINNING_SPEC_v0.4.md)
 - [Top-10 gate report](TOP10_GATE_REPORT.md)
 - [Benchmark report](BENCHMARK_REPORT.md)
 - [Judging evidence map](submission/JUDGING_EVIDENCE.md)

@@ -52,7 +52,7 @@ button { font: inherit; }
 .eyebrow, .section-kicker { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: 0.15em; }
 .hero h1 { margin: 7px auto 5px; max-width: 1120px; font-family: Georgia, "Times New Roman", serif; font-size: 42px; line-height: 1.06; letter-spacing: -0.04em; font-weight: 500; }
 .hero h1 em { color: var(--red); font-style: italic; }
-.hero p:last-child { margin: 10px auto 0; max-width: 760px; color: var(--muted); font-size: 15px; }
+.hero p:last-child { margin: 10px auto 0; max-width: 860px; color: var(--muted); font-size: 15px; }
 
 .scenario-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
 .scenario-tabs button {
@@ -73,8 +73,16 @@ button { font: inherit; }
   box-shadow: 0 18px 50px rgba(46, 50, 46, .08);
   overflow: hidden;
 }
-.proof-header { display: flex; align-items: center; justify-content: space-between; padding: 21px 25px 17px; border-bottom: 1px solid var(--line); }
+.proof-header { display: grid; grid-template-columns: minmax(360px, 1fr) auto auto; align-items: center; gap: 18px; padding: 18px 25px 15px; border-bottom: 1px solid var(--line); }
 .proof-header h2 { margin: 4px 0 0; font-size: 24px; letter-spacing: -0.03em; }
+.release-question { margin: 4px 0 0; color: var(--muted); font-size: 10px; font-weight: 650; }
+.gate-status { min-width: 184px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; background: #f5f4ef; }
+.gate-status span, .gate-status small { display: block; }
+.gate-status span { font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+.gate-status small { margin-top: 2px; color: var(--muted); font-size: 9px; }
+.gate-blocked { border-color: #dd8e86; background: var(--red-soft); color: var(--red-dark); }
+.gate-passed { border-color: #9fceb9; background: var(--green-soft); color: #075943; }
+.gate-running { border-color: #d7bd82; background: var(--amber-soft); color: #72501c; }
 .proof-actions { display: flex; gap: 9px; }
 .button { border-radius: 9px; padding: 10px 15px; border: 1px solid var(--ink); font-weight: 750; cursor: pointer; }
 .button:disabled { opacity: .45; cursor: default; }
@@ -159,6 +167,9 @@ button { font: inherit; }
 .call-passed { color: #075943; background: white; border: 1px solid #a6cfbf; }
 .fail-message { color: white; background: var(--red-dark); }
 .pass-message { margin-top: 16px; color: white; background: var(--green); font-size: 14px; }
+.ship-decision { margin: 7px 14px 10px; text-align: center; font-size: 8px; font-weight: 900; letter-spacing: .12em; }
+.ship-blocked { color: var(--red-dark); }
+.ship-pass { color: #075943; }
 .verdict-panel p { margin: 9px 14px; color: #72534e; font-size: 10px; }
 
 .regression-strip { margin: 0 15px 12px; display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #cad3ce; border-radius: 10px; background: #f4f7f5; }
@@ -203,4 +214,6 @@ button { font: inherit; }
   .topbar { padding-inline: 22px; }
   .hero h1 { font-size: 36px; }
   .proof-node { min-width: 125px; }
+  .proof-header { grid-template-columns: minmax(330px, 1fr) auto; }
+  .proof-actions { grid-column: 1 / -1; justify-content: flex-end; }
 }

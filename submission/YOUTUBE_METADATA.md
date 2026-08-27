@@ -8,7 +8,7 @@ ActionProof — Correct Call. Wrong Effect. | WebMCP Challenge
 
 The agent did everything right. The result was still wrong.
 
-ActionProof generates an Effect Contract from visible human intent and pre-action state, executes the one context-matched native WebMCP tool, observes application state independently of the return payload, and catches collateral changes that a correct tool call and `success: true` cannot prove away.
+ActionProof is a pre-release effect gate for state-changing WebMCP tools. It generates an Effect Contract from visible human intent and pre-action state, executes the one context-matched native WebMCP tool, observes application state independently of the return payload, and blocks the gate when collateral changes appear despite a correct call and `success: true`.
 
 Live demo: https://actionproof.vercel.app
 Open-source repository: https://github.com/tsuchiyatakahirolab/actionproof

@@ -6,15 +6,15 @@ ActionProof
 
 ## Tagline
 
-Effect verification for WebMCP actions: correct call, wrong effect, caught.
+A pre-release effect gate for WebMCP writes: correct call, wrong effect, caught.
 
 ## Short description
 
-ActionProof generates an Effect Contract from visible human intent and pre-action state, executes the page's native WebMCP tool, observes application-owned post-action state independently of the return payload, and catches collateral changes that a correct tool call and successful return cannot prove away.
+Before a state-changing WebMCP tool ships, ActionProof generates an Effect Contract from visible human intent and pre-action state, executes the native tool, observes application-owned post-action state independently of the return payload, and blocks the gate when anything outside that contract changes.
 
 ## Inspiration
 
-WebMCP gives browser agents a structured way to act on websites. That makes tool selection and argument validation easier to inspect—but a correct invocation is not the same as a correct resulting state. A handler can accept the right target, return success, and still mutate an unselected record.
+WebMCP gives browser agents a structured way to act on websites. That makes tool selection and argument validation easier to inspect—but a developer or QA engineer deciding whether a write tool can ship still needs evidence about its actual state transition. A handler can accept the right target, return success, and still mutate an unselected record.
 
 The WebMCP standards discussion explicitly identifies the trust gap between a tool's declared intent and its actual behavior. Chrome's own Evals guidance recommends classic deterministic tests for UI updates and intentional side effects. ActionProof makes that effect boundary generated, inspectable, and reusable instead of claiming to replace call evals or application tests.
 
@@ -22,13 +22,13 @@ We wanted one failure to be understandable without background knowledge: **the a
 
 ## What it does
 
-The human selects one target in the application UI. Before the action, ActionProof turns that visible intent and the pre-action snapshot into an Effect Contract:
+In an owned staging environment, the human selects one target in the application UI. Before the action, ActionProof turns that visible intent and the pre-action snapshot into an Effect Contract:
 
 - the selected record must make the declared transition;
 - every unselected record must remain unchanged;
 - entity identity and count must remain stable.
 
-The page then executes its registered native WebMCP tool. ActionProof does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. A failed effect becomes a downloadable regression case. After the handler is repaired, the identical contract, tool arguments, and regression ID must pass.
+The page then executes its registered native WebMCP tool. ActionProof does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. A collateral mutation blocks the effect gate and becomes a downloadable CI regression artifact. After the handler is repaired, the identical contract, tool arguments, and regression ID must pass before the gate clears.
 
 The demo uses two fictional workflows—order cancellation and permission change—with the same verification core.
 
@@ -36,20 +36,22 @@ The demo uses two fictional workflows—order cancellation and permission change
 
 ActionProof wraps the page-exposed action boundary that WebMCP creates. It registers only the tool relevant to the visible workflow with `document.modelContext.registerTool()`, disposes it when context changes, discovers it with `getTools()`, and invokes it with `executeTool()`. Exact schema enums bind the target and requested value to visible intent, while same-origin exposure narrows who can invoke it. The deterministic Run control invokes the same native path for a stable judge demo.
 
-Without WebMCP, ActionProof would be a conventional application-specific regression test. With WebMCP, the human's visible intent, the agent's structured page action, and the application's resulting state can be inspected as one proof chain.
+Without WebMCP, ActionProof would be a conventional application-specific regression test. With WebMCP, it discovers and executes the same structured write boundary exposed to agents, so the human's visible intent, the agent-facing page action, and the application's resulting state can be inspected as one release proof chain.
 
 ## Better human-agent UX
 
-The human does not write a test assertion or decode an agent trace. They select the intended target in the normal UI. ActionProof generates the effect boundary, shows the exact call, separates the tool result from observed state, highlights collateral changes, and preserves a regression that developers can rerun after a fix.
+The QA operator does not write a record-specific assertion or decode an agent trace. They select the intended target in the normal UI. ActionProof generates the effect boundary, shows the exact call, separates the tool result from observed state, highlights collateral changes, makes the release decision visible, and preserves a regression that developers can rerun after a fix.
 
 ## How we built it
 
 - React 19, TypeScript, and Vite
+- OpenAI Codex as the primary development environment; GPT-5.6 for architecture review, test design, and adversarial submission review
 - Native imperative WebMCP registration and execution
 - Context-matched tool lifecycle, exact visible-intent schemas, and same-origin exposure
 - Typed Effect Contract generation from explicit selection and pre-state
 - Deterministic snapshot diff for required, unexpected, and invariant changes
 - Two in-memory fake-data action bindings with seeded defect/repair toggles
+- Visible pre-release gate state and downloadable `actionproof.regression.v1` CI artifact
 - Vitest unit coverage and Playwright native-Chrome E2E coverage
 - Controlled comparison using the official `webmcp-evals` 0.0.3 trajectory matcher plus manual Playwright state assertions
 
@@ -68,6 +70,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 ## Accomplishments
 
 - A 20-second silent proof of correct call / failed effect
+- An explicit product decision: effect gate blocked on collateral change, passed after identical repair regression
 - One verification core for order and permission workflows
 - Deterministic defect → detection → repair → identical regression PASS
 - A reproducible, source-visible Evals + Playwright comparison
@@ -79,7 +82,7 @@ An invocation trace answers “what did the agent ask the page to do?” An Effe
 
 ## What's next
 
-A production-oriented version would add application-owned server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, and authorization-aware contract scopes. Those extensions are intentionally outside this submission.
+A production-oriented version would add application-owned server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, authorization-aware contract scopes, and CI enforcement around the retained artifact. Those extensions are intentionally outside this submission.
 
 ## Links
 
@@ -95,8 +98,8 @@ A production-oriented version would add application-owned server-state adapters,
 1. Open the live app in a WebMCP-capable browser.
 2. Confirm **Native WebMCP · 1 context-matched tool** when the API is available.
 3. Click **Run seeded defect** under Order cancellation.
-4. Confirm `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, and unselected Order #1043 marked `UNEXPECTED`.
-5. Click **Run repaired version** and confirm `IDENTICAL REGRESSION PASS`.
+4. Confirm `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, `EFFECT GATE BLOCKED`, and unselected Order #1043 marked `UNEXPECTED`.
+5. Click **Run repaired version** and confirm `EFFECT GATE PASSED` plus `IDENTICAL REGRESSION PASS`.
 6. Switch to Permission change and repeat.
 
 All demo data is fictional and all failures are deliberately seeded.

@@ -7,12 +7,13 @@ Ask the reviewer to answer in their own words:
 1. What did the human intend to change?
 2. Was the tool call itself correct and successful?
 3. What actually went wrong?
-4. What did ActionProof add beyond checking the tool call?
-5. Why is WebMCP part of this flow?
+4. Who would use ActionProof, and what decision did it make?
+5. What did ActionProof add beyond checking the tool call?
+6. Why is WebMCP part of this flow?
 
 ## Pass rule
 
-Questions 1–4 must be substantially correct. For question 5, the reviewer should identify the structured page action or agent-to-page tool boundary; exact protocol terminology is not required.
+Questions 1–5 must be substantially correct. For question 6, the reviewer should identify the structured page action or agent-to-page tool boundary; exact protocol terminology is not required.
 
 ## Actual response record
 

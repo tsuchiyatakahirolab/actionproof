@@ -24,6 +24,8 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   expect(orderTool.schema.additionalProperties).toBe(false);
   await expect(page.getByRole("heading", { name: "The agent did everything right. The result was still wrong." })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cancel only Order #1042" })).toBeVisible();
+  await expect(page.getByText("Release decision: can this WebMCP write tool ship?")).toBeVisible();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PENDING");
   await expect(page.getByTestId("effect-contract")).toContainText("#1042.status → cancelled");
   await expect(page.getByText("Correct WebMCP call")).toBeVisible();
 
@@ -31,6 +33,7 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await expect(page.getByTestId("verdict-fail")).toBeVisible();
   await expect(page.getByText("TOOL CALL PASSED")).toBeVisible();
   await expect(page.getByText("REAL-WORLD EFFECT FAILED")).toBeVisible();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByTestId("state-gap")).toHaveText("REQUESTED 1 · CHANGED 2");
   await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();
   await expect(page.getByTestId("regression-strip")).toContainText("orders__1042__status__to-cancelled");
@@ -47,6 +50,7 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await page.getByTestId("run-fixed").click();
   await expect(page.getByTestId("verdict-pass")).toBeVisible();
   await expect(page.getByText("ACTION PROVEN")).toBeVisible();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PASSED");
   await expect(page.getByTestId("regression-proof")).toContainText("IDENTICAL REGRESSION");
   await expect(page.getByTestId("regression-proof")).toContainText("PASS");
 
@@ -71,10 +75,12 @@ test("the second workflow uses the same UI and verifier", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Change only Alice to Editor" })).toBeVisible();
   await page.getByTestId("run-defect").click();
   await expect(page.getByTestId("verdict-fail")).toBeVisible();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByText("Bob")).toBeVisible();
   await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();
   await expect(page.getByTestId("regression-strip")).toContainText("permissions__alice__role__to-editor");
   await page.getByTestId("run-fixed").click();
   await expect(page.getByTestId("verdict-pass")).toBeVisible();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PASSED");
   await expect(page.getByTestId("regression-proof")).toContainText("PASS");
 });

@@ -9,12 +9,13 @@
 
 | Check | Result |
 |---|---|
-| `npm ci` | PASS — 199 packages installed; 0 vulnerabilities reported |
+| `npm ci` | PASS — 200 packages installed; 0 vulnerabilities reported |
 | `npm run check` | PASS — TypeScript project check |
 | `npm test` | PASS — 8/8 unit tests, including wrong-value and timeout controls |
 | `npm run build` | PASS — production Vite build |
 | `npm run test:ui` | PASS — 2/2 native Chrome WebMCP E2E tests |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
+| `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with refreshed gate narrative |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
 | `npm audit --audit-level=high` | PASS — 0 vulnerabilities |
 | credential-pattern scan | PASS — no credential-shaped matches |
@@ -33,7 +34,7 @@
 - The registration uses same-origin `exposedTo`; the app header remains `Permissions-Policy: tools=*` for the top-level WebMCP feature.
 - Collected local-preview console errors: zero.
 
-The existing `submission/PRODUCTION_AUDIT.json` records the previous public revision and must be replaced by the release-day audit before submission.
+The existing `submission/PRODUCTION_AUDIT.json` records the previous public revision and must be replaced by the release-day audit before submission. `submission/private/HELD_PRODUCTION_AUDIT.json` records the refreshed held build against a local production preview: native WebMCP, both context-matched tools, both defect detections, both identical regression passes, `tools=*`, and zero console errors.
 
 ## Benchmark evidence
 
@@ -52,11 +53,11 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Duration: 90.00 seconds
 - Video: H.264 High, 1440×900, 25 fps
 - Audio: AAC-LC, English Microsoft Zira narration
-- SHA-256: `6583309429B7761F3632987036E313D180878F4385B34D102DCDA78770299596`
+- SHA-256: `ADAAC0B0BD100951641419FFDCD65A1E2F694A6E2A696483898A7A5B5DC2E68E`
 - 16:9 upload thumbnail: `submission/youtube-thumbnail.png`
 - Silent-audit source screen: `submission/thumbnail.png`
 
-Ten-second contact-sheet review covered the hero, contract, native action, successful return, failed effect, repaired order pass, permission repair pass, and comparison screen. Exact 80-second and 88-second frame reviews confirmed the comparison cards and final hero/native/pass composition. Silence detection confirmed clean gaps between all ten TTS segments without narration overlap at segment boundaries.
+Ten-second contact-sheet review covered the hero, staging QA release question, contract, native action, successful return, failed effect with `EFFECT GATE BLOCKED`, repaired order pass with `EFFECT GATE PASSED`, permission repair pass, and comparison screen. Exact 80-second and 88-second frame reviews confirmed the comparison cards and final hero/native/pass composition. The refreshed narration was generated from `submission/VIDEO_SCRIPT.md`; its ten segment starts remain fixed and fit within the 90-second H.264/AAC output.
 
 ## Release-hold state
 

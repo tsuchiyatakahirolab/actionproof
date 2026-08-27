@@ -189,6 +189,17 @@ export default function App() {
       JSON.stringify(failedRun.regressionCase.contract) === JSON.stringify(repairedRun.regressionCase.contract) &&
       JSON.stringify(failedRun.regressionCase.arguments) === JSON.stringify(repairedRun.regressionCase.arguments),
   );
+  const gateState = phase < 4 || !currentResult
+    ? running ? "running" : "pending"
+    : currentResult.verdict === "ACTION_PROVEN"
+      ? "passed"
+      : "blocked";
+  const gateLabel = {
+    pending: "EFFECT GATE PENDING",
+    running: "EFFECT GATE RUNNING",
+    passed: "EFFECT GATE PASSED",
+    blocked: "EFFECT GATE BLOCKED",
+  }[gateState];
 
   function downloadRegression(resultToDownload: VerificationResult): void {
     const artifact = {
@@ -213,11 +224,11 @@ export default function App() {
           <span className="brand-mark" aria-hidden="true">AP</span>
           <div>
             <strong>ActionProof</strong>
-            <span>Effect verification for WebMCP actions</span>
+            <span>Pre-release effect gate for WebMCP writes</span>
           </div>
         </div>
         <div className="topbar-badges">
-          <span className="badge badge-neutral">Seeded regression</span>
+          <span className="badge badge-neutral">Staging release fixture</span>
           <span className="badge badge-neutral">Fake data · no transactions</span>
           <span
             className={`badge ${bridgeMode === "native-webmcp" ? "badge-native" : "badge-harness"}`}
@@ -233,10 +244,10 @@ export default function App() {
       </header>
 
       <section className="hero">
-        <p className="eyebrow">VERIFY THE EFFECT, NOT JUST THE INVOCATION</p>
+        <p className="eyebrow">THE PRE-RELEASE EFFECT GATE FOR WEBMCP WRITES</p>
         <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
         <p>
-          A correct tool call can still cause collateral change. ActionProof checks the declared effect against state observed independently of the tool return.
+          Before a state-changing tool ships, ActionProof proves that observed application state matches the human-authorized Effect Contract—and nothing else changed.
         </p>
       </section>
 
@@ -258,8 +269,17 @@ export default function App() {
       <section className="proof-workspace">
         <div className="proof-header">
           <div>
-            <span className="section-kicker">20-second silent proof</span>
+            <span className="section-kicker">STAGING QA · 20-SECOND SILENT PROOF</span>
             <h2>{definition.intentSummary}</h2>
+            <p className="release-question">Release decision: can this WebMCP write tool ship?</p>
+          </div>
+          <div
+            className={`gate-status gate-${gateState}`}
+            data-testid="gate-status"
+            role="status"
+          >
+            <span>{gateLabel}</span>
+            <small>{gateState === "blocked" ? "Collateral change detected" : gateState === "passed" ? "Exact contract satisfied" : "Awaiting effect evidence"}</small>
           </div>
           <div className="proof-actions">
             <button
@@ -432,6 +452,7 @@ export default function App() {
                 <div className="score-line"><span>Required changes</span><strong>{currentResult.requiredSatisfied.length}/{currentResult.contract.required.length}</strong></div>
                 <div className="score-line"><span>Unexpected changes</span><strong>0</strong></div>
                 <div className="verdict-message pass-message">ACTION PROVEN</div>
+                <div className="ship-decision ship-pass">EFFECT GATE PASSED</div>
               </div>
             ) : currentResult.verdict === "TOOL_CALL_FAILED" ? (
               <div data-testid="verdict-tool-failed">
@@ -445,6 +466,7 @@ export default function App() {
                 <div className="state-gap" data-testid="state-gap">REQUESTED {currentResult.contract.required.length} · CHANGED {observedCount}</div>
                 <div className="verdict-message call-passed">TOOL CALL PASSED</div>
                 <div className="verdict-message fail-message">REAL-WORLD EFFECT FAILED</div>
+                <div className="ship-decision ship-blocked">EFFECT GATE BLOCKED</div>
               </div>
             )}
           </aside>
@@ -453,17 +475,17 @@ export default function App() {
         {currentResult && phase >= 4 && (
           <div className="regression-strip" data-testid="regression-strip">
             <div>
-              <span>REGRESSION RETAINED</span>
+              <span>CI REGRESSION ARTIFACT</span>
               <strong>{currentResult.regressionCase.id}</strong>
             </div>
-            <p>Same generated contract · same tool arguments · reusable after the fix</p>
+            <p>Same contract · same arguments · reusable as the release gate after repair</p>
             <button
               className="download-regression"
               data-testid="download-regression"
               onClick={() => downloadRegression(currentResult)}
               type="button"
             >
-              Download regression JSON
+              Download CI regression
             </button>
           </div>
         )}
@@ -480,7 +502,7 @@ export default function App() {
         )}
 
         <div className="architecture-note">
-          <strong>One verifier, two workflows.</strong>
+          <strong>One release gate, two workflows.</strong>
           <span>UI selection → Effect Contract → context-matched WebMCP action → application-state diff</span>
           <span className="live-record-count" aria-hidden="true">{Object.keys(liveSnapshot).length} records observed</span>
         </div>
@@ -490,7 +512,7 @@ export default function App() {
         <div className="benchmark-heading">
           <div>
             <span className="section-kicker">CONTROLLED COMPARISON · TWO SEEDED SCENARIOS</span>
-            <h2 id="benchmark-title">What each layer actually checked</h2>
+            <h2 id="benchmark-title">Why a correct call still needs an effect gate</h2>
           </div>
           <a href="/baseline.html?scenario=orders&defect=1">Open plain WebMCP fixture →</a>
         </div>
