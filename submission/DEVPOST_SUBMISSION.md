@@ -80,8 +80,8 @@ A production-oriented version would add application-owned server-state adapters,
 
 ## Links
 
-- Live app: `[INSERT AFTER DEPLOYMENT]`
-- Public repository: `[INSERT AFTER PUBLICATION]`
+- Live app: `https://actionproof.vercel.app`
+- Public repository: `https://github.com/tsuchiyatakahirolab/actionproof`
 - Public demo video: `[INSERT AFTER YOUTUBE UPLOAD]`
 - Technical benchmark: `BENCHMARK_REPORT.md` in the repository
 

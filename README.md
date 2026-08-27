@@ -8,7 +8,8 @@ The deterministic demo registers native WebMCP write tools for two fictional wor
 
 ## Try it
 
-- **Live demo:** deployment URL will be inserted before submission
+- **Live demo:** [https://actionproof.vercel.app](https://actionproof.vercel.app)
+- **Public repository:** [github.com/tsuchiyatakahirolab/actionproof](https://github.com/tsuchiyatakahirolab/actionproof)
 - **20-second proof:** open the demo, keep **Order cancellation** selected, and click **Run seeded defect**
 - **Repair proof:** click **Run repaired version**; the same regression ID, contract, and tool arguments must pass
 - **Second workflow:** switch to **Permission change** and repeat
