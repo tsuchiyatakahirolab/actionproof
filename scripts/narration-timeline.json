@@ -1,0 +1,33 @@
+{
+  "voice": "en-US-AvaMultilingualNeural",
+  "rate": "+2%",
+  "volume": "+0%",
+  "pitch": "+0Hz",
+  "clips": [
+    { "id": "00", "startMs": 200, "text": "The agent did everything right." },
+    { "id": "01", "startMs": 2900, "text": "The result was still wrong." },
+    { "id": "02", "startMs": 5500, "text": "This is ActionProof." },
+    { "id": "03", "startMs": 7800, "text": "Before this tool ships, Q A selects only Order ten forty-two." },
+    { "id": "04", "startMs": 13400, "text": "The gate requires one cancellation, and no other change." },
+    { "id": "05", "startMs": 17800, "text": "The page exposes one native Web M C P tool for this context." },
+    { "id": "06", "startMs": 23000, "text": "Its schema binds the argument to the visible selection." },
+    { "id": "07", "startMs": 27300, "text": "The tool returns success." },
+    { "id": "08", "startMs": 29800, "text": "At the invocation layer, everything passed." },
+    { "id": "09", "startMs": 34300, "text": "But the observed application state shows two orders changed." },
+    { "id": "10", "startMs": 38900, "text": "The seeded handler also cancelled unselected Order ten forty-three." },
+    { "id": "11", "startMs": 47300, "text": "Tool call passed." },
+    { "id": "12", "startMs": 49600, "text": "Real-world effect failed." },
+    { "id": "13", "startMs": 52200, "text": "Requested one." },
+    { "id": "14", "startMs": 54500, "text": "Changed two." },
+    { "id": "15", "startMs": 56800, "text": "The release gate blocks." },
+    { "id": "16", "startMs": 59100, "text": "We repair only the handler and rerun the identical contract." },
+    { "id": "17", "startMs": 63700, "text": "The regression passes." },
+    { "id": "18", "startMs": 66000, "text": "The effect gate clears." },
+    { "id": "19", "startMs": 68300, "text": "The same verifier catches the permission defect." },
+    { "id": "20", "startMs": 72100, "text": "The identical repair regression passes there too." },
+    { "id": "21", "startMs": 77300, "text": "Evals accepted both correct calls, and rejected both wrong controls." },
+    { "id": "22", "startMs": 82450, "text": "Both effect defects still remained." },
+    { "id": "23", "startMs": 85400, "text": "ActionProof caught both." },
+    { "id": "24", "startMs": 87700, "text": "Prove the effect." }
+  ]
+}

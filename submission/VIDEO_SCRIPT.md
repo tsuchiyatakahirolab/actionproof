@@ -4,20 +4,20 @@
 
 **The agent did everything right. The result was still wrong.**
 
-Target duration: 86–90 seconds. English narration. No music is required. Every record and failure is explicitly labeled fictional and seeded.
+Target duration: 86–90 seconds. English neural narration. No music is required. Every record and failure is explicitly labeled fictional and seeded. Each sentence is rendered as a separate clip with a deliberate 0.5-second-or-longer pause before the next sentence.
 
 | Time | Screen | Narration |
 |---:|---|---|
-| 0–7s | Hero and staging/fake-data/native badges | “The agent did everything right. The result was still wrong. ActionProof is a pre-release effect gate for WebMCP writes.” |
-| 7–17s | Staging QA decision, order intent, and generated contract | “Before this tool ships, QA selects only Order 1042. ActionProof generates the gate: cancel this order; leave every unselected order unchanged.” |
-| 17–27s | Correct native WebMCP call and context-matched badge | “The page exposes one native WebMCP tool for this visible context. Its call name is correct. Its schema-bound argument matches the selection.” |
-| 27–34s | `success: true` | “The tool returns success. At the invocation layer, everything passed.” |
-| 34–47s | Observed table; 1042 required, 1043 unexpected | “But application state, observed independently of the return, shows two orders changed. The seeded handler also cancelled unselected Order 1043.” |
-| 47–57s | Verdict and blocked gate | “ActionProof separates those facts: tool call passed; real-world effect failed. Requested one, changed two. The release gate blocks.” |
-| 57–68s | Click repaired version; lifecycle and gate become PASS | “After repairing only the handler, we rerun the identical generated contract and arguments. The retained regression passes, so the effect gate clears.” |
-| 68–77s | Permission tab, defect result, then repaired PASS | “The same verification core catches the same defect class in permission changes, then passes the identical repair regression.” |
-| 77–87s | Measured comparison cards | “Evals passed both correct calls and rejected both wrong controls, while both effect defects remained. ActionProof generated the state checks from two bindings.” |
-| 87–90s | Hero, native one-tool badge, and permission repair PASS | “Prove the effect before the write tool ships.” |
+| 0–7s | Hero and staging/fake-data/native badges | “The agent did everything right.” [pause] “The result was still wrong.” [pause] “This is ActionProof.” |
+| 7–17s | Staging QA decision, order intent, and generated contract | “Before this tool ships, QA selects only Order 1042.” [pause] “The gate requires one cancellation, and no other change.” |
+| 17–27s | Correct native WebMCP call and context-matched badge | “The page exposes one native WebMCP tool for this context.” [pause] “Its schema binds the argument to the visible selection.” |
+| 27–34s | `success: true` | “The tool returns success.” [pause] “At the invocation layer, everything passed.” |
+| 34–47s | Observed table; 1042 required, 1043 unexpected | “But the observed application state shows two orders changed.” [pause] “The seeded handler also cancelled unselected Order 1043.” |
+| 47–57s | Verdict and blocked gate | “Tool call passed.” [pause] “Real-world effect failed.” [pause] “Requested one.” [pause] “Changed two.” [pause] “The release gate blocks.” |
+| 57–68s | Click repaired version; lifecycle and gate become PASS | “We repair only the handler and rerun the identical contract.” [pause] “The regression passes.” [pause] “The effect gate clears.” |
+| 68–77s | Permission tab, defect result, then repaired PASS | “The same verifier catches the permission defect.” [pause] “The identical repair regression passes there too.” |
+| 77–87s | Measured comparison cards | “Evals accepted both correct calls, and rejected both wrong controls.” [pause] “Both effect defects still remained.” [pause] “ActionProof caught both.” |
+| 87–90s | Hero, native one-tool badge, and permission repair PASS | “Prove the effect.” |
 
 ## Recording requirements
 

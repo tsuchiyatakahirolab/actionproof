@@ -15,7 +15,8 @@
 | `npm run build` | PASS — production Vite build |
 | `npm run test:ui` | PASS — 2/2 native Chrome WebMCP E2E tests |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
-| `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with refreshed gate narrative |
+| `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with sentence-level neural narration |
+| `npm run demo:audit` | PASS — 25/25 sentence clips preserve ≥500 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
 | `npm audit --audit-level=high` | PASS — 0 vulnerabilities |
 | credential-pattern scan | PASS — no credential-shaped matches |
@@ -52,12 +53,16 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Final demo: `submission/actionproof-demo-90s.mp4`
 - Duration: 90.00 seconds
 - Video: H.264 High, 1440×900, 25 fps
-- Audio: AAC-LC, English Microsoft Zira narration
-- SHA-256: `ADAAC0B0BD100951641419FFDCD65A1E2F694A6E2A696483898A7A5B5DC2E68E`
+- Audio: AAC-LC, English `en-US-AvaMultilingualNeural` narration generated with pinned `edge-tts` 7.2.8
+- Audio level: mean −20.7 dB, peak −2.2 dB
+- Sentence timing: 25 separate clips; minimum measured inter-sentence pause 500 ms; 26 final-video silence intervals ≥350 ms detected
+- SHA-256: `79BA130166F8BBDA3FE205F1AF24AADBBC8760196C7EFFBF33341C58A7AE1FFA`
 - 16:9 upload thumbnail: `submission/youtube-thumbnail.png`
 - Silent-audit source screen: `submission/thumbnail.png`
 
-Ten-second contact-sheet review covered the hero, staging QA release question, contract, native action, successful return, failed effect with `EFFECT GATE BLOCKED`, repaired order pass with `EFFECT GATE PASSED`, permission repair pass, and comparison screen. Exact 80-second and 88-second frame reviews confirmed the comparison cards and final hero/native/pass composition. The refreshed narration was generated from `submission/VIDEO_SCRIPT.md`; its ten segment starts remain fixed and fit within the 90-second H.264/AAC output.
+Ten-second contact-sheet review covered the hero, staging QA release question, contract, native action, successful return, failed effect with `EFFECT GATE BLOCKED`, repaired order pass with `EFFECT GATE PASSED`, permission repair pass, and comparison screen. Exact 48-second, 65-second, 80-second, and 88-second frame reviews confirmed the blocked gate, repaired order pass, comparison cards, and final hero/native/permission-pass composition. The narration text and starts are fixed in `scripts/narration-timeline.json`; `scripts/audit-narration.mjs` measures the generated files rather than trusting scheduled timings.
+
+`edge-tts` is an online, third-party build tool for the video asset, not an ActionProof runtime integration. The final MP4 is committed, so judges do not need Python, the package, or network TTS access to watch or run the product.
 
 ## Release-hold state
 

@@ -126,6 +126,15 @@ Current deterministic suite:
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
 
+### Rebuild the submission video
+
+Video generation additionally requires Python 3 and network access for the pinned [`edge-tts` 7.2.8](https://github.com/rany2/edge-tts) build tool. It is used only to render the narration asset; it is not a product runtime dependency. The timeline renders every sentence as a separate `en-US-AvaMultilingualNeural` clip and rejects the build unless every measured inter-sentence pause is at least 500 ms.
+
+```bash
+npm run demo:record  # build, neural narration, pause audit, browser recording, mux
+npm run demo:audit   # narration timing plus final H.264/AAC media audit
+```
+
 ## Repository map
 
 - `src/core/effect-contract.ts` — contract generation, state diff, verification, retained regression
@@ -136,6 +145,7 @@ Current deterministic suite:
 - `baseline.html` — plain WebMCP comparison fixture without ActionProof
 - `benchmarks/` — official matcher inputs, manual Playwright baseline, raw and summarized results
 - `tests/browser/` — native Chrome end-to-end proof
+- `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
 - `DOCUMENTATION.md` / `PLANS.md` — reproducible development record and release-gated execution source of truth
 

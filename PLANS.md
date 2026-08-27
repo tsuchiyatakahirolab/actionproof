@@ -15,7 +15,8 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 
 - Reframed UI as `STAGING QA` / `Release decision` with dynamic `EFFECT GATE BLOCKED` and `EFFECT GATE PASSED` states.
 - Added CI regression artifact language and a bounded integration guide.
-- Updated README, Devpost copy, judging evidence, video script, TTS, YouTube metadata, and blind audit questions.
+- Updated README, Devpost copy, judging evidence, video script, YouTube metadata, and blind audit questions.
+- Replaced desktop Zira narration with sentence-level Ava Neural TTS; all 25 measured inter-sentence pauses are at least 500 ms and the final-media audio audit passes.
 - Added current v0.5 release specification incorporating the Falsify lesson: concrete user, recognizable task, visible state change, immediate product outcome.
 - Regenerated the 90-second demo and ran the full local test, comparison, media, dependency, secret, and held-production audit suite.
 

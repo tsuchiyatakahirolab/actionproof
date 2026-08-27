@@ -30,6 +30,7 @@ npm run test:ui
 npm run benchmark
 npm run audit:production
 npm run demo:record
+npm run demo:audit
 npm audit --audit-level=high
 ```
 
@@ -42,7 +43,7 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 - Official Evals matcher: 2/2 correct calls matched; 2/2 wrong-argument controls rejected; 2/2 collateral defects remained.
 - Manual Playwright: four concrete state assertions detect both defects and pass unchanged after repair.
 - ActionProof: two reusable action bindings, zero per-record expected-state assertions in scenario definitions, two defects detected, two identical regressions passed.
-- Demo: 90.00 seconds, H.264 1440×900, AAC English narration; final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
+- Demo: 90.00 seconds, H.264 1440×900, AAC English `en-US-AvaMultilingualNeural` narration. All 25 sentences are separate clips; every measured pause is at least 500 ms. Final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
 - Held local production preview: native WebMCP, correct context-matched tool per workflow, `tools=*`, zero console errors; see `submission/private/HELD_PRODUCTION_AUDIT.json` (ignored from public release).
 
 ## Release safety

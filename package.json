@@ -12,7 +12,9 @@
     "test:ui": "playwright test",
     "benchmark": "npm run build && node scripts/run-benchmark.mjs",
     "audit:production": "node scripts/audit-production.mjs",
-    "demo:record": "npm run build && powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/record-demo.mjs",
+    "demo:audio": "powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/audit-narration.mjs",
+    "demo:audit": "node scripts/audit-narration.mjs && node scripts/audit-video.mjs",
+    "demo:record": "npm run build && npm run demo:audio && node scripts/record-demo.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
