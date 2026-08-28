@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "exactdelta.regression.v1",
+  "generatedAt": "2026-08-28T00:00:00.000Z",
+  "regressionCase": {
+    "id": "orders__1042__status__to-cancelled",
+    "workflowId": "orders",
+    "intent": {
+      "workflowId": "orders",
+      "resourceLabel": "order",
+      "selectedIds": ["#1042"],
+      "summary": "Cancel only Order #1042",
+      "mutation": { "field": "status", "value": "cancelled" }
+    },
+    "toolName": "cancel_order",
+    "arguments": { "order_id": "#1042" },
+    "contract": {
+      "workflowId": "orders",
+      "source": "explicit-ui-selection+pre-action-state",
+      "required": [
+        { "entityId": "#1042", "field": "status", "before": "active", "expected": "cancelled" }
+      ],
+      "forbidden": [
+        {
+          "entityId": "#1043",
+          "expectedUnchanged": {
+            "id": "#1043",
+            "customer": "Jon Bell",
+            "total": "$61.00",
+            "status": "active"
+          }
+        }
+      ],
+      "invariants": { "entityIds": ["#1042", "#1043"], "entityCount": 2, "exactChangeSet": true }
+    }
+  }
+}

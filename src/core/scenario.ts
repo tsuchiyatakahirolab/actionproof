@@ -14,7 +14,6 @@ export type ScenarioDefinition = {
   audience: string;
   resourceLabel: string;
   targetId: string;
-  neighborId: string;
   records: EntityRecord[];
   intentSummary: string;
   actionLabel: string;
@@ -31,12 +30,14 @@ type Listener = () => void;
 export class ScenarioStore {
   readonly definition: ScenarioDefinition;
   private records: Snapshot;
+  private selectedRecordId: string;
   private defectEnabled = true;
   private listeners = new Set<Listener>();
   private version = 0;
 
   constructor(definition: ScenarioDefinition) {
     this.definition = definition;
+    this.selectedRecordId = definition.targetId;
     this.records = this.makeInitialSnapshot();
   }
 
@@ -68,21 +69,47 @@ export class ScenarioStore {
     return cloneSnapshot(this.records);
   }
 
+  selectedId(): string {
+    return this.selectedRecordId;
+  }
+
+  select(entityId: string): void {
+    if (!this.records[entityId]) {
+      throw new Error(`Cannot select unknown ${this.definition.resourceLabel} ${entityId}.`);
+    }
+    if (entityId === this.selectedRecordId) return;
+    this.selectedRecordId = entityId;
+    this.notify();
+  }
+
+  toolArguments(): Record<string, Scalar> {
+    return {
+      ...this.definition.toolArguments,
+      [this.definition.targetArgument]: this.selectedRecordId,
+    };
+  }
+
+  intentSummary(): string {
+    return this.definition.id === "orders"
+      ? `Cancel only Order ${this.selectedRecordId}`
+      : `Change only ${this.selectedRecordId} to Editor`;
+  }
+
   explicitIntent(): ExplicitIntent {
     return {
       workflowId: this.definition.id,
       resourceLabel: this.definition.resourceLabel,
-      selectedIds: [this.definition.targetId],
-      summary: this.definition.intentSummary,
+      selectedIds: [this.selectedRecordId],
+      summary: this.intentSummary(),
       mutation: this.definition.mutation,
     };
   }
 
   executeMutation(argumentsRecord: Record<string, Scalar>): unknown {
     const argumentTarget = argumentsRecord[this.definition.targetArgument];
-    if (argumentTarget !== this.definition.targetId) {
+    if (argumentTarget !== this.selectedRecordId) {
       throw new Error(
-        `Tool target ${String(argumentTarget)} does not match the visible selection ${this.definition.targetId}.`,
+        `Tool target ${String(argumentTarget)} does not match the visible selection ${this.selectedRecordId}.`,
       );
     }
 
@@ -100,16 +127,20 @@ export class ScenarioStore {
       );
     }
 
-    this.records[this.definition.targetId][this.definition.mutation.field] = mutationValue;
+    this.records[this.selectedRecordId][this.definition.mutation.field] = mutationValue;
 
     if (this.defectEnabled) {
-      this.records[this.definition.neighborId][this.definition.mutation.field] = mutationValue;
+      const collateralId = Object.keys(this.records).find((id) => id !== this.selectedRecordId);
+      if (!collateralId) {
+        throw new Error("The seeded defect requires an unselected neighboring record.");
+      }
+      this.records[collateralId][this.definition.mutation.field] = mutationValue;
     }
 
     this.notify();
     return {
       success: true,
-      requestedTarget: this.definition.targetId,
+      requestedTarget: this.selectedRecordId,
     };
   }
 }
@@ -128,7 +159,7 @@ export async function runExactDelta(input: {
   signal?: AbortSignal;
 }): Promise<VerificationResult> {
   const { store, executeTool, timeoutMs = 5_000 } = input;
-  const toolArguments = input.toolArguments ?? store.definition.toolArguments;
+  const toolArguments = input.toolArguments ?? store.toolArguments();
   const before = store.snapshot();
   const intent = store.explicitIntent();
   const contract = generateEffectContract(intent, before);
@@ -198,7 +229,6 @@ export const scenarioDefinitions: ScenarioDefinition[] = [
     audience: "SaaS developer / QA",
     resourceLabel: "order",
     targetId: "#1042",
-    neighborId: "#1043",
     records: [
       { id: "#1042", customer: "Mira Chen", total: "$84.00", status: "active" },
       { id: "#1043", customer: "Jon Bell", total: "$61.00", status: "active" },
@@ -221,7 +251,6 @@ export const scenarioDefinitions: ScenarioDefinition[] = [
     audience: "SaaS developer / QA",
     resourceLabel: "user",
     targetId: "Alice",
-    neighborId: "Bob",
     records: [
       { id: "Alice", team: "Research", role: "Viewer", status: "active" },
       { id: "Bob", team: "Research", role: "Viewer", status: "active" },

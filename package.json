@@ -11,10 +11,13 @@
     "test:watch": "vitest",
     "test:ui": "npm run build && playwright test",
     "benchmark": "npm run build && node scripts/run-benchmark.mjs",
+    "regression:ci": "tsx scripts/run-regression.ts",
+    "regression:ci:all": "npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation repaired --expect ACTION_PROVEN && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation repaired --expect ACTION_PROVEN",
     "audit:production": "node scripts/audit-production.mjs",
     "demo:audio": "powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/audit-narration.mjs",
     "demo:audit": "node scripts/audit-narration.mjs && node scripts/audit-video.mjs",
     "demo:record": "npm run build && npm run demo:audio && node scripts/record-demo.mjs",
+    "thumbnail:render": "node scripts/render-thumbnail.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
@@ -27,6 +30,7 @@
     "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react": "^6.1.0",
     "ffmpeg-static": "^5.3.0",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2",
     "vite": "^8.2.2",
     "vitest": "^4.1.11",

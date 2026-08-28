@@ -185,3 +185,25 @@ test("the second workflow uses the same UI and verifier", async ({ page }) => {
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PASSED");
   await expect(page.getByTestId("regression-proof")).toContainText("PASS");
 });
+
+test("a human can change the visible target and the native tool contract follows it", async ({ page }) => {
+  await page.goto("/?speed=0.01");
+  await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");
+
+  await page.getByRole("button", { name: "Select #1043" }).click();
+  await expect(page.getByRole("heading", { name: "Cancel only Order #1043" })).toBeVisible();
+  await expect(page.getByTestId("effect-contract")).toContainText("#1043.status → cancelled");
+  await expect.poll(() => page.evaluate(async () => {
+    const tool = (await document.modelContext!.getTools())[0];
+    const schema = typeof tool.inputSchema === "string"
+      ? JSON.parse(tool.inputSchema)
+      : tool.inputSchema;
+    return schema.properties.order_id.enum;
+  })).toEqual(["#1043"]);
+
+  await page.getByTestId("run-defect").click();
+  await expect(page.getByTestId("verdict-fail")).toBeVisible();
+  await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();
+  await expect(page.getByTestId("regression-strip")).toContainText("orders__1043__status__to-cancelled");
+  await expect(page.getByRole("button", { name: "Select #1043" })).toHaveAttribute("aria-pressed", "true");
+});

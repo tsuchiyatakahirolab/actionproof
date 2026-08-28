@@ -94,7 +94,7 @@ export function diffSnapshots(before: Snapshot, after: Snapshot): StateChange[] 
   return changes;
 }
 
-function buildRegressionId(intent: ExplicitIntent): string {
+export function buildRegressionId(intent: ExplicitIntent): string {
   const safe = (value: Scalar | string): string =>
     String(value)
       .toLowerCase()

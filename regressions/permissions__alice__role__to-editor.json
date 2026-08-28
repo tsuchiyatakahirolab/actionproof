@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "exactdelta.regression.v1",
+  "generatedAt": "2026-08-28T00:00:00.000Z",
+  "regressionCase": {
+    "id": "permissions__alice__role__to-editor",
+    "workflowId": "permissions",
+    "intent": {
+      "workflowId": "permissions",
+      "resourceLabel": "user",
+      "selectedIds": ["Alice"],
+      "summary": "Change only Alice to Editor",
+      "mutation": { "field": "role", "value": "Editor" }
+    },
+    "toolName": "change_user_role",
+    "arguments": { "user_id": "Alice", "role": "Editor" },
+    "contract": {
+      "workflowId": "permissions",
+      "source": "explicit-ui-selection+pre-action-state",
+      "required": [
+        { "entityId": "Alice", "field": "role", "before": "Viewer", "expected": "Editor" }
+      ],
+      "forbidden": [
+        {
+          "entityId": "Bob",
+          "expectedUnchanged": { "id": "Bob", "team": "Research", "role": "Viewer", "status": "active" }
+        }
+      ],
+      "invariants": { "entityIds": ["Alice", "Bob"], "entityCount": 2, "exactChangeSet": true }
+    }
+  }
+}

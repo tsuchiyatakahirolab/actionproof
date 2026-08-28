@@ -169,6 +169,10 @@ button { font: inherit; }
 .record-row.selected { background: #f2f8f5; }
 .record-row.unexpected { background: #fff0ed; box-shadow: inset 3px 0 0 var(--red); }
 .checkbox-cell { color: var(--green); font-weight: 900; text-align: center; }
+.selection-button { width: 27px; height: 27px; border: 1px solid #9dcaba; border-radius: 7px; color: #60716a; background: white; font-weight: 900; cursor: pointer; }
+.selection-button[aria-pressed="true"] { color: white; background: var(--green); border-color: var(--green); }
+.selection-button:hover:not(:disabled), .selection-button:focus-visible { outline: 2px solid #80bda7; outline-offset: 2px; }
+.selection-button:disabled { cursor: not-allowed; opacity: .65; }
 .changed-value { color: var(--red-dark); font-weight: 850; }
 .effect-label { display: inline-block; padding: 4px 6px; border-radius: 999px; font-size: 8px; font-weight: 900; letter-spacing: .06em; }
 .effect-label.waiting { color: #7d8581; background: #ecece8; }

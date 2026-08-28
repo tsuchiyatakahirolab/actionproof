@@ -5,6 +5,7 @@ import {
   ScenarioStore,
   scenarioDefinitions,
 } from "./core/scenario";
+import { createRegressionArtifact } from "./core/regression";
 import type { Snapshot, VerificationResult } from "./core/types";
 import {
   createWebMcpBridge,
@@ -49,6 +50,9 @@ export default function App() {
   const store = stores.get(scenarioId)!;
   const definition = store.definition;
   const liveSnapshot = useScenarioSnapshot(store);
+  const selectedId = store.selectedId();
+  const toolArguments = store.toolArguments();
+  const intentSummary = store.intentSummary();
   const [displaySnapshot, setDisplaySnapshot] = useState<Snapshot>(() => store.snapshot());
   const [phase, setPhase] = useState<Phase>(0);
   const [running, setRunning] = useState(false);
@@ -147,19 +151,19 @@ export default function App() {
     const tools: WebMcpTool[] = [{
       name: definition.toolName,
       title: definition.actionLabel,
-      description: `${definition.actionLabel}. Use only for the record explicitly selected in the visible UI: ${definition.targetId}. The intended ${definition.mutation.field} is ${String(definition.mutation.value)}.`,
+      description: `${definition.actionLabel}. Use only for the record explicitly selected in the visible UI: ${selectedId}. The intended ${definition.mutation.field} is ${String(definition.mutation.value)}.`,
       inputSchema: {
         type: "object",
         properties: Object.fromEntries(
-          Object.entries(definition.toolArguments).map(([name, value]) => [name, {
+          Object.entries(toolArguments).map(([name, value]) => [name, {
             type: value === null ? "null" : typeof value,
             enum: [value],
             description: name === definition.targetArgument
-              ? `Must match the record explicitly selected in the visible UI (${definition.targetId}).`
+              ? `Must match the record explicitly selected in the visible UI (${selectedId}).`
               : `Must match the visible requested value (${String(value)}).`,
           }]),
         ),
-        required: Object.keys(definition.toolArguments),
+        required: Object.keys(toolArguments),
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
@@ -188,7 +192,7 @@ export default function App() {
       active = false;
       installedBridge?.dispose();
     };
-  }, [definition, store]);
+  }, [definition, selectedId, store]);
 
   useEffect(() => {
     store.reset(true);
@@ -216,7 +220,7 @@ export default function App() {
     const invocationPlan: InvocationPlan = { origin: "judge-control", phaseDelays };
     nextInvocationPlan.current = invocationPlan;
     try {
-      await bridge.executeTool(definition.toolName, definition.toolArguments);
+      await bridge.executeTool(definition.toolName, store.toolArguments());
     } finally {
       if (nextInvocationPlan.current === invocationPlan) nextInvocationPlan.current = null;
     }
@@ -241,7 +245,6 @@ export default function App() {
   const unexpectedIds = new Set(
     currentResult?.unexpectedChanges.map((change) => change.entityId) ?? [],
   );
-  const selectedId = definition.targetId;
   const agentPrompt = definition.id === "orders"
     ? "Cancel only the order selected on this page, then report whether the effect gate passes."
     : "Change only the selected user to Editor, then report whether the effect gate passes.";
@@ -250,8 +253,9 @@ export default function App() {
   ).length ?? 0;
   const contractPreview = useMemo(() => {
     const cleanStore = new ScenarioStore(definition);
+    cleanStore.select(selectedId);
     return generateEffectContract(cleanStore.explicitIntent(), cleanStore.snapshot());
-  }, [definition]);
+  }, [definition, selectedId]);
   const failedRun = [...runHistory].reverse().find((run) => run.verdict === "FAILED_EFFECT");
   const repairedRun = [...runHistory].reverse().find((run) => run.verdict === "ACTION_PROVEN");
   const identicalRegressionPassed = Boolean(
@@ -274,11 +278,7 @@ export default function App() {
   }[gateState];
 
   function downloadRegression(resultToDownload: VerificationResult): void {
-    const artifact = {
-      schemaVersion: "exactdelta.regression.v1",
-      generatedAt: new Date().toISOString(),
-      regressionCase: resultToDownload.regressionCase,
-    };
+    const artifact = createRegressionArtifact(resultToDownload);
     const url = URL.createObjectURL(
       new Blob([`${JSON.stringify(artifact, null, 2)}\n`], { type: "application/json" }),
     );
@@ -287,6 +287,17 @@ export default function App() {
     link.download = `${resultToDownload.regressionCase.id}.json`;
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
+  }
+
+  function selectRecord(entityId: string): void {
+    if (running || entityId === selectedId) return;
+    store.reset(true);
+    store.select(entityId);
+    setDisplaySnapshot(store.snapshot());
+    setResult(null);
+    setRunHistory([]);
+    setPhase(0);
+    setInvocationOrigin("none");
   }
 
   return (
@@ -350,7 +361,7 @@ export default function App() {
         <div className="proof-header">
           <div>
             <span className="section-kicker">STAGING QA · 20-SECOND SILENT PROOF</span>
-            <h2>{definition.intentSummary}</h2>
+            <h2>{intentSummary}</h2>
             <p className="release-question">Release decision: can this WebMCP write tool ship?</p>
           </div>
           <div
@@ -407,8 +418,8 @@ export default function App() {
             <div className="selection-callout">
               <span className="selection-check">✓</span>
               <div>
-                <strong>{definition.targetId}</strong>
-                <span>{definition.intentSummary}</span>
+                <strong>{selectedId}</strong>
+                <span>{intentSummary}</span>
               </div>
               <span className="only-pill">ONLY</span>
             </div>
@@ -436,7 +447,7 @@ export default function App() {
             <div className="code-card">
               <span className="webmcp-chip">WebMCP</span>
               <code>{definition.toolName}</code>
-              <pre>{formatJson(definition.toolArguments)}</pre>
+              <pre>{formatJson(toolArguments)}</pre>
             </div>
             <div className="call-correct">✓ Target matches visible selection</div>
             <div className={`invocation-origin origin-${invocationOrigin}`} data-testid="invocation-origin">
@@ -511,7 +522,19 @@ export default function App() {
                     key={record.id}
                     role="row"
                   >
-                    <span className="checkbox-cell">{selected ? "✓" : "—"}</span>
+                    <span className="checkbox-cell">
+                      <button
+                        aria-label={`Select ${record.id}`}
+                        aria-pressed={selected}
+                        className="selection-button"
+                        data-testid={`select-${record.id.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}`}
+                        disabled={running}
+                        onClick={() => selectRecord(record.id)}
+                        type="button"
+                      >
+                        {selected ? "✓" : "○"}
+                      </button>
+                    </span>
                     <strong>{record.id}</strong>
                     {definition.columns.map((column) => (
                       <span key={column.field} className={column.field === definition.mutation.field && changed ? "changed-value" : ""}>
@@ -633,7 +656,7 @@ export default function App() {
             <p>Two action bindings generated the required and unchanged checks.</p>
           </article>
         </div>
-        <p className="benchmark-limit">Measured with native Chrome WebMCP and deterministic fake data. This is a detection-coverage comparison, not a runtime-performance or market-demand claim.</p>
+        <p className="benchmark-limit">Measured with native Chrome WebMCP and deterministic fake data. This comparison measures detection coverage only.</p>
       </section>
     </main>
   );
