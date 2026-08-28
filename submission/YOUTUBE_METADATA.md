@@ -2,13 +2,13 @@
 
 ## Title
 
-ActionProof — Correct Call. Wrong Effect. | WebMCP Challenge
+ExactDelta — Correct Call. Wrong Effect. | WebMCP Challenge
 
 ## Description
 
 The agent did everything right. The result was still wrong.
 
-ActionProof is a pre-release effect gate for state-changing WebMCP tools. It generates an Effect Contract from visible human intent and pre-action state, executes the one context-matched native WebMCP tool, observes application state independently of the return payload, and blocks the gate when collateral changes appear despite a correct call and `success: true`.
+ExactDelta turns the visible selected target into the only permitted application-state delta. A browser agent directly invokes the one context-matched native WebMCP tool; ExactDelta observes application state independently, blocks collateral changes, and returns the original `success: true` payload together with the separate `effectGate` verdict.
 
 Live demo: https://actionproof.vercel.app
 Open-source repository: https://github.com/tsuchiyatakahirolab/actionproof
@@ -37,5 +37,5 @@ English
 
 ## Assets
 
-- Video: `submission/actionproof-demo-90s.mp4`
+- Video: `submission/exactdelta-demo-90s.mp4`
 - Thumbnail: `submission/youtube-thumbnail.png`

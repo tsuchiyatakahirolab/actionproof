@@ -1,10 +1,10 @@
-# ActionProof formal GO decision
+# ExactDelta formal GO decision
 
-**Decision:** `ACTIONPROOF_TOP10_GATE_PASS`
+**Decision:** `EXACTDELTA_TOP10_GATE_PASS`
 
 **Approved:** 2026-08-27 JST
 
-The owner formally approved ActionProof for full implementation and submission preparation for the WebMCP Challenge. `WINNING_SPEC_v0.4.md`, `DEMO_SCRIPT_v0.2.md`, and `TOP10_GATE_REPORT.md` remain the scope baseline.
+The owner formally approved ExactDelta for full implementation and submission preparation for the WebMCP Challenge. `WINNING_SPEC_v0.4.md`, `DEMO_SCRIPT_v0.2.md`, and `TOP10_GATE_REPORT.md` remain the scope baseline.
 
 ## Scope lock
 

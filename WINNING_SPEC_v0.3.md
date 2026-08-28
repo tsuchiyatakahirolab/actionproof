@@ -1,12 +1,12 @@
 # WebMCP Challenge 勝利仕様書 v0.3 — 5案・デモ先行比較
 
-2026-08-26 JST / TSUCHIYA LAB / **企画比較の首位: ActionProof（仮称）。本実装: HOLD。**
+2026-08-26 JST / TSUCHIYA LAB / **企画比較の首位: ExactDelta（仮称）。本実装: HOLD。**
 
 ## 0. 今回の決定と、その限界
 
-RevisionGuard、ImportRescue、ShiftPatch、ShareSafe、ActionProofを同じ6条件で比較し、全案について20秒の導入と90秒の英語ナレーション・画面操作を先に書いた。[脚本全文](DEMO_SCRIPTS_v0.1.md)
+RevisionGuard、ImportRescue、ShiftPatch、ShareSafe、ExactDeltaを同じ6条件で比較し、全案について20秒の導入と90秒の英語ナレーション・画面操作を先に書いた。[脚本全文](DEMO_SCRIPTS_v0.1.md)
 
-**最終反証に進める1案はActionProof。** 「WebMCPの呼出しは正しかったのに、実際の業務データは間違って変わった」を画面で再現し、回帰テストにする開発者向けワークスペースである。
+**最終反証に進める1案はExactDelta。** 「WebMCPの呼出しは正しかったのに、実際の業務データは間違って変わった」を画面で再現し、回帰テストにする開発者向けワークスペースである。
 
 これは現時点で「6条件すべてPASS」「受賞確率が最も高いと実証した」「すぐ本実装する」という決定ではない。需要の強さ・競合との差・WebMCPを外した場合の劣化が未確認のため、**正式な実装選定はまだできない**。この案も同じ基準で棄却する。
 
@@ -41,9 +41,9 @@ CutRoom選定は引き続き撤回。企画名を変えただけの一般的な�
 | ImportRescue | 顧客データ整形がSaaS導入を止めるという創業者の具体的投稿 | 「取り込み規則と手修正を保持した差分修復」／CSVbox・ImportCSV・Flatfileが非常に近い | 画面の選択・スキーマ・現行版を共有／既存のAI変換UI・APIで近似できる | エラー→曖昧値の確認→保護ID維持→取り込み可能 | Executionは比較的限定可能。独自性・WebMCP追加効果の証拠が弱い | 汎用版は見送り |
 | ShiftPatch | 当日欠勤でカバーを探す管理者の相談 | 「全予定を作り直さず、確定済みを守る最小変更の復旧」／Timefoldに直接相当する機能 | 店長の画面上の固定条件を共有／再計画APIで代替可能 | 欠員→2人の配置替え→追加固定→再復旧 | 非専門家にも見えるが、既存最適化との差が弱い。実際の人手不足は解決不能 | 今回見送り |
 | ShareSafe | 公開・共有前の秘密情報除去。今回のユーザー自身の録画／ログ共有の懸念とも近い | 「1フレームではなく同一秘密の全出現を追跡して修正」／OpenScrub・Reductにも追跡とレビューがある | 編集中の範囲とタイムラインを共有／通常の編集コマンドで近い結果 | 一度隠した秘密が再登場→全候補修正→出力再確認 | 変化は直観的。検出漏れ、音声、書き出し検証の範囲が大きい | 今回見送り |
-| ActionProof | WebMCP固有の動的ツールリスクの研究と公式のセキュリティ課題。顧客の有料需要は未確認 | 「呼出しの適合だけでなく、人の選択と実際の変更結果の食い違いを再現テストにする」／既存Evals＋状態assertionで十分なら不要 | nativeツール経路・現在の選択・承認中の状態変化を試す／Playwright＋独自テストが強い代替 | 1件指定→2件変更を発見→同じ試験を修正版で通す | 4項目に同じ実行証拠を結びやすい。ただし検証基盤・観測adapter・本当の差別化は難所 | **企画比較の首位。最後の反証対象1案。本実装HOLD** |
+| ExactDelta | WebMCP固有の動的ツールリスクの研究と公式のセキュリティ課題。顧客の有料需要は未確認 | 「呼出しの適合だけでなく、人の選択と実際の変更結果の食い違いを再現テストにする」／既存Evals＋状態assertionで十分なら不要 | nativeツール経路・現在の選択・承認中の状態変化を試す／Playwright＋独自テストが強い代替 | 1件指定→2件変更を発見→同じ試験を修正版で通す | 4項目に同じ実行証拠を結びやすい。ただし検証基盤・観測adapter・本当の差別化は難所 | **企画比較の首位。最後の反証対象1案。本実装HOLD** |
 
-ActionProofを上位に置く理由は、「WebMCPという名前が入っている」からではない。ツール引数の正しさと業務結果の正しさを同じ画面で分け、失敗→原因→回帰試験を短く見せられるから。ただし、この長所だけで需要・競合ゲートを飛ばさない。
+ExactDeltaを上位に置く理由は、「WebMCPという名前が入っている」からではない。ツール引数の正しさと業務結果の正しさを同じ画面で分け、失敗→原因→回帰試験を短く見せられるから。ただし、この長所だけで需要・競合ゲートを飛ばさない。
 
 ## 3. 根拠と反証の台帳
 
@@ -62,18 +62,18 @@ ActionProofを上位に置く理由は、「WebMCPという名前が入ってい
 - [Deputyの代替要員機能](https://help.deputy.com/hc/en-au/articles/4688987465743-How-do-I-find-a-replacement-for-a-team-member-that-can-t-work)も存在。単に代打を見つけるデモでは勝ち筋にならない。
 - [OpenScrub](https://github.com/austinmabry/OpenScrub)はローカルの追跡付き墨消し、人の確認、映像・音声への対応を案内。[Reduct](https://reduct.video/product/redaction/)も画面録画等の機密情報除去を提供。「秘密を追跡して隠す」はそれだけでは新しくない。
 
-### ActionProof — 最も厳しく比較すべき相手
+### ExactDelta — 最も厳しく比較すべき相手
 
 - [ChromeのWebMCPセキュリティ説明](https://developer.chrome.com/docs/ai/webmcp/secure-tools)はツールの公開範囲、情報漏えい、注釈、ユーザー同意に関する注意を示す。注釈を付けただけで安全になるという説明はしない。
 - [WebMCP Tool Surface Poisoning](https://arxiv.org/html/2606.06387v1)は実行中のツール変更とメタデータ操作を研究。攻撃者が同一ページのスクリプトに介入できるという前提があり、一般のサイトが誰にでも攻撃可能という意味ではない。6月時点の研究結果を8月の現行実装の脆弱性と断定しない。支払需要の資料でもない。
 - [仕様のIssue #218](https://github.com/webmachinelearning/webmcp/issues/218)は登録解除時に実行中の呼出しをどう扱うかの議論。未解決の設計論点であり、実害が発生した証拠とはしない。
 - [公式WebMCP Evals](https://raw.githubusercontent.com/GoogleChromeLabs/webmcp-tools/main/evals-cli/README.md)にはlive browser、smoke、引数・順序の照合、レポートが既にある。[引数matcher](https://raw.githubusercontent.com/GoogleChromeLabs/webmcp-tools/main/evals-cli/src/matcher.ts)も閲覧した。「ライブ試験ができる唯一の製品」とは言えない。
 - [nekuda WebMCP Workbench](https://chromewebstore.google.com/detail/nekuda-webmcp-workbench/amochnnbmnkjjlblolhpddkokhnalkjp)は検査、呼出し、モデルによるツール選択・引数評価、ログ、再生を案内。[提供元](https://www.nekuda.ai/)もシナリオ評価を扱う。ここにない機能だと公開説明の不在だけで断定しない。
-- [AgentGuard](https://docs.agentguard.tech/)等には実行前のポリシー検査・人の承認がある。ActionProofを承認ボタンや一般的な安全判定へ広げても独自性にはならない。
+- [AgentGuard](https://docs.agentguard.tech/)等には実行前のポリシー検査・人の承認がある。ExactDeltaを承認ボタンや一般的な安全判定へ広げても独自性にはならない。
 
 ソース確認の限界: 公式EvalsのREADMEとmatcherはWeb取得で閲覧したが、ソース一覧のGitHub API取得と`src/types.ts`は404。現行リポジトリ全体・コミット・実行動作は未確認。競合優位の判定には実機比較が残る。
 
-## 4. ActionProofの勝負する範囲
+## 4. ExactDeltaの勝負する範囲
 
 ### 一文の製品説明
 
@@ -105,7 +105,7 @@ WebMCPで書き込み操作を公開するSaaSの開発・QA担当。初期の�
 
 - 通常UIのボタン試験だけでは、別に実装されたWebMCPの書き込み経路を通らず、この種の不一致を見逃す可能性がある。
 - 保存したツールschemaだけの試験では、現在の選択や操作途中の状態変更を実行しない。
-- **Playwright＋nativeツール呼出し＋状態assertionなら同じ問題を検出できる可能性がある。これが最も重要な対照。** 再現・試験作成の手間が減らないならActionProofを作る理由がない。
+- **Playwright＋nativeツール呼出し＋状態assertionなら同じ問題を検出できる可能性がある。これが最も重要な対照。** 再現・試験作成の手間が減らないならExactDeltaを作る理由がない。
 - WebMCPを検査対象にしただけではLeverageの証明にならない。ユーザーのエージェントが実際のブラウザ上で検査条件を設定し、live toolsを呼び、差分から追試を進める必要がある。
 
 native経路を通した事実をトレースに残す。内部関数を直接呼ぶだけ、polyfillだけ、保存済みログを再生するだけの実演とは分ける。現在の画面・権限・ツール登録状態を使わないなら③は不合格。
@@ -114,7 +114,7 @@ native経路を通した事実をトレースに残す。内部関数を直接�
 
 正式名称はWebMCP Leverage、Execution、Potential Impact、Creativity & Ambition。等配点。同点時は記載順。[公式審査基準](https://webmcp.devpost.com/rules)
 
-| 公式項目 | ActionProofで見せる場面 | 提出までに用意する証拠 | 現状 |
+| 公式項目 | ExactDeltaで見せる場面 | 提出までに用意する証拠 | 現状 |
 |---|---|---|---|
 | WebMCP Leverage | 0–20秒のnative呼出し、40–60秒の人の選択変更と追試 | 登録・実行トレース、同一条件の対照試験、対応ブラウザと版 | 台本のみ |
 | Execution | 20–40秒の差分→最短再現、60–90秒の同一試験再実行→出力 | 実稼働URL、リセット可能なfixture、テスト出力、回帰試験の再実行記録 | 未実装 |
@@ -170,7 +170,7 @@ native経路を通した事実をトレースに残す。内部関数を直接�
 4. 間違いを説明して理解させるのではなく、映像・順序・一文を直す。再試験は可能なら別の初見者。
 5. 別枠の技術監査で、正しい実行経路・合否根拠・安全境界・再現性を確認する。
 
-ActionProofの期待回答:
+ExactDeltaの期待回答:
 
 - 誰: WebMCPをSaaSに導入する開発・QAチーム。
 - 何: 1件だけを変える正しい呼出しで、未選択の別の注文まで変わった。
@@ -184,10 +184,10 @@ ActionProofの期待回答:
 **分析評価: Share with caveats。5案の比較と次の反証対象を示す資料として共有可。受賞見込み・商用需要・優位性の検証完了としては不可。**
 
 - 数値の受賞確率・主観的な総合点は作成していない。
-- 英語台本の単語数を機械的に確認: RevisionGuard 172、ImportRescue 173、ShiftPatch 163、ShareSafe 169、ActionProof 185。140語/分なら約70〜79秒の発話量。操作・間を含む90秒が実現したという測定ではない。
+- 英語台本の単語数を機械的に確認: RevisionGuard 172、ImportRescue 173、ShiftPatch 163、ShareSafe 169、ExactDelta 185。140語/分なら約70〜79秒の発話量。操作・間を含む90秒が実現したという測定ではない。
 - 需要の資料と競合の仕様、論文上の結果、私たちの未検証の仮説を分けた。
 - 先行研究・同名製品・検査ツールの存在を記載。未公開応募作との非重複は保証できない。
 - 合成データと既知不具合を使うデモは計画上明示。実顧客の成果に見せない。
 - 外部アカウント・公開サイト・応募内容・Falsify本体に変更なし。
 
-**次の実装判断: ActionProofの3つの負け筋を解消できる場合だけ、1案に固定して実装する。解消できなければ次点を自動採用せず、同じ6条件で企画を戻す。**
+**次の実装判断: ExactDeltaの3つの負け筋を解消できる場合だけ、1案に固定して実装する。解消できなければ次点を自動採用せず、同じ6条件で企画を戻す。**

@@ -1,12 +1,12 @@
-# ActionProof Top-10 gate report
+# ExactDelta Top-10 gate report
 
 2026-08-27 JST / Gate record
 
-> **Status update:** the owner formally approved `ACTIONPROOF_TOP10_GATE_PASS` on 2026-08-27. The historical gate findings below remain the scope baseline; the earlier implementation hold is superseded by `GO_DECISION.md`.
+> **Status update:** the owner formally approved `EXACTDELTA_TOP10_GATE_PASS` on 2026-08-27. The historical gate findings below remain the scope baseline; the earlier implementation hold is superseded by `GO_DECISION.md`.
 
 ## Decision
 
-ActionProof can satisfy the four requested pre-implementation conditions with a small, inspectable architecture. The prototype is not a full product, deployment, market validation, or submission.
+ExactDelta can satisfy the four requested pre-implementation conditions with a small, inspectable architecture. The prototype is not a full product, deployment, market validation, or submission.
 
 ## Evidence by mandatory GO condition
 
@@ -61,11 +61,11 @@ The tests prove:
 - disabling the seeded defect makes the identical retained order regression pass;
 - the main UI produces no console errors in the tested sequence.
 
-Current release-hold evidence has superseded these counts: 8 unit tests, 2 native Chrome E2E tests, official matcher negative controls, context-matched tool lifecycle assertions, downloadable regression verification, and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
+Current release-hold evidence has superseded these counts: 9 unit tests, 3 native Chrome E2E tests including the external-call gate, official matcher negative controls, context-matched tool lifecycle assertions, downloadable regression verification, and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
 
-## Strongest argument against ActionProof
+## Strongest argument against ExactDelta
 
-> A competent team can add a few Playwright state assertions around official WebMCP Evals, so ActionProof may be a thin convenience layer rather than a standalone product.
+> A competent team can add a few Playwright state assertions around official WebMCP Evals, so ExactDelta may be a thin convenience layer rather than a standalone product.
 
 ### Was it resolved?
 
@@ -97,4 +97,4 @@ It does not yet prove that this saves enough work over WebMCP Evals plus Playwri
 
 All four requested GO conditions passed for this bounded architecture and prototype. Full implementation was subsequently authorized in `GO_DECISION.md`.
 
-`ACTIONPROOF_TOP10_GATE_PASS`
+`EXACTDELTA_TOP10_GATE_PASS`

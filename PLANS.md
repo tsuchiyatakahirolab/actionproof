@@ -1,4 +1,4 @@
-# ActionProof execution plan
+# ExactDelta execution plan
 
 ## Current objective
 
@@ -16,13 +16,16 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Reframed UI as `STAGING QA` / `Release decision` with dynamic `EFFECT GATE BLOCKED` and `EFFECT GATE PASSED` states.
 - Added CI regression artifact language and a bounded integration guide.
 - Updated README, Devpost copy, judging evidence, video script, YouTube metadata, and blind audit questions.
-- Replaced desktop Zira narration with sentence-level Ava Neural TTS; all 25 measured inter-sentence pauses are at least 500 ms and the final-media audio audit passes.
-- Added current v0.5 release specification incorporating the Falsify lesson: concrete user, recognizable task, visible state change, immediate product outcome.
+- Replaced desktop Zira narration with sentence-level Andrew Neural TTS; all 26 measured inter-sentence pauses are at least 600 ms and the final-media audio audit passes.
+- Added v0.5 release framing incorporating the Falsify lesson, then superseded it with v0.6's direct external-agent-call proof and competitive claim boundary.
 - Regenerated the 90-second demo and ran the full local test, comparison, media, dependency, secret, and held-production audit suite.
+- Rebranded to the non-colliding `ExactDelta` name while retaining the owner-gated public URLs until release.
+- Routed direct external browser-client WebMCP invocations through the same Effect Contract gate and added native E2E proof.
+- Added a dated competitive review and v0.6 release specification with a bounded one-sentence difference.
 
 ## Release-gated remaining work
 
 - Obtain an unfamiliar-human 20-second comprehension record against the final build.
-- In the owner-approved window only: push the held commit, wait for CI, promote Vercel, rerun the production audit, upload the public YouTube video, update the Devpost video URL, review the final preview, and submit.
+- In the owner-approved window only: resolve and verify the canonical ExactDelta app/repository URLs (including redirects if legacy slugs remain), push the held commit, wait for CI, promote Vercel, rerun the production audit, upload the public YouTube video, update every submission URL, review the final preview, and submit.
 
 No other feature work is authorized by this plan unless it fixes a release blocker at equal or lower scope.

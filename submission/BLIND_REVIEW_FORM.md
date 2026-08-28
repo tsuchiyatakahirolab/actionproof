@@ -7,8 +7,8 @@ Ask the reviewer to answer in their own words:
 1. What did the human intend to change?
 2. Was the tool call itself correct and successful?
 3. What actually went wrong?
-4. Who would use ActionProof, and what decision did it make?
-5. What did ActionProof add beyond checking the tool call?
+4. Who would use ExactDelta, and what decision did it make?
+5. What did ExactDelta add beyond checking the tool call?
 6. Why is WebMCP part of this flow?
 
 ## Pass rule

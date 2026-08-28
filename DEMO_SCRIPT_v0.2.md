@@ -1,6 +1,6 @@
-# ActionProof demo script v0.2
+# ExactDelta demo script v0.2
 
-2026-08-27 JST. Fictional SaaS fixture, seeded defect, fake data. This replaces the ActionProof section of [DEMO_SCRIPTS_v0.1.md](DEMO_SCRIPTS_v0.1.md) for the gate prototype. It removes stale approvals, races, and secondary failure modes from the primary narrative.
+2026-08-27 JST. Fictional SaaS fixture, seeded defect, fake data. This replaces the ExactDelta section of [DEMO_SCRIPTS_v0.1.md](DEMO_SCRIPTS_v0.1.md) for the gate prototype. It removes stale approvals, races, and secondary failure modes from the primary narrative.
 
 ## 20-second silent sequence
 
@@ -12,12 +12,12 @@ No narration, captions, cursor callouts, or project description are assumed. The
 | 4–8s | The second panel activates and shows the structured call | `AGENT ACTION` · `Correct WebMCP call` · `cancel_order` · `{ "order_id": "#1042" }` · `Target matches visible selection` | The agent chose the correct WebMCP action and target |
 | 8–11s | The result panel activates | `TOOL RESULT` · `success: true` · `Tool returned without error` | The invocation layer believes it succeeded |
 | 11–15s | The independent state table reveals that both rows changed | `OBSERVED EFFECT` · `2 orders changed` · `#1042 REQUIRED` · `#1043 UNEXPECTED` | The application changed an extra record despite the correct call |
-| 15–20s | The verdict compares expected and actual | `Expected changes 1` · `Unexpected changes 1` · `TOOL CALL PASSED` · `REAL-WORLD EFFECT FAILED` | ActionProof detected the discrepancy at the effect layer |
+| 15–20s | The verdict compares expected and actual | `Expected changes 1` · `Unexpected changes 1` · `TOOL CALL PASSED` · `REAL-WORLD EFFECT FAILED` | ExactDelta detected the discrepancy at the effect layer |
 
 Persistent framing visible throughout:
 
 - `Correct call. Wrong effect.`
-- `ActionProof proves that a WebMCP action changed exactly what the human intended—and nothing else.`
+- `ExactDelta proves that a WebMCP action changed exactly what the human intended—and nothing else.`
 - `Seeded regression`
 - `Fake data · no transactions`
 - `Native WebMCP active` in the native run
@@ -34,7 +34,7 @@ Order `#1042` is selected; adjacent `#1043` is not. The contract source line is 
 
 **Narration**
 
-> This is a disposable test store. I selected one order: number ten forty-two. ActionProof captures that explicit intent and the current state before an agent changes anything.
+> This is a disposable test store. I selected one order: number ten forty-two. ExactDelta captures that explicit intent and the current state before an agent changes anything.
 
 **Judge understanding**
 
@@ -76,7 +76,7 @@ Tool-call success and real-world effect have diverged.
 
 **Narration**
 
-> ActionProof does not trust the return value. From the selection and pre-action state, it generated one required change, protected the unselected records, and compared the independent post-action snapshot. One required change passed. One unexpected change failed.
+> ExactDelta does not trust the return value. From the selection and pre-action state, it generated one required change, protected the unselected records, and compared the independent post-action snapshot. One required change passed. One unexpected change failed.
 
 **Judge understanding**
 

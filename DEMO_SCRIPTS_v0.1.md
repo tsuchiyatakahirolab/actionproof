@@ -148,7 +148,7 @@ Synthetic screen recording containing a fake API token and email. Solid opaque r
 
 最大の負け筋: OpenScrub・Reductに追跡、人の確認、映像／音声墨消しがある。WebMCPなしの通常の選択操作との差が弱い。検出漏れと書き出しの検証が重い。
 
-## 5. ActionProof — correct tool call, wrong result
+## 5. ExactDelta — correct tool call, wrong result
 
 **Concept-review leader, not an implementation GO.** Owned disposable test storefront with fake orders, visibly labeled `Seeded regression · no real transactions`. The business tool's arguments are correct; its buggy handler ignores the selected scope. Do not claim a real merchant or model suffered this incident.
 
@@ -156,7 +156,7 @@ Synthetic screen recording containing a fake API token and email. Solid opaque r
 
 画面: `For teams adding WebMCP to their SaaS`。選択された注文は1件。実際のWebMCP呼出しの引数も1件。しかし変更後は2件キャンセル。左に `Expected: 1 order`、右に `Actual: 2 orders`。`Correct call ≠ correct outcome`。
 
-> You're adding WebMCP to your SaaS. The agent requests cancellation of one selected order. The call is correct—but two orders change. ActionProof tests what actually happened in the live page, including the human's selection, instead of stopping at the tool call.
+> You're adding WebMCP to your SaaS. The agent requests cancellation of one selected order. The call is correct—but two orders change. ExactDelta tests what actually happened in the live page, including the human's selection, instead of stopping at the tool call.
 
 ### 20–40 seconds
 
@@ -168,7 +168,7 @@ Synthetic screen recording containing a fake API token and email. Solid opaque r
 
 画面: 操作途中に人が選択を変更する別試行。古い承認の対象に基づく実行を検査し、期待仕様との違いを表示。
 
-> Now change the selection while the operation is waiting. Does the old approval still apply? ActionProof replays the sequence and checks the application's declared rule. This is a browser-state test, not just another schema score.
+> Now change the selection while the operation is waiting. Does the old approval still apply? ExactDelta replays the sequence and checks the application's declared rule. This is a browser-state test, not just another schema score.
 
 ### 60–75 seconds
 
@@ -192,6 +192,6 @@ Synthetic screen recording containing a fake API token and email. Solid opaque r
 | ImportRescue | SaaS customer; blocked import; agent repairs against actual import rules | “AI cleans spreadsheets” is too familiar; the differentiating safety behavior appears late |
 | ShiftPatch | Café manager; missing coverage; preserve locked commitments | Looks like existing automatic scheduling; “why WebMCP” may remain just a label |
 | ShareSafe | Founder; a secret reappears; review linked redactions across frames | Existing tracking redaction looks the same; a direct editing command may be simpler |
-| ActionProof | SaaS team; one requested change caused two; verify actual state through the live tool path | “Is this just a buggy test app?” or “Why not Playwright?” must be answered with a fair baseline |
+| ExactDelta | SaaS team; one requested change caused two; verify actual state through the live tool path | “Is this just a buggy test app?” or “Why not Playwright?” must be answered with a fair baseline |
 
 These are intended answers, not observed reviewer responses. No independent viewer, timed screening, rendered storyboard, native run, or final video audit has been completed.

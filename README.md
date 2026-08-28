@@ -1,17 +1,18 @@
-# ActionProof
+# ExactDelta
 
 > **The agent did everything right. The result was still wrong.**
 
-**ActionProof is a pre-release effect gate for state-changing WebMCP tools.** Before a developer or QA engineer lets a write tool ship, it proves that the observed application state matches the human-authorized Effect Contract—and that nothing else changed.
+**ExactDelta turns the visible selected target into the only permitted application-state delta, gates the external WebMCP call when anything else changes, and retains that identical contract as the repair regression.**
 
-This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ActionProof turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
+This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
-The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ActionProof generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a CI-ready regression artifact, and passes that identical gate after repair.
+The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ExactDelta generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a CI-ready regression artifact, and passes that identical gate after repair.
 
 ## Try it
 
 - **Live demo:** [https://actionproof.vercel.app](https://actionproof.vercel.app)
 - **Public repository:** [github.com/tsuchiyatakahirolab/actionproof](https://github.com/tsuchiyatakahirolab/actionproof)
+- **Real agent path:** ask the in-app browser agent, `Cancel only the order selected on this page, then report whether the effect gate passes.` The direct tool call must be labeled **EXTERNAL WEBMCP CALL** and the seeded collateral effect must block the gate.
 - **20-second proof:** open the demo, keep **Order cancellation** selected, and click **Run seeded defect**; the effect gate must block the write tool
 - **Repair proof:** click **Run repaired version**; the same regression ID, contract, and tool arguments must pass and clear the gate
 - **Second workflow:** switch to **Permission change** and repeat
@@ -20,7 +21,7 @@ All records are fake, all defects are deliberately seeded, and no transaction le
 
 ## Why WebMCP
 
-A browser agent can choose the correct WebMCP tool, supply valid arguments, receive `success: true`, and still leave the application in the wrong state. Tool-call matching evaluates the invocation. ActionProof adds an application-owned effect boundary around the invocation:
+A browser agent can choose the correct WebMCP tool, supply valid arguments, receive `success: true`, and still leave the application in the wrong state. Tool-call matching evaluates the invocation. ExactDelta adds an application-owned effect boundary around the invocation:
 
 ```text
 visible human selection + pre-action state
@@ -31,15 +32,15 @@ visible human selection + pre-action state
 → inspectable verdict + retained regression
 ```
 
-The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. The Run button makes the native execution deterministic for judging; an external browser agent can invoke the same context-matched tool. Without WebMCP there is no structured page-exposed write boundary for this gate to discover and execute; it becomes an ordinary application-specific test.
+The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. A direct call from the browser client enters the Effect Contract gate automatically and returns the original action payload plus an independent `effectGate` verdict, so the agent can report the release result instead of trusting `success: true`. The Run button uses the same native boundary as a deterministic judge replay. Without WebMCP there is no structured page-exposed write boundary for a browser agent to discover and invoke; it becomes an ordinary application-specific test.
 
 ## Human and agent roles
 
 - The human declares the action by selecting the target in the application UI.
-- ActionProof turns that visible intent and the pre-action snapshot into an Effect Contract.
+- ExactDelta turns that visible intent and the pre-action snapshot into an Effect Contract.
 - The agent invokes the registered WebMCP tool.
 - The application exposes an owned post-action state adapter.
-- ActionProof compares declared and observed effects; it does not infer intent from the tool result.
+- ExactDelta compares declared and observed effects; it does not infer intent from the tool result.
 - A developer repairs the handler and reruns the retained regression unchanged before clearing the write tool for release.
 
 ## One core, two workflows
@@ -49,7 +50,7 @@ The page registers the one tool relevant to the visible workflow with `document.
 | Order cancellation | `#1042.status → cancelled` | Order `#1043` | `#1043` also becomes cancelled |
 | Permission change | `Alice.role → Editor` | User `Bob` | Bob also becomes Editor |
 
-Both scenarios use the same `generateEffectContract()`, `diffSnapshots()`, `verifyEffect()`, `runActionProof()`, WebMCP bridge, and UI. Scenario definitions provide only the application-owned action binding and state shape.
+Both scenarios use the same `generateEffectContract()`, `diffSnapshots()`, `verifyEffect()`, `runExactDelta()`, WebMCP bridge, and UI. Scenario definitions provide only the application-owned action binding and state shape.
 
 ## Measured comparison
 
@@ -59,13 +60,19 @@ The repository includes a plain WebMCP fixture, official WebMCP Evals `0.0.3` tr
 |---|---|
 | Official Evals call matcher | 2/2 correct calls PASS; 2/2 deliberately wrong-argument controls FAIL; collateral defects remained in 2/2 resulting states |
 | Evals + manual Playwright | 4 concrete expected-state assertions detected both defects; identical assertions PASS after repair |
-| ActionProof | 2 reusable action bindings; 0 per-record expected-state assertions in scenario definitions; both generated regressions detect the defect and PASS after repair |
+| ExactDelta | 2 reusable action bindings; 0 per-record expected-state assertions in scenario definitions; both generated regressions detect the defect and PASS after repair |
 
-This is a detection-coverage comparison, not a runtime-performance, universal-support, or market-demand claim. ActionProof still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
+This is a detection-coverage comparison, not a runtime-performance, universal-support, or market-demand claim. ExactDelta still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
+
+## Public alternatives and precise difference
+
+The strongest public adjacent approaches are not strawmen. [GoogleChromeLabs WebMCP Evals](https://github.com/GoogleChromeLabs/webmcp-tools/) tests model/tool selection. [webmcpify](https://github.com/TueJon/webmcpify) provides a broader integration pipeline and real-browser result/UI-delta verification. [Postcept](https://github.com/postcept/mcp) verifies selected outcomes against external systems of record and returns receipts. Conventional Playwright assertions can also catch both seeded defects.
+
+ExactDelta's narrower demonstrated difference is that it generates the exact allowed state delta—including unchanged obligations for every current unselected record—from the visible target and pre-state, gates the direct page WebMCP invocation, and reuses the identical artifact after repair. See the dated [competitive review](COMPETITIVE_REVIEW.md) for the comparison and search limits.
 
 ## Integration boundary
 
-ActionProof is not zero-configuration magic. A site owner supplies two narrow, reviewable pieces: an authorized snapshot adapter for the state that matters, and one action binding that declares the intended field transition. The core then expands the current visible selection into concrete required, forbidden, and invariant checks for each run.
+ExactDelta is not zero-configuration magic. A site owner supplies two narrow, reviewable pieces: an authorized snapshot adapter for the state that matters, and one action binding that declares the intended field transition. The core then expands the current visible selection into concrete required, forbidden, and invariant checks for each run.
 
 See [the integration guide](docs/INTEGRATION.md) for the minimum adapter, binding, native execution, CI artifact, and production caveats.
 
@@ -106,7 +113,7 @@ For a local Chrome build with WebMCP testing enabled:
 2. Reload the app.
 3. Confirm the top badge says **Native WebMCP · 1 context-matched tool**.
 
-If the API is absent, ActionProof uses an explicitly labeled **WebMCP-compatible local harness** for UI review. Harness output is never counted as native evidence.
+If the API is absent, ExactDelta uses an explicitly labeled **WebMCP-compatible local harness** for UI review. Harness output is never counted as native evidence.
 
 ## Verification
 
@@ -115,20 +122,20 @@ npm run check       # TypeScript project check
 npm test            # Effect Contract unit tests
 npm run build       # Production Vite build
 npm run test:ui     # Native Chrome WebMCP + UI/E2E + console checks
-npm run benchmark   # Evals matcher + manual Playwright + ActionProof comparison
+npm run benchmark   # Evals matcher + manual Playwright + ExactDelta comparison
 ```
 
 Current deterministic suite:
 
-- 8 unit tests pass, including wrong-value and timeout controls.
-- 2 native Chrome UI/E2E tests pass.
+- 9 unit tests pass, including actual external-argument capture, wrong-value, and timeout controls.
+- 5 native Chrome UI/E2E tests pass, including a direct external WebMCP invocation, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
 
 ### Rebuild the submission video
 
-Video generation additionally requires Python 3 and network access for the pinned [`edge-tts` 7.2.8](https://github.com/rany2/edge-tts) build tool. It is used only to render the narration asset; it is not a product runtime dependency. The timeline renders every sentence as a separate `en-US-AvaMultilingualNeural` clip and rejects the build unless every measured inter-sentence pause is at least 500 ms.
+Video generation additionally requires Python 3 and network access for the pinned [`edge-tts` 7.2.8](https://github.com/rany2/edge-tts) build tool. It is used only to render the narration asset; it is not a product runtime dependency. The timeline renders every sentence as a separate `en-US-AndrewMultilingualNeural` clip and rejects the build unless every measured inter-sentence pause is at least 500 ms.
 
 ```bash
 npm run demo:record  # build, neural narration, pause audit, browser recording, mux
@@ -142,7 +149,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, same-origin exposure, and labeled local fallback
 - `src/App.tsx` — judge-first proof UI
 - `docs/INTEGRATION.md` — bounded path from the fixture to an application-owned release gate
-- `baseline.html` — plain WebMCP comparison fixture without ActionProof
+- `baseline.html` — plain WebMCP comparison fixture without ExactDelta
 - `benchmarks/` — official matcher inputs, manual Playwright baseline, raw and summarized results
 - `tests/browser/` — native Chrome end-to-end proof
 - `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
@@ -162,7 +169,9 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 ## Submission evidence
 
 - [Formal GO decision](GO_DECISION.md)
-- [Current top-award release specification v0.5](WINNING_SPEC_v0.5.md)
+- [Current top-10 release specification v0.6](WINNING_SPEC_v0.6.md)
+- [Dated competitive review](COMPETITIVE_REVIEW.md)
+- [Final internal top-10 scorecard](TOP10_FINAL_REVIEW.md)
 - [Architecture gate specification v0.4](WINNING_SPEC_v0.4.md)
 - [Top-10 gate report](TOP10_GATE_REPORT.md)
 - [Benchmark report](BENCHMARK_REPORT.md)
@@ -170,7 +179,11 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - [90-second demo script](submission/VIDEO_SCRIPT.md)
 - [Devpost submission copy](submission/DEVPOST_SUBMISSION.md)
 - [Final technical audit](submission/FINAL_AUDIT.md)
+- [Rules compliance record](submission/RULES_COMPLIANCE.md)
+- [Third-party dependency and media-tool notice](THIRD_PARTY_NOTICES.md)
+- [Submission owner checklist](submission/FINAL_CHECKLIST.md)
 - [20-second unfamiliar-reviewer form](submission/BLIND_REVIEW_FORM.md)
+- [Private comprehension and relevance protocol](submission/PRIVATE_VALIDATION_PROTOCOL.md)
 
 ## License
 

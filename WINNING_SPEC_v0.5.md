@@ -1,12 +1,12 @@
-# ActionProof top-award release specification v0.5
+# ExactDelta top-award release specification v0.5
 
 2026-08-27 JST / TSUCHIYA LAB / **Current release scope**
 
-This specification keeps the Effect Contract and verification core approved in v0.4. It narrows the product story around one concrete user, moment, and decision so ActionProof is judged as a coherent product rather than a technical proof of concept.
+This specification keeps the Effect Contract and verification core approved in v0.4. It narrows the product story around one concrete user, moment, and decision so ExactDelta is judged as a coherent product rather than a technical proof of concept.
 
 ## One-sentence product
 
-> **ActionProof is a pre-release effect gate that proves a state-changing WebMCP tool changed exactly what the human authorized—and nothing else.**
+> **ExactDelta is a pre-release effect gate that proves a state-changing WebMCP tool changed exactly what the human authorized—and nothing else.**
 
 ## User, moment, and decision
 
@@ -27,7 +27,7 @@ visible human selection + pre-action state
 → tool result kept separate from application-owned post-state
 → required / unexpected / invariant diff
 → EFFECT GATE BLOCKED or EFFECT GATE PASSED
-→ downloadable actionproof.regression.v1 CI artifact
+→ downloadable exactdelta.regression.v1 CI artifact
 → identical regression after developer-reviewed repair
 ```
 
@@ -52,7 +52,7 @@ The repaired run must visibly switch to `EFFECT GATE PASSED` and preserve the sa
 
 - Native `registerTool()`, `getTools()`, and `executeTool()` are the action boundary under test.
 - Only the active visible-context tool is registered; exact enums bind visible target/value; same-origin exposure and cancellation are explicit.
-- Removing WebMCP turns the workflow into an ordinary application test and removes the structured page action boundary ActionProof is designed to gate.
+- Removing WebMCP turns the workflow into an ordinary application test and removes the structured page action boundary ExactDelta is designed to gate.
 
 ### Execution
 
@@ -64,8 +64,8 @@ The repaired run must visibly switch to `EFFECT GATE PASSED` and preserve the sa
 ### Potential Impact
 
 - The audience and release moment are specific and visible.
-- The official Chrome guidance explicitly requires classic deterministic testing for UI updates and intentional side effects before production; ActionProof demonstrates a generated, inspectable form of that effect test.
-- The controlled benchmark proves the narrow gap: correct-call matching succeeds while both seeded state defects remain, and ActionProof catches both from reusable action bindings.
+- The official Chrome guidance explicitly requires classic deterministic testing for UI updates and intentional side effects before production; ExactDelta demonstrates a generated, inspectable form of that effect test.
+- The controlled benchmark proves the narrow gap: correct-call matching succeeds while both seeded state defects remain, and ExactDelta catches both from reusable action bindings.
 
 ### Creativity & Ambition
 
@@ -77,4 +77,4 @@ The repaired run must visibly switch to `EFFECT GATE PASSED` and preserve the sa
 
 Only changes that improve correctness, judge comprehension, accessibility, release reliability, or evidence integrity may enter after this specification. New product features are deferred.
 
-`ACTIONPROOF_TOP_AWARD_SCOPE_LOCKED`
+`EXACTDELTA_TOP_AWARD_SCOPE_LOCKED`

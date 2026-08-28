@@ -2,7 +2,7 @@
 
 ## Objective and source of truth
 
-Aim for an exceptional, demonstrably useful entry and a plausible TSUCHIYA LAB business, not submission completion alone. Current release scope is in `WINNING_SPEC_v0.5.md`; the final recording plan is in `submission/VIDEO_SCRIPT.md`. Earlier specifications and paper demos are historical context, not active implementation instructions.
+Aim for an exceptional, demonstrably useful entry and a plausible TSUCHIYA LAB business, not submission completion alone. Current release scope is in `WINNING_SPEC_v0.6.md`; the final recording plan is in `submission/VIDEO_SCRIPT.md`. Earlier specifications and paper demos are historical context, not active implementation instructions.
 
 ## Mandatory concept gates
 

@@ -1,16 +1,16 @@
-# ActionProof Top-10 gate specification v0.4
+# ExactDelta Top-10 gate specification v0.4
 
 2026-08-27 JST / TSUCHIYA LAB / **Historical pre-implementation gate: PASS. Full implementation was later authorized in `GO_DECISION.md`.**
 
-This version preserves [v0.3](WINNING_SPEC_v0.3.md) as the concept-selection history and replaces it only for the bounded ActionProof gate described here. The code in this folder is a fictional, disposable gate prototype, not a production product or a customer incident.
+This version preserves [v0.3](WINNING_SPEC_v0.3.md) as the concept-selection history and replaces it only for the bounded ExactDelta gate described here. The code in this folder is a fictional, disposable gate prototype, not a production product or a customer incident.
 
 ## 1. Final problem statement
 
 An agent can invoke the intended WebMCP tool with the intended arguments, receive a successful result, and still leave the application in a state that diverges from the human's explicit intent.
 
-ActionProof's proposition is:
+ExactDelta's proposition is:
 
-> **ActionProof proves that a WebMCP action changed exactly what the human intended, and nothing else.**
+> **ExactDelta proves that a WebMCP action changed exactly what the human intended, and nothing else.**
 
 The canonical seeded regression is deliberately narrow:
 
@@ -18,7 +18,7 @@ The canonical seeded regression is deliberately narrow:
 2. The agent correctly invokes `cancel_order({ order_id: "#1042" })` through WebMCP.
 3. The tool returns `{ success: true }`.
 4. The intentionally defective handler cancels both `#1042` and `#1043`.
-5. ActionProof independently compares the observed post-action state with a contract generated before the call.
+5. ExactDelta independently compares the observed post-action state with a contract generated before the call.
 6. It reports one required change and one unexpected change.
 7. The same retained regression case passes after the seeded defect is disabled.
 
@@ -34,13 +34,13 @@ The gate prototype does not claim proven paid demand, universal site support, pr
 
 ## 3. Competitive boundary
 
-| Adjacent method | What it establishes | ActionProof's visible boundary |
+| Adjacent method | What it establishes | ExactDelta's visible boundary |
 |---|---|---|
-| WebMCP Evals | Tool schema/calling and agent workflow evaluation; browser and smoke modes can execute expected calls | ActionProof generates an application-effect contract from the visible selection and pre-action state, then shows required and collateral state changes separately |
-| Nekuda WebMCP Workbench | Tool inspection, execution, evaluation, logs, and replay according to its public materials | ActionProof's primary artifact is not a call log; it is the expected-vs-observed effect diff tied to human intent |
-| Playwright assertions | A developer can manually encode arbitrary pre/post assertions | ActionProof expands one reusable action binding plus the current selection into per-record required, forbidden, and invariant checks for that run |
-| Generic agent evaluation | Can score or compare model behavior | ActionProof does not score the model; it verifies the state transition produced by a live WebMCP write path |
-| Generic pre/postcondition framework | Can express state rules for many systems | ActionProof is deliberately scoped to visible human intent, native WebMCP execution, and the resulting browser-application state |
+| WebMCP Evals | Tool schema/calling and agent workflow evaluation; browser and smoke modes can execute expected calls | ExactDelta generates an application-effect contract from the visible selection and pre-action state, then shows required and collateral state changes separately |
+| Nekuda WebMCP Workbench | Tool inspection, execution, evaluation, logs, and replay according to its public materials | ExactDelta's primary artifact is not a call log; it is the expected-vs-observed effect diff tied to human intent |
+| Playwright assertions | A developer can manually encode arbitrary pre/post assertions | ExactDelta expands one reusable action binding plus the current selection into per-record required, forbidden, and invariant checks for that run |
+| Generic agent evaluation | Can score or compare model behavior | ExactDelta does not score the model; it verifies the state transition produced by a live WebMCP write path |
+| Generic pre/postcondition framework | Can express state rules for many systems | ExactDelta is deliberately scoped to visible human intent, native WebMCP execution, and the resulting browser-application state |
 
 This does **not** establish that adjacent tools are incapable of state assertions. The strongest unresolved product objection remains that WebMCP Evals plus a small Playwright assertion layer may be sufficient for many teams. A fair time/authoring/maintenance comparison is required before a standalone commercial product claim.
 
@@ -62,7 +62,7 @@ The prototype registers two imperative tools with `document.modelContext.registe
 
 The automated browser test launches installed Chrome with `--enable-features=WebMCP,WebMCPTesting` and requires the UI to display `Native WebMCP · 1 context-matched tool`. A feature-detected local harness exists only so the visual prototype remains reviewable in browsers without the experimental API; it is explicitly labeled `WebMCP-compatible local harness` and is not presented as a native run.
 
-Removing WebMCP materially changes the demonstrated job: a normal UI test can exercise the human button path, but it does not prove the separately exposed WebMCP write path. A direct JavaScript callback is not accepted as native evidence. At the same time, Playwright plus native WebMCP execution remains a competent implementation alternative; ActionProof's claim is reduced assertion authoring and an intent-first effect artifact, not exclusive detection capability.
+Removing WebMCP materially changes the demonstrated job: a normal UI test can exercise the human button path, but it does not prove the separately exposed WebMCP write path. A direct JavaScript callback is not accepted as native evidence. At the same time, Playwright plus native WebMCP execution remains a competent implementation alternative; ExactDelta's claim is reduced assertion authoring and an intent-first effect artifact, not exclusive detection capability.
 
 ## 5. Effect-contract definition
 
@@ -138,7 +138,7 @@ target argument: user_id
 effect: role -> Editor
 ```
 
-With the seeded defect, both Alice and Bob become Editors. The same `generateEffectContract()`, `diffSnapshots()`, `verifyEffect()`, `runActionProof()`, native bridge, UI panels, and regression format are used. There is no order- or permission-specific branch in the verification architecture.
+With the seeded defect, both Alice and Bob become Editors. The same `generateEffectContract()`, `diffSnapshots()`, `verifyEffect()`, `runExactDelta()`, native bridge, UI panels, and regression format are used. There is no order- or permission-specific branch in the verification architecture.
 
 ## 8. Four mandatory GO conditions
 
@@ -157,4 +157,4 @@ The four requested architecture/prototype conditions are satisfied by the bounde
 
 The gate does **not** establish standalone commercial superiority. Before authorizing a full build, the owner should decide whether the remaining Evals-plus-assertions objection is acceptable for the hackathon and schedule a blind 20-second audit. No outreach, deployment, account creation, or submission occurred in this gate.
 
-`ACTIONPROOF_TOP10_GATE_PASS`
+`EXACTDELTA_TOP10_GATE_PASS`

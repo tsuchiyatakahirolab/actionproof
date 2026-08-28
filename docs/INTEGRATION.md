@@ -1,8 +1,8 @@
-# Integrating the ActionProof effect gate
+# Integrating the ExactDelta effect gate
 
-ActionProof is designed for a developer or QA engineer validating a state-changing WebMCP tool in an owned staging environment before release.
+ExactDelta is designed for a developer or QA engineer validating a state-changing WebMCP tool in an owned staging environment before release.
 
-The application—not ActionProof—must own authorization, tool semantics, and the state snapshot. ActionProof supplies the contract expansion, independent diff, bounded verdict, and retained regression artifact.
+The application—not ExactDelta—must own authorization, tool semantics, and the state snapshot. ExactDelta supplies the contract expansion, independent diff, bounded verdict, and retained regression artifact.
 
 ## Minimum integration
 
@@ -40,7 +40,7 @@ if (result.verdict !== "ACTION_PROVEN") {
 }
 ```
 
-In this repository, `runActionProof()` composes the same steps around `ScenarioStore`, while `createWebMcpBridge()` performs native registration, discovery, execution, timeout cancellation, and explicit fallback labeling.
+In this repository, `runExactDelta()` composes the same steps around `ScenarioStore`, while `createWebMcpBridge()` performs native registration, discovery, execution, timeout cancellation, and explicit fallback labeling.
 
 ## What is generated
 
@@ -55,7 +55,7 @@ The owner defines the action semantics once. Record-specific obligations come fr
 
 ## CI artifact
 
-The downloadable `actionproof.regression.v1` JSON preserves the workflow, explicit intent, tool arguments, and generated Effect Contract. The demo proves that the same artifact identity and contract fail against the seeded handler and pass after the only code-path difference—the reviewed repair.
+The downloadable `exactdelta.regression.v1` JSON preserves the workflow, explicit intent, tool arguments, and generated Effect Contract. The demo proves that the same artifact identity and contract fail against the seeded handler and pass after the only code-path difference—the reviewed repair.
 
 The artifact is evidence for this bounded effect contract. It is not an application-wide security certificate.
 
