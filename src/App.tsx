@@ -276,6 +276,21 @@ export default function App() {
     passed: "EFFECT GATE PASSED",
     blocked: "EFFECT GATE BLOCKED",
   }[gateState];
+  const traceIsLive = phase >= 4 && Boolean(currentResult);
+  const traceLabel = traceIsLive
+    ? "LIVE VERIFIED EFFECT"
+    : running
+      ? "LIVE ACTION · OBSERVING"
+      : "SEEDED STAGING PREVIEW";
+  const traceObserved = traceIsLive ? observedCount : running ? null : 2;
+  const traceDecision = traceIsLive
+    ? currentResult?.verdict === "ACTION_PROVEN" ? "RELEASE PASSED" : "RELEASE BLOCKED"
+    : running ? "VERIFYING EFFECT" : "RELEASE BLOCKED";
+  const traceState = traceIsLive
+    ? currentResult?.verdict === "ACTION_PROVEN" ? "passed" : "blocked"
+    : running ? "running" : "preview";
+  const regressionVerificationRunning = Boolean(failedRun && running);
+  const visibleRegressionPass = identicalRegressionPassed && gateState === "passed";
 
   function downloadRegression(resultToDownload: VerificationResult): void {
     const artifact = createRegressionArtifact(resultToDownload);
@@ -304,15 +319,14 @@ export default function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-lockup">
-          <span className="brand-mark" aria-hidden="true">ED</span>
+          <span className="brand-mark" aria-hidden="true">Δ</span>
           <div>
             <strong>ExactDelta</strong>
             <span>Pre-release effect gate for WebMCP writes</span>
           </div>
         </div>
         <div className="topbar-badges">
-          <span className="badge badge-neutral">Staging release fixture</span>
-          <span className="badge badge-neutral">Fake data · no transactions</span>
+          <span className="badge badge-neutral">Staging · fictional data</span>
           <span
             className={`badge ${bridgeMode === "native-webmcp" ? "badge-native" : "badge-harness"}`}
             data-testid="bridge-mode"
@@ -326,28 +340,62 @@ export default function App() {
         </div>
       </header>
 
-      <section className="hero">
-        <p className="eyebrow">THE PRE-RELEASE EFFECT GATE FOR WEBMCP WRITES</p>
-        <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
-        <p>
-          Human selection becomes the only permitted state delta. ExactDelta blocks release when the native WebMCP write changes anything else.
-        </p>
-      </section>
+      <section className={`hero hero-${traceState}`}>
+        <div className="hero-copy">
+          <p className="eyebrow">THE PRE-RELEASE EFFECT GATE FOR WEBMCP WRITES</p>
+          <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
+          <p className="hero-summary">
+            Human selection becomes the only permitted state delta. ExactDelta blocks release when the native WebMCP write changes anything else.
+          </p>
+          <nav className="scenario-tabs" aria-label="Proof scenarios">
+            {scenarioDefinitions.map((candidate) => (
+              <button
+                key={candidate.id}
+                className={candidate.id === scenarioId ? "active" : ""}
+                disabled={running}
+                onClick={() => setScenarioId(candidate.id)}
+                type="button"
+              >
+                {candidate.tabLabel}
+                {candidate.id === "permissions" && <span>same verifier</span>}
+              </button>
+            ))}
+          </nav>
+        </div>
 
-      <nav className="scenario-tabs" aria-label="Proof scenarios">
-        {scenarioDefinitions.map((candidate) => (
-          <button
-            key={candidate.id}
-            className={candidate.id === scenarioId ? "active" : ""}
-            disabled={running}
-            onClick={() => setScenarioId(candidate.id)}
-            type="button"
-          >
-            {candidate.tabLabel}
-            {candidate.id === "permissions" && <span>same verifier</span>}
-          </button>
-        ))}
-      </nav>
+        <div className="hero-effect-trace" data-testid="hero-effect-trace">
+          <div className="trace-header">
+            <div>
+              <span className="trace-signal" aria-hidden="true" />
+              <strong>{traceLabel}</strong>
+            </div>
+            <span>Effect Trace · 01</span>
+          </div>
+          <div className="trace-main">
+            <div className="trace-receipt">
+              <span>TOOL RETURN</span>
+              <strong>success: true</strong>
+              <small>Correct call accepted</small>
+            </div>
+            <div className="trace-connector" aria-hidden="true">
+              <span />
+              <b>≠</b>
+              <span />
+            </div>
+            <div className="trace-delta">
+              <div><span>REQUESTED</span><strong>1</strong><small>selected target</small></div>
+              <div className="trace-observed"><span>OBSERVED</span><strong>{traceObserved ?? "…"}</strong><small>{traceObserved === 1 ? "exact change" : traceObserved === 2 ? "one collateral" : "reading state"}</small></div>
+            </div>
+          </div>
+          <div className={`trace-decision trace-${traceState}`}>
+            <div>
+              <span>EXACTDELTA DECISION</span>
+              <strong>{traceDecision}</strong>
+            </div>
+            <p>{traceState === "passed" ? "Observed state matches the exact contract." : traceState === "running" ? "Tool result received. Independent state check running." : "The tool succeeded; the observed effect did not."}</p>
+          </div>
+        </div>
+      </section>
 
       <section className="proof-workspace">
         <div className="agent-handoff" data-testid="agent-handoff">
@@ -617,9 +665,9 @@ export default function App() {
           <div className="regression-proof" data-testid="regression-proof">
             <div className="proof-node detected"><span>1</span><div><small>SEEDED DEFECT</small><strong>DETECTED</strong></div></div>
             <span className="proof-arrow">→</span>
-            <div className={`proof-node ${repairedRun ? "repaired" : "pending"}`}><span>2</span><div><small>HANDLER</small><strong>{repairedRun ? "REPAIRED" : "REPAIR NEXT"}</strong></div></div>
+            <div className={`proof-node ${regressionVerificationRunning || visibleRegressionPass ? "repaired" : "pending"}`}><span>2</span><div><small>HANDLER</small><strong>{regressionVerificationRunning || visibleRegressionPass ? "REPAIRED" : "REPAIR NEXT"}</strong></div></div>
             <span className="proof-arrow">→</span>
-            <div className={`proof-node ${identicalRegressionPassed ? "passed" : "pending"}`}><span>3</span><div><small>IDENTICAL REGRESSION</small><strong>{identicalRegressionPassed ? "PASS" : "NOT RUN"}</strong></div></div>
+            <div className={`proof-node ${visibleRegressionPass ? "passed" : regressionVerificationRunning ? "verifying" : "pending"}`}><span>3</span><div><small>IDENTICAL REGRESSION</small><strong>{visibleRegressionPass ? "PASS" : regressionVerificationRunning ? "VERIFYING" : "NOT RUN"}</strong></div></div>
             <code>{failedRun.regressionCase.id}</code>
           </div>
         )}

@@ -1,22 +1,56 @@
 import { chromium } from "@playwright/test";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const template = path.join(root, "scripts", "thumbnail-template.html");
+const sourceOutput = path.join(root, "submission", "youtube-thumbnail.png");
 const output = path.join(root, "submission", "youtube-thumbnail-v2.png");
-const browser = await chromium.launch({ channel: "chrome", headless: true });
+const vite = spawn(
+  process.execPath,
+  [path.join(root, "node_modules", "vite", "bin", "vite.js"), "preview", "--host", "127.0.0.1", "--port", "4178", "--strictPort"],
+  { cwd: root, stdio: ["ignore", "pipe", "pipe"] },
+);
+let serverOutput = "";
+vite.stdout.on("data", (chunk) => { serverOutput += chunk.toString(); });
+vite.stderr.on("data", (chunk) => { serverOutput += chunk.toString(); });
+
+async function waitForServer() {
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    try {
+      const response = await fetch("http://127.0.0.1:4178/");
+      if (response.ok) return;
+    } catch {
+      // Preview is still starting.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error(`Thumbnail preview did not start.\n${serverOutput}`);
+}
+
+let browser;
 
 try {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
-  await page.goto(pathToFileURL(template).href);
-  await page.locator(".source").evaluate((image) => {
-    if (!(image instanceof HTMLImageElement) || !image.complete || image.naturalWidth !== 1280 || image.naturalHeight !== 720) {
-      throw new Error("Thumbnail source did not load at 1280x720.");
-    }
+  await waitForServer();
+  browser = await chromium.launch({
+    channel: "chrome",
+    headless: true,
+    args: ["--enable-features=WebMCP,WebMCPTesting"],
   });
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
+  await page.goto("http://127.0.0.1:4178/?speed=0.01");
+  await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
+  await page.evaluate(async () => {
+    const tool = (await document.modelContext.getTools())[0];
+    await document.modelContext.executeTool(tool, JSON.stringify({ order_id: "#1042" }));
+  });
+  await page.getByTestId("verdict-fail").waitFor();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: sourceOutput, type: "png" });
   await page.screenshot({ path: output, type: "png" });
-  process.stdout.write(`${output}\n`);
+  process.stdout.write(`${sourceOutput}\n${output}\n`);
 } finally {
-  await browser.close();
+  if (browser) await browser.close();
+  vite.kill();
+  vite.unref();
 }

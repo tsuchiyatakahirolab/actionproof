@@ -20,6 +20,7 @@ The product remains intentionally bounded to two disposable in-memory workflows:
 | 2026-08-27 | Held-build local production smoke audit | Complete |
 | 2026-08-28 | ExactDelta brand, direct browser-client gate, public competitor review, and 15-second judge proof | Complete |
 | 2026-08-28 | Objective adversarial review, no-op/post-failure hardening, and subjective-gate demotion | Complete |
+| 2026-08-28 | Cross-browser native input compatibility, first-viewport Effect Trace, temporal verdict hardening, and media regeneration | Complete |
 | Release window | Push, promote, public YouTube, Devpost preview | Owner-controlled |
 
 ## Reproducible commands
@@ -41,17 +42,17 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 
 ## Current evidence
 
-- 20/20 unit tests pass, including artifact parsing, contract/identity-drift fail-before-write, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, actual external-argument capture, and validation.
-- 7/7 native Chrome WebMCP E2E flows pass, including interactive target reselection and schema rebinding, direct and repeated external tool invocation, concurrent-call fail-closed behavior, 1280×720 judge-path layout, context tool lifecycle, and gate transitions.
+- 24/24 unit tests pass, including Chrome JSON-string and in-app-browser object input-mode detection, exactly-once application-write enforcement in both modes, artifact parsing, contract/identity-drift fail-before-write, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, actual external-argument capture, and validation.
+- 8/8 native Chrome WebMCP E2E flows pass, including interactive target reselection and schema rebinding, direct and repeated external tool invocation, concurrent-call fail-closed behavior, 1280×720 judge-path layout, hero Effect Trace transitions, context tool lifecycle, and the rule that regression `PASS` cannot render while verification is still running.
 - `npm run regression:ci:all` loads both committed JSON artifacts and executes each against the seeded defect and repaired implementation; all four expected verdicts and artifact-identity checks pass.
-- Codex's in-app browser discovered and directly invoked `cancel_order` again after the single-flight hardening; the same page call returned success and independently produced the blocked Effect Contract verdict with zero console errors.
+- Codex's in-app browser discovered and directly invoked `cancel_order` through its object-input native API; the UI replay path also completed defect block and identical repair PASS after the compatibility fix, with zero console warnings or errors.
 - Official Evals matcher: 2/2 correct calls matched; 2/2 wrong-argument controls rejected; 2/2 collateral defects remained.
 - Manual Playwright: four concrete state assertions detect both defects and pass unchanged after repair.
 - ExactDelta: two reusable action bindings, zero per-record expected-state assertions in scenario definitions, two defects detected, two identical regressions passed.
 - Demo: 90.00 seconds, H.264 1440×900, AAC English `en-US-AndrewMultilingualNeural` narration. All 26 sentences are separate clips; every measured pause is at least 600 ms. The seeded effect failure is fully visible by 15 seconds. Final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
 - Held local production preview: native WebMCP, correct context-matched tool per workflow, `tools=*`, zero console errors; see `submission/private/HELD_PRODUCTION_AUDIT.json` (ignored from public release).
 - Public-source review: official issue #45 and Chrome Evals guidance support the bounded trust-gap claim; webmcpify, Postcept, Playwright, Schemathesis, and AgentSynth cap broader novelty claims. The official gallery was still unpublished. See `OBJECTIVE_ADVERSARIAL_REVIEW.md`.
-- Latest post-runner rerun: typecheck PASS, unit 20/20, native E2E 7/7, four JSON-driven regression executions PASS, and build PASS. Benchmark, media, dependency, secret, local production, and diff checks are rerun in the final audit.
+- Latest clean-install rerun plus compatibility regression: typecheck PASS, unit 24/24, native E2E 8/8, four JSON-driven regression executions PASS, build PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, and held local production audit PASS.
 
 ## Release safety
 

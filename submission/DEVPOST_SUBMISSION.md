@@ -47,6 +47,7 @@ The QA operator does not write a record-specific assertion or decode an agent tr
 - React 19, TypeScript, and Vite
 - OpenAI Codex as the primary development environment; GPT-5.6 for architecture review, test design, and adversarial submission review
 - Native imperative WebMCP registration and execution
+- Read-only native input-mode detection for Chrome and in-app-browser `executeTool()` dialects, with exactly one application write
 - Context-matched tool lifecycle, exact visible-intent schemas, and same-origin exposure
 - Typed Effect Contract generation from explicit selection and pre-state
 - Deterministic snapshot diff for required, unexpected, and invariant changes
@@ -66,7 +67,7 @@ This comparison measures detection coverage only. ExactDelta still requires an a
 
 The hardest design constraint was avoiding a dressed-up Playwright wrapper. The Effect Contract had to be generated from visible intent and pre-state, remain inspectable, work across two action classes, and demonstrate a measurable boundary from expected-call matching without exaggerating the comparison.
 
-We also kept native and fallback evidence separate: the UI labels harness mode, while the browser suite requires a real Chrome WebMCP API.
+We also kept native and fallback evidence separate: the UI labels harness mode, while the browser suite requires a real Chrome WebMCP API. Chrome and ChatGPT's in-app browser currently accept different `executeTool()` input forms, so we resolve that difference with a read-only startup probe instead of retrying a state-changing call.
 
 ## Accomplishments
 

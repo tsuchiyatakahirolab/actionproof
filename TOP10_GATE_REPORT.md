@@ -61,7 +61,7 @@ The tests prove:
 - disabling the seeded defect makes the identical retained order regression pass;
 - the main UI produces no console errors in the tested sequence.
 
-Current release-hold evidence has superseded these counts: 20 unit tests, 7 native Chrome E2E tests including real target/schema rebinding and direct/repeated external-call gates, four JSON-driven regression executions, official matcher negative controls, context-matched tool lifecycle assertions, and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
+Current release-hold evidence has superseded these counts: 24 unit tests, 8 native Chrome E2E tests including exactly-once native input-dialect handling, real target/schema rebinding, direct/repeated external-call gates, first-viewport Effect Trace, and temporal verdict controls; four JSON-driven regression executions; official matcher negative controls; context-matched tool lifecycle assertions; and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
 
 ## Strongest argument against ExactDelta
 

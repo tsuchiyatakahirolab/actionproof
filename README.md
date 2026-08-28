@@ -33,7 +33,7 @@ visible human selection + pre-action state
 → inspectable verdict + retained regression
 ```
 
-The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. A direct call from the browser client enters the Effect Contract gate automatically and returns the original action payload plus an independent `effectGate` verdict, so the agent can report the release result instead of trusting `success: true`. The Run button uses the same native boundary as a deterministic judge replay. Without WebMCP there is no structured page-exposed write boundary for a browser agent to discover and invoke; it becomes an ordinary application-specific test.
+The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. A read-only startup probe resolves the current Chrome JSON-string and in-app-browser object input dialects before any application write is exposed; the selected write is then invoked exactly once. A direct call from the browser client enters the Effect Contract gate automatically and returns the original action payload plus an independent `effectGate` verdict, so the agent can report the release result instead of trusting `success: true`. The Run button uses the same native boundary as a deterministic judge replay. Without WebMCP there is no structured page-exposed write boundary for a browser agent to discover and invoke; it becomes an ordinary application-specific test.
 
 ## Human and agent roles
 
@@ -137,8 +137,8 @@ npm run regression:ci:all # Load and execute both versioned JSON regressions aga
 
 Current deterministic suite:
 
-- 20 unit tests pass, including artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
-- 7 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
+- 24 unit tests pass, including both native `executeTool()` input dialects, exactly-once application-write enforcement in each dialect, artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
+- 8 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, a 1280×720 judge-path overflow control, hero Effect Trace state, and a temporal guard that forbids regression `PASS` before verification completes.
 - Four CI runner executions pass: each committed JSON detects its seeded defect and proves its repaired implementation with identical identity, intent, arguments, and contract.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
@@ -158,7 +158,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `src/core/effect-contract.ts` — contract generation, state diff, verification, retained regression
 - `src/core/regression.ts` — versioned artifact validation, identity checks, and JSON-driven re-execution
 - `src/core/scenario.ts` — two fictional application bindings and deterministic defect/repair handlers
-- `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, same-origin exposure, and labeled local fallback
+- `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, safe object/JSON-string input-mode detection, same-origin exposure, and labeled local fallback
 - `src/App.tsx` — judge-first proof UI
 - `docs/INTEGRATION.md` — bounded path from the fixture to an application-owned release gate
 - `baseline.html` — plain WebMCP comparison fixture without ExactDelta

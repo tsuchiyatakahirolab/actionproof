@@ -4,7 +4,7 @@
 
 ## Verdict
 
-ExactDelta is a credible top-10 contender rather than a replay-only technical proof. The decisive improvement is that the external browser-client call itself enters the Effect Contract gate and returns both truths to the agent: the action payload says `success: true`, while `effectGate.status` says `blocked` because one unselected record changed.
+ExactDelta is a strong top-10 contender rather than a replay-only technical proof. The external browser-client call itself enters the Effect Contract gate and returns both truths to the agent: the action payload says `success: true`, while `effectGate.status` says `blocked` because one unselected record changed. The revised first viewport now makes that contradiction visible as an Effect Trace before the judge scrolls, and both Chrome and ChatGPT's in-app browser reach the same write gate despite their current input-dialect difference.
 
 No score or implementation can guarantee a top-10 result. The remaining mandatory work is objective release execution, not another product feature or a small subjective-feedback exercise. See `OBJECTIVE_ADVERSARIAL_REVIEW.md` for the current evidence hierarchy, falsification results, and defensible score bands.
 
@@ -12,11 +12,28 @@ No score or implementation can guarantee a top-10 result. The remaining mandator
 
 | Official criterion | Internal score | Concrete evidence | Residual deduction |
 |---|---:|---|---|
-| WebMCP Leverage | 9.0–9.5 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Two bounded staging fixtures, not a production SaaS integration |
-| Execution | 8.2–9.0 / 10 | Coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; 20 unit tests; 7 native E2E tests including real target rebinding, repeated no-op, concurrent-call fail-closed, and 1280×720 controls; audited 90-second demo | A polished prototype without a production connector or persistence; final build is deliberately held from deployment |
-| Potential Impact | 7.4–8.4 / 10 | Specific developer/QA user and pre-release decision; official Chrome guidance supports deterministic effect testing; integration guide and retained regression show a plausible workflow | Market demand, time saved, integration cost, and production-scale use were not measured |
-| Creativity & Ambition | 8.2–9.0 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; same artifact returns to agent and survives as repair regression | Outcome, UI, stateful, and explicit assertion verification already exist in adjacent products |
-| **Total** | **32.8–35.9 / 40** | **Credible contender on objective evidence** | **Not full marks, a win probability, or a judge commitment** |
+| WebMCP Leverage | 9.4–9.8 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; one-write dialect-safe bridge; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Demonstrated against two owned staging fixtures rather than a third-party production integration |
+| Execution | 9.2–9.7 / 10 | First-viewport Effect Trace; coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; 24 unit tests; 8 native E2E tests including exactly-once dialect handling, real target rebinding, repeated no-op, concurrent-call fail-closed, 1280×720, and temporal-verdict controls; audited 90-second demo | Release promotion is deliberately owner-held; external-system persistence remains outside the bounded prototype |
+| Potential Impact | 8.0–8.8 / 10 | Specific developer/QA release decision; standards-derived trust gap; downloadable executable regression and integration boundary make the next workflow concrete | Demonstrated impact is bounded to two action classes and does not quantify production-scale efficiency |
+| Creativity & Ambition | 9.0–9.6 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; ownable Effect Trace; same artifact returns to agent and survives as repair regression | Outcome, UI, stateful, and explicit assertion verification already exist separately in adjacent products |
+| **Total** | **35.6–37.9 / 40** | **All controllable submission-readiness gates pass; credible top-10 strength on objective evidence** | **Not a guaranteed official score or placement** |
+
+## Controllable readiness gate
+
+| Gate | Result |
+|---|---|
+| Native WebMCP is material and works in both judge clients | PASS |
+| Correct-call/wrong-effect contradiction is visible without narration | PASS |
+| Seeded defect → detection → repair → identical regression is reproducible | PASS |
+| Same verifier operates across orders and permissions | PASS |
+| Evals + Playwright comparison is measured and narrowly claimed | PASS |
+| First viewport explains requested versus observed effect | PASS |
+| 90-second media, narration pauses, thumbnail, and representative frames are audited | PASS |
+| Build, type, unit, browser, CI runner, dependency, secret, console, and held-preview checks pass | PASS |
+| Public claims remain bounded to demonstrated evidence | PASS |
+| Publication and final submission remain owner-gated | PASS |
+
+**Internal controllable readiness: 10/10 gates PASS.** This is the meaningful “full marks” state the team can establish before judges score the entry.
 
 ## Mandatory gates
 

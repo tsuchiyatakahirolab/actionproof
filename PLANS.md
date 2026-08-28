@@ -25,6 +25,10 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Added a dated competitive review and v0.6 release specification with a bounded one-sentence difference.
 - Replaced the subjective-review release gate with an objective evidence hierarchy and adversarial review; unfamiliar-viewer feedback is now optional copy/layout evidence only.
 - Hardened the verifier against repeated no-op false proof, mutation-before-error, client abort, identity/invariant ambiguity, entity/field delimiter collision, and regression schema/contract/identity drift; expanded the suites to 20 unit and 7 native-browser tests.
+- Rebuilt the first viewport around an inspectable Effect Trace so `success: true`, requested `1`, observed `2`, and `RELEASE BLOCKED` are visible together before scrolling.
+- Added a read-only native input-mode probe so Chrome's JSON-string and ChatGPT in-app-browser's object `executeTool()` dialects both reach the same gate without retrying an application write.
+- Removed a premature visual `PASS` during repaired-run animation; the lifecycle now shows `VERIFYING` until the identical regression actually completes. The final suite is 24 unit and 8 native-browser tests, including exactly-once write coverage for both native input dialects.
+- Regenerated the 16:9 thumbnail and 90-second video from the held build; media audit and representative-frame review pass against the revised UI.
 
 ## Release-gated remaining work
 

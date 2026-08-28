@@ -5,18 +5,18 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 ## 1. WebMCP Leverage
 
 - **UI:** native badge reports exactly one context-matched tool; the real-agent handoff prompt is visible; `EXTERNAL WEBMCP CALL · BROWSER CLIENT PATH` distinguishes a direct call from deterministic replay; intent, invocation, result, and observed effect remain separate.
-- **Implementation:** `src/webmcp/bridge.ts` uses `registerTool`, `getTools`, and `executeTool`; tab changes abort the previous registration; exact enums bind arguments to visible intent; `exposedTo` is same-origin.
+- **Implementation:** `src/webmcp/bridge.ts` uses `registerTool`, `getTools`, and `executeTool`; a removed-before-use read-only probe safely resolves object versus JSON-string native inputs without retrying a write; tab changes abort the previous registration; exact enums bind arguments to visible intent; `exposedTo` is same-origin.
 - **Test:** Playwright launches installed Chrome with `WebMCP,WebMCPTesting`, fails if native mode is absent, and proves a call issued through `document.modelContext.executeTool()`—without pressing the replay button—produces the blocked Effect Contract verdict. It also asserts the discoverable tool changes from only `cancel_order` to only `change_user_role` with the visible context.
-- **In-app browser evidence:** Codex's browser client discovered `cancel_order`, invoked it with `#1042`, and received both `{ success: true }` and `effectGate: { status: "blocked", unexpectedChanges: 1 }`; the UI independently displayed the external-call label, unexpected `#1043` mutation, and blocked gate. Screenshot: `submission/exactdelta-agent-proof.png`.
+- **In-app browser evidence:** Codex's browser client discovered `cancel_order`, invoked it with `#1042`, and received both `{ success: true }` and `effectGate: { status: "blocked", unexpectedChanges: 1 }`; the same in-app runtime also used the visible controls to complete block → repair → identical PASS with zero console warnings or errors.
 - **Video:** the opening third shows the real-agent prompt, registered action, external native invocation, and successful return before revealing the effect failure.
 - **Human-agent UX:** the human declares the target in UI; the agent invokes the page tool; the application-owned adapter verifies the result without trusting the action payload; the same native response returns the separate gate verdict so the agent can report it.
 
 ## 2. Execution
 
-- **UI:** the 20-second screen makes the QA/release job, `ONLY`, `success: true`, `UNEXPECTED`, `REQUESTED 1 · CHANGED 2`, the split verdict, and `EFFECT GATE BLOCKED` visible at once.
+- **UI:** the first viewport now contains a dedicated Effect Trace with `success: true`, requested `1`, observed `2`, and `RELEASE BLOCKED`; the detailed 20-second screen adds the QA/release job, `ONLY`, `UNEXPECTED`, `REQUESTED 1 · CHANGED 2`, and split verdict.
 - **Implementation:** official WebMCP type package, typed contract, exact-change-set semantics, deterministic diff, handler-side intent validation, aborting timeout/tool-failure distinction, required/unexpected/invariant checks, downloadable regression JSON, and a schema-validating JSON-driven CI runner.
 - **Breadth without scope creep:** the same core runs order and permission workflows.
-- **Verification:** TypeScript check, production build, 20 unit tests, four JSON-driven regression executions, 7 native Chrome E2E tests including real target/schema rebinding, repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed and 1280×720 overflow behavior, console collection, secret scan, and deployment smoke test.
+- **Verification:** TypeScript check, production build, 24 unit tests, four JSON-driven regression executions, 8 native Chrome E2E tests including real target/schema rebinding, both native input dialects with exactly-once application writes, repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed, 1280×720 first-viewport behavior, no-premature-PASS timing, console collection, secret scan, and held-build smoke test.
 - **Video:** defect → detection → repair → identical PASS is completed on screen.
 
 ## 3. Potential Impact

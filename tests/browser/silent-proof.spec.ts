@@ -23,6 +23,10 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   expect(orderTool.schema.properties.order_id.enum).toEqual(["#1042"]);
   expect(orderTool.schema.additionalProperties).toBe(false);
   await expect(page.getByRole("heading", { name: "The agent did everything right. The result was still wrong." })).toBeVisible();
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("SEEDED STAGING PREVIEW");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("REQUESTED1");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("OBSERVED2");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("RELEASE BLOCKED");
   await expect(page.getByRole("heading", { name: "Cancel only Order #1042" })).toBeVisible();
   await expect(page.getByText("Release decision: can this WebMCP write tool ship?")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PENDING");
@@ -35,6 +39,9 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await expect(page.getByText("REAL-WORLD EFFECT FAILED")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByTestId("state-gap")).toHaveText("REQUESTED 1 · CHANGED 2");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("LIVE VERIFIED EFFECT");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("OBSERVED2");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("RELEASE BLOCKED");
   await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();
   await expect(page.getByTestId("regression-strip")).toContainText("orders__1042__status__to-cancelled");
   const downloadPromise = page.waitForEvent("download");
@@ -53,6 +60,8 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PASSED");
   await expect(page.getByTestId("regression-proof")).toContainText("IDENTICAL REGRESSION");
   await expect(page.getByTestId("regression-proof")).toContainText("PASS");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("OBSERVED1");
+  await expect(page.getByTestId("hero-effect-trace")).toContainText("RELEASE PASSED");
 
   expect(consoleErrors).toEqual([]);
 });
@@ -146,6 +155,12 @@ test("the judge path remains usable without horizontal overflow at 1280 by 720",
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/?speed=0.01");
   await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");
+  const heroTraceBounds = await page.getByTestId("hero-effect-trace").evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom };
+  });
+  expect(heroTraceBounds.top).toBeGreaterThanOrEqual(0);
+  expect(heroTraceBounds.bottom).toBeLessThanOrEqual(720);
   await page.getByTestId("run-defect").click();
   await expect(page.getByTestId("verdict-fail")).toBeVisible();
 
@@ -183,6 +198,20 @@ test("the second workflow uses the same UI and verifier", async ({ page }) => {
   await page.getByTestId("run-fixed").click();
   await expect(page.getByTestId("verdict-pass")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PASSED");
+  await expect(page.getByTestId("regression-proof")).toContainText("PASS");
+});
+
+test("the repair regression never displays PASS before verification completes", async ({ page }) => {
+  await page.goto("/?speed=0.05");
+  await page.getByTestId("run-defect").click();
+  await expect(page.getByTestId("verdict-fail")).toBeVisible();
+
+  await page.getByTestId("run-fixed").click();
+  await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE RUNNING");
+  await expect(page.getByTestId("regression-proof")).toContainText("VERIFYING");
+  await expect(page.getByTestId("regression-proof")).not.toContainText("PASS");
+
+  await expect(page.getByTestId("verdict-pass")).toBeVisible();
   await expect(page.getByTestId("regression-proof")).toContainText("PASS");
 });
 
