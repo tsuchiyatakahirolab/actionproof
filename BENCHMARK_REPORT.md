@@ -1,4 +1,4 @@
-# ActionProof detection-coverage benchmark
+# ExactDelta detection-coverage benchmark
 
 **Measured:** 2026-08-27 JST  
 **Technical audience:** WebMCP application developers, QA engineers, and hackathon judges  
@@ -8,7 +8,7 @@
 
 Two correct native WebMCP calls were executed against two deterministic fake-data handlers containing the same class of seeded collateral-mutation defect. The official `webmcp-evals` 0.0.3 trajectory matcher passed both tool calls because the function names and arguments matched. As a negative control, it rejected a deliberately wrong target argument in both workflows. Application-state reads performed independently of the return payload confirmed that both correct calls also changed an unselected neighboring record.
 
-Adding four concrete expected-state assertions in Playwright detected both defects; the identical assertions passed after the handler repairs. ActionProof detected both defects and passed both identical retained regressions using two action bindings and generated required/unchanged checks, with no per-record expected-state assertions in the scenario definitions.
+Adding four concrete expected-state assertions in Playwright detected both defects; the identical assertions passed after the handler repairs. ExactDelta detected both defects and passed both identical retained regressions using two action bindings and generated required/unchanged checks, with no per-record expected-state assertions in the scenario definitions.
 
 This supports one narrow conclusion: **tool-call matching and post-action effect verification cover different failure surfaces.** In the product flow, that distinction becomes a release decision: the gate blocks on collateral state and clears only after the identical retained contract passes. It does not establish runtime superiority, lower total engineering cost, universal adapter support, or customer demand.
 
@@ -18,7 +18,7 @@ This supports one narrow conclusion: **tool-call matching and post-action effect
 |---|---:|---:|---:|---:|
 | Official WebMCP Evals trajectory matcher | 2/2 | 2/2 | 0/2 at the call-matching layer | Not evaluated |
 | Evals + manual Playwright state assertions | 2/2 | 2/2 | 2/2 | 2/2 |
-| ActionProof generated Effect Contracts | 2/2 | 2/2 | 2/2 | 2/2 |
+| ExactDelta generated Effect Contracts | 2/2 | 2/2 | 2/2 | 2/2 |
 
 The official matcher also rejected 2/2 wrong-argument negative controls. This confirms the matcher invocation is discriminating; the comparison isolates an expected-call versus post-action-state coverage boundary.
 
@@ -27,9 +27,9 @@ Authoring inputs in this fixture:
 | Method | Explicit expected-state inputs |
 |---|---:|
 | Manual Playwright | 4 concrete per-record state assertions across two workflows |
-| ActionProof | 2 action bindings; 0 concrete per-record expected-state assertions in the scenario definitions |
+| ExactDelta | 2 action bindings; 0 concrete per-record expected-state assertions in the scenario definitions |
 
-The second table is descriptive, not a claim that ActionProof always requires less code. An ActionProof integration still needs an application-owned state adapter and an action binding that declares the selected IDs and intended mutation.
+The second table is descriptive, not a claim that ExactDelta always requires less code. An ExactDelta integration still needs an application-owned state adapter and an action binding that declares the selected IDs and intended mutation.
 
 ## Scope and metric definitions
 
@@ -53,7 +53,7 @@ The benchmark does not measure wall-clock product performance. Command durations
 7. Read the post-action target and unselected-neighbor fields from the page.
 8. Run the manual Playwright suite against the defective handler. A non-zero exit is the expected detection result.
 9. Run the identical manual suite with only the defect disabled. A zero exit is required.
-10. Run the ActionProof native-Chrome UI suite. Each workflow must show `FAILED_EFFECT`, then `ACTION_PROVEN`, with the same regression case.
+10. Run the ExactDelta native-Chrome UI suite. Each workflow must show `FAILED_EFFECT`, then `ACTION_PROVEN`, with the same regression case.
 
 The deterministic matcher path deliberately excludes LLM selection variability. It measures the documented Evals expected-call layer, not an end-to-end model's probability of choosing the tool.
 
@@ -71,7 +71,7 @@ Evidence files:
 - `benchmarks/results/webmcp-evals.log` — native-call/matcher output
 - `benchmarks/results/manual-playwright-defect.log` — expected failing state assertions
 - `benchmarks/results/manual-playwright-fixed.log` — identical assertions passing after repair
-- `benchmarks/results/actionproof-ui.log` — ActionProof native-Chrome UI result
+- `benchmarks/results/exactdelta-ui.log` — ExactDelta native-Chrome UI result
 - `benchmarks/manual-playwright.spec.ts` — the four marked expected-state assertions
 
 ## Limitations and robustness

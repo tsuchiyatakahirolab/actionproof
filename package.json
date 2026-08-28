@@ -1,5 +1,5 @@
 {
-  "name": "actionproof",
+  "name": "exactdelta",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -9,7 +9,7 @@
     "check": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "playwright test",
+    "test:ui": "npm run build && playwright test",
     "benchmark": "npm run build && node scripts/run-benchmark.mjs",
     "audit:production": "node scripts/audit-production.mjs",
     "demo:audio": "powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/audit-narration.mjs",

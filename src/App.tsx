@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { generateEffectContract } from "./core/effect-contract";
 import {
-  runActionProof,
+  runExactDelta,
   ScenarioStore,
   scenarioDefinitions,
 } from "./core/scenario";
@@ -15,13 +15,18 @@ import {
 import "./styles.css";
 
 type Phase = 0 | 1 | 2 | 3 | 4;
+type InvocationOrigin = "none" | "judge-control" | "external-webmcp-client";
+type InvocationPlan = {
+  origin: Exclude<InvocationOrigin, "none">;
+  phaseDelays: readonly [number, number, number, number, number];
+};
 
 const phaseLabels = [
   "Human intent",
   "Agent action",
   "Tool result",
   "Observed effect",
-  "ActionProof verdict",
+  "ExactDelta verdict",
 ] as const;
 
 const sleep = (milliseconds: number) =>
@@ -51,6 +56,14 @@ export default function App() {
   const [runHistory, setRunHistory] = useState<VerificationResult[]>([]);
   const [bridge, setBridge] = useState<WebMcpBridge | null>(null);
   const [bridgeMode, setBridgeMode] = useState<BridgeMode | "initializing">("initializing");
+  const [invocationOrigin, setInvocationOrigin] = useState<InvocationOrigin>("none");
+  const gateInFlight = useRef(false);
+  const nextInvocationPlan = useRef<InvocationPlan | null>(null);
+  const externalInvocationHandler = useRef<(argumentsRecord: Record<string, string | number | boolean | null>) => Promise<unknown>>(
+    async () => {
+      throw new Error("The effect gate is not ready.");
+    },
+  );
 
   const query = new URLSearchParams(window.location.search);
   const speed = Math.max(
@@ -60,6 +73,65 @@ export default function App() {
   const autoplay = query.get("autoplay");
   const demoTiming = query.get("timing") === "demo";
   const autoplayStarted = useRef(false);
+
+  useEffect(() => {
+    externalInvocationHandler.current = async (argumentsRecord) => {
+      if (gateInFlight.current) throw new Error("The effect gate is already running.");
+      gateInFlight.current = true;
+
+      const invocationPlan = nextInvocationPlan.current ?? {
+        origin: "external-webmcp-client",
+        phaseDelays: [0, 0, 0, 120, 0],
+      } satisfies InvocationPlan;
+      nextInvocationPlan.current = null;
+
+      setInvocationOrigin(invocationPlan.origin);
+      setRunning(true);
+      setResult(null);
+      setPhase(0);
+      const before = store.snapshot();
+      setDisplaySnapshot(before);
+
+      let toolResult: unknown;
+      try {
+        await sleep(invocationPlan.phaseDelays[0]);
+        setPhase(1);
+        await sleep(invocationPlan.phaseDelays[1]);
+
+        const proof = await runExactDelta({
+          store,
+          toolArguments: argumentsRecord,
+          executeTool: async (_name, toolArguments) => {
+            toolResult = await store.executeMutation(toolArguments);
+            return toolResult;
+          },
+        });
+        setResult(proof);
+        setRunHistory((history) => [...history, proof]);
+        setPhase(2);
+        await sleep(invocationPlan.phaseDelays[2]);
+
+        setDisplaySnapshot(store.snapshot());
+        setPhase(3);
+        await sleep(invocationPlan.phaseDelays[3]);
+
+        setPhase(4);
+        await sleep(invocationPlan.phaseDelays[4]);
+        const effectGate = {
+          status: proof.verdict === "ACTION_PROVEN" ? "passed" : proof.verdict === "FAILED_EFFECT" ? "blocked" : "not-evaluated",
+          verdict: proof.verdict,
+          unexpectedChanges: proof.unexpectedChanges.length,
+          regressionId: proof.regressionCase.id,
+        };
+        return typeof toolResult === "object" && toolResult !== null && !Array.isArray(toolResult)
+          ? { ...toolResult, effectGate }
+          : { toolResult, effectGate };
+      } finally {
+        setRunning(false);
+        gateInFlight.current = false;
+      }
+    };
+  }, [store]);
 
   useEffect(() => {
     setBridge(null);
@@ -85,7 +157,7 @@ export default function App() {
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
-      execute: async (argumentsRecord) => store.executeMutation(argumentsRecord),
+      execute: async (argumentsRecord) => externalInvocationHandler.current(argumentsRecord),
     }];
 
     createWebMcpBridge(tools)
@@ -117,40 +189,30 @@ export default function App() {
     setResult(null);
     setRunHistory([]);
     setPhase(0);
+    setInvocationOrigin("none");
   }, [scenarioId, store]);
 
   async function runSequence(defectEnabled: boolean) {
-    if (!bridge || running) return;
-    setRunning(true);
+    if (!bridge || running || gateInFlight.current || nextInvocationPlan.current) return;
     setResult(null);
     setPhase(0);
     store.reset(defectEnabled);
     const before = store.snapshot();
     setDisplaySnapshot(before);
 
-    const phaseDelays = demoTiming
+    const phaseDelays: InvocationPlan["phaseDelays"] = demoTiming
       ? definition.id === "orders" && defectEnabled
         ? [10_000, 10_000, 7_000, 13_000, 5_000]
         : [500, 500, 500, 500, 500]
-      : [4_000, 4_000, 3_000, 4_000, 5_000].map((delay) => delay * speed);
+      : [4_000 * speed, 4_000 * speed, 3_000 * speed, 4_000 * speed, 5_000 * speed];
 
-    await sleep(phaseDelays[0]);
-    setPhase(1);
-    await sleep(phaseDelays[1]);
-
-    const proof = await runActionProof({ store, executeTool: bridge.executeTool });
-    setResult(proof);
-    setRunHistory((history) => [...history, proof]);
-    setPhase(2);
-    await sleep(phaseDelays[2]);
-
-    setDisplaySnapshot(store.snapshot());
-    setPhase(3);
-    await sleep(phaseDelays[3]);
-
-    setPhase(4);
-    await sleep(phaseDelays[4]);
-    setRunning(false);
+    const invocationPlan: InvocationPlan = { origin: "judge-control", phaseDelays };
+    nextInvocationPlan.current = invocationPlan;
+    try {
+      await bridge.executeTool(definition.toolName, definition.toolArguments);
+    } finally {
+      if (nextInvocationPlan.current === invocationPlan) nextInvocationPlan.current = null;
+    }
   }
 
   useEffect(() => {
@@ -173,6 +235,9 @@ export default function App() {
     currentResult?.unexpectedChanges.map((change) => change.entityId) ?? [],
   );
   const selectedId = definition.targetId;
+  const agentPrompt = definition.id === "orders"
+    ? "Cancel only the order selected on this page, then report whether the effect gate passes."
+    : "Change only the selected user to Editor, then report whether the effect gate passes.";
   const observedCount = currentResult?.observedChanges.filter(
     (change) => change.field === definition.mutation.field,
   ).length ?? 0;
@@ -203,7 +268,7 @@ export default function App() {
 
   function downloadRegression(resultToDownload: VerificationResult): void {
     const artifact = {
-      schemaVersion: "actionproof.regression.v1",
+      schemaVersion: "exactdelta.regression.v1",
       generatedAt: new Date().toISOString(),
       regressionCase: resultToDownload.regressionCase,
     };
@@ -221,9 +286,9 @@ export default function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-lockup">
-          <span className="brand-mark" aria-hidden="true">AP</span>
+          <span className="brand-mark" aria-hidden="true">ED</span>
           <div>
-            <strong>ActionProof</strong>
+            <strong>ExactDelta</strong>
             <span>Pre-release effect gate for WebMCP writes</span>
           </div>
         </div>
@@ -247,7 +312,7 @@ export default function App() {
         <p className="eyebrow">THE PRE-RELEASE EFFECT GATE FOR WEBMCP WRITES</p>
         <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
         <p>
-          Before a state-changing tool ships, ActionProof proves that observed application state matches the human-authorized Effect Contract—and nothing else changed.
+          Human selection becomes the only permitted state delta. ExactDelta gates the native WebMCP write when anything else changes.
         </p>
       </section>
 
@@ -267,6 +332,14 @@ export default function App() {
       </nav>
 
       <section className="proof-workspace">
+        <div className="agent-handoff" data-testid="agent-handoff">
+          <div>
+            <span>TRY THE REAL AGENT PATH</span>
+            <strong>Ask your browser agent:</strong>
+          </div>
+          <code data-testid="agent-prompt">{agentPrompt}</code>
+          <small>No manual record-by-record assertions. Direct agent calls and replay share the same native WebMCP boundary.</small>
+        </div>
         <div className="proof-header">
           <div>
             <span className="section-kicker">STAGING QA · 20-SECOND SILENT PROOF</span>
@@ -359,6 +432,13 @@ export default function App() {
               <pre>{formatJson(definition.toolArguments)}</pre>
             </div>
             <div className="call-correct">✓ Target matches visible selection</div>
+            <div className={`invocation-origin origin-${invocationOrigin}`} data-testid="invocation-origin">
+              {invocationOrigin === "external-webmcp-client"
+                ? "EXTERNAL WEBMCP CALL · BROWSER CLIENT PATH"
+                : invocationOrigin === "judge-control"
+                  ? "DETERMINISTIC REPLAY · SAME NATIVE WEBMCP PATH"
+                  : "READY FOR EXTERNAL BROWSER AGENT"}
+            </div>
           </article>
 
           <article className={`result-panel panel ${phase >= 2 ? "panel-live" : "panel-muted"}`}>
@@ -376,7 +456,7 @@ export default function App() {
                 <small>Tool returned without error</small>
               </div>
             </div>
-            <p className="warning-copy">A successful return is not proof of the resulting state.</p>
+              <p className="warning-copy">Action success is not effect proof. External clients also receive the independent gate verdict.</p>
           </article>
         </div>
 
@@ -439,7 +519,7 @@ export default function App() {
             <div className="panel-title verdict-title">
               <span className="step-number">05</span>
               <div>
-                <span>ACTIONPROOF VERDICT</span>
+                <span>EXACTDELTA VERDICT</span>
                 <strong>Expected vs. actual</strong>
               </div>
             </div>
@@ -527,8 +607,8 @@ export default function App() {
             <strong>4 state assertions</strong>
             <p>Detected both defects; the identical assertions passed after repair.</p>
           </article>
-          <article className="benchmark-actionproof">
-            <span>ActionProof</span>
+          <article className="benchmark-exactdelta">
+            <span>ExactDelta</span>
             <strong>0 per-record expected-state assertions</strong>
             <p>Two action bindings generated the required and unchanged checks.</p>
           </article>

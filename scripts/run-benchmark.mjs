@@ -67,8 +67,8 @@ try {
     [path.join(root, "node_modules", "@playwright", "test", "cli.js"), "test", "--config", "benchmarks/playwright.config.ts"],
     { BASELINE_DEFECT: "0" },
   );
-  const actionProofUi = run(
-    "ActionProof generated contracts in native Chrome",
+  const exactDeltaUi = run(
+    "ExactDelta generated contracts in native Chrome",
     process.execPath,
     [path.join(root, "node_modules", "@playwright", "test", "cli.js"), "test", "--config", "playwright.config.ts"],
   );
@@ -76,7 +76,7 @@ try {
   await writeFile(path.join(resultsDirectory, "webmcp-evals.log"), evals.output);
   await writeFile(path.join(resultsDirectory, "manual-playwright-defect.log"), manualDefect.output);
   await writeFile(path.join(resultsDirectory, "manual-playwright-fixed.log"), manualFixed.output);
-  await writeFile(path.join(resultsDirectory, "actionproof-ui.log"), actionProofUi.output);
+  await writeFile(path.join(resultsDirectory, "exactdelta-ui.log"), exactDeltaUi.output);
 
   const evalsDetails = JSON.parse(
     await readFile(path.join(resultsDirectory, "evals-comparison.json"), "utf8"),
@@ -88,7 +88,7 @@ try {
     evals.exitCode === 0 &&
     manualDefect.exitCode !== 0 &&
     manualFixed.exitCode === 0 &&
-    actionProofUi.exitCode === 0;
+    exactDeltaUi.exitCode === 0;
   summary = {
     measuredAt: new Date().toISOString(),
     scope: "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
@@ -112,21 +112,21 @@ try {
         detectedSeededDefects: manualDefect.exitCode !== 0,
         identicalAssertionsPassedAfterRepair: manualFixed.exitCode === 0,
       },
-      actionProof: {
-        nativeChromeUiExitCode: actionProofUi.exitCode,
-        seededDefectsDetected: actionProofUi.exitCode === 0 ? 2 : 0,
-        identicalRegressionsPassedAfterRepair: actionProofUi.exitCode === 0 ? 2 : 0,
+      exactDelta: {
+        nativeChromeUiExitCode: exactDeltaUi.exitCode,
+        seededDefectsDetected: exactDeltaUi.exitCode === 0 ? 2 : 0,
+        identicalRegressionsPassedAfterRepair: exactDeltaUi.exitCode === 0 ? 2 : 0,
         concretePerRecordExpectedStateAssertionsInScenarioDefinitions: 0,
         reusableActionBindings: 2,
         generatedRequiredAndUnchangedChecks: true,
-        note: "ActionProof still requires an application-owned state adapter and action binding for each action class.",
+        note: "ExactDelta still requires an application-owned state adapter and action binding for each action class.",
       },
     },
     commandDurationsMs: {
       evals: evals.durationMs,
       manualDefect: manualDefect.durationMs,
       manualFixed: manualFixed.durationMs,
-      actionProofUi: actionProofUi.durationMs,
+      exactDeltaUi: exactDeltaUi.durationMs,
     },
     success,
   };

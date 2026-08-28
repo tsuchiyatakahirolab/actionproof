@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  runActionProof,
+  runExactDelta,
   ScenarioStore,
   scenarioDefinitions,
 } from "./scenario";
@@ -8,12 +8,12 @@ import {
 const orders = scenarioDefinitions[0];
 const permissions = scenarioDefinitions[1];
 
-describe("ActionProof effect verification", () => {
+describe("ExactDelta effect verification", () => {
   it("passes a correct single-target action", async () => {
     const store = new ScenarioStore(orders);
     store.reset(false);
 
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
     });
@@ -27,7 +27,7 @@ describe("ActionProof effect verification", () => {
     const store = new ScenarioStore(orders);
     store.reset(true);
 
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
     });
@@ -41,7 +41,7 @@ describe("ActionProof effect verification", () => {
 
   it("distinguishes tool-call failure from a failed real-world effect", async () => {
     const store = new ScenarioStore(orders);
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async () => {
         throw new Error("Injected transport failure");
@@ -53,11 +53,27 @@ describe("ActionProof effect verification", () => {
     expect(result.observedChanges).toHaveLength(0);
   });
 
+  it("records and validates the actual arguments received from an external client", async () => {
+    const store = new ScenarioStore(orders);
+    const received = { order_id: "#1043" };
+
+    const result = await runExactDelta({
+      store,
+      toolArguments: received,
+      executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
+    });
+
+    expect(result.toolCall.arguments).toEqual(received);
+    expect(result.toolCall.status).toBe("FAILED");
+    expect(result.toolCall.error).toContain("does not match the visible selection #1042");
+    expect(result.verdict).toBe("TOOL_CALL_FAILED");
+  });
+
   it("uses the identical verifier for the permission workflow", async () => {
     const store = new ScenarioStore(permissions);
     store.reset(true);
 
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
     });
@@ -75,7 +91,7 @@ describe("ActionProof effect verification", () => {
     const store = new ScenarioStore(permissions);
     store.reset(false);
 
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async (_name, argumentsRecord) =>
         store.executeMutation({ ...argumentsRecord, role: "Admin" }),
@@ -90,7 +106,7 @@ describe("ActionProof effect verification", () => {
   it("fails closed when the WebMCP action exceeds its timeout", async () => {
     const store = new ScenarioStore(orders);
     let observedSignal: AbortSignal | undefined;
-    const result = await runActionProof({
+    const result = await runExactDelta({
       store,
       executeTool: async (_name, _arguments, options) => {
         observedSignal = options?.signal;
@@ -109,13 +125,13 @@ describe("ActionProof effect verification", () => {
     async (definition) => {
       const store = new ScenarioStore(definition);
       store.reset(true);
-      const failure = await runActionProof({
+      const failure = await runExactDelta({
         store,
         executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
       });
 
       store.reset(false);
-      const repaired = await runActionProof({
+      const repaired = await runExactDelta({
         store,
         executeTool: async (_name, argumentsRecord) => store.executeMutation(argumentsRecord),
       });

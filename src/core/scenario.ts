@@ -120,12 +120,14 @@ export type ToolExecutor = (
   options?: { signal?: AbortSignal },
 ) => Promise<unknown>;
 
-export async function runActionProof(input: {
+export async function runExactDelta(input: {
   store: ScenarioStore;
   executeTool: ToolExecutor;
+  toolArguments?: Record<string, Scalar>;
   timeoutMs?: number;
 }): Promise<VerificationResult> {
   const { store, executeTool, timeoutMs = 5_000 } = input;
+  const toolArguments = input.toolArguments ?? store.definition.toolArguments;
   const before = store.snapshot();
   const intent = store.explicitIntent();
   const contract = generateEffectContract(intent, before);
@@ -146,7 +148,7 @@ export async function runActionProof(input: {
     const result = await Promise.race([
       executeTool(
         store.definition.toolName,
-        store.definition.toolArguments,
+        toolArguments,
         { signal: controller.signal },
       ),
       timeoutPromise,
@@ -155,14 +157,14 @@ export async function runActionProof(input: {
     });
     toolCall = {
       name: store.definition.toolName,
-      arguments: store.definition.toolArguments,
+      arguments: toolArguments,
       status: "PASSED",
       result,
     };
   } catch (error) {
     toolCall = {
       name: store.definition.toolName,
-      arguments: store.definition.toolArguments,
+      arguments: toolArguments,
       status: "FAILED",
       error: error instanceof Error ? error.message : String(error),
     };

@@ -9,6 +9,7 @@ test-results/
 !.env.example
 submission/.audio/
 submission/.recording/
+submission/.video-audit/
 submission/private/
 submission/contact-sheet.png
 submission/frame-*.png

@@ -39,7 +39,7 @@ function render(mode = bridge?.mode ?? "initializing") {
     <main>
       <p class="fixture-label">COMPARISON FIXTURE · FAKE DATA · SEEDED DEFECT: ${defectEnabled ? "ON" : "OFF"}</p>
       <h1>Plain WebMCP action page</h1>
-      <p>This page intentionally has no Effect Contract or ActionProof verifier.</p>
+      <p>This page intentionally has no Effect Contract or ExactDelta verifier.</p>
       <dl>
         <div><dt>Visible intent</dt><dd>${definition.intentSummary}</dd></div>
         <div><dt>Registered tool</dt><dd><code>${definition.toolName}(${JSON.stringify(definition.toolArguments)})</code></dd></div>

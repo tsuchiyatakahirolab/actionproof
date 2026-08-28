@@ -73,6 +73,21 @@ button { font: inherit; }
   box-shadow: 0 18px 50px rgba(46, 50, 46, .08);
   overflow: hidden;
 }
+.agent-handoff {
+  display: grid;
+  grid-template-columns: auto minmax(360px, 1fr) minmax(260px, .65fr);
+  align-items: center;
+  gap: 18px;
+  padding: 12px 18px;
+  color: #dcebe5;
+  background: #17211d;
+  border-bottom: 1px solid #304139;
+}
+.agent-handoff div { display: flex; flex-direction: column; gap: 2px; }
+.agent-handoff span { color: #89cbb4; font-size: 8px; font-weight: 900; letter-spacing: .12em; }
+.agent-handoff strong { color: white; font-size: 11px; }
+.agent-handoff code { padding: 8px 10px; color: #f3f8f5; background: #26342e; border: 1px solid #43574e; border-radius: 8px; font-size: 10px; line-height: 1.35; }
+.agent-handoff small { color: #a8bbb3; font-size: 9px; line-height: 1.35; }
 .proof-header { display: grid; grid-template-columns: minmax(360px, 1fr) auto auto; align-items: center; gap: 18px; padding: 18px 25px 15px; border-bottom: 1px solid var(--line); }
 .proof-header h2 { margin: 4px 0 0; font-size: 24px; letter-spacing: -0.03em; }
 .release-question { margin: 4px 0 0; color: var(--muted); font-size: 10px; font-weight: 650; }
@@ -125,6 +140,10 @@ button { font: inherit; }
 .code-card pre { margin: 5px 0 0; font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; color: #e7ece9; }
 .webmcp-chip { position: absolute; right: 8px; top: 8px; font-size: 8px; font-weight: 850; letter-spacing: .08em; background: #dff2e9; color: #075943; padding: 4px 6px; border-radius: 999px; }
 .call-correct { margin: 0 13px 12px; font-size: 10px; font-weight: 750; color: var(--green); }
+.invocation-origin { margin: -4px 13px 12px; padding: 6px 8px; border-radius: 7px; font-size: 8px; font-weight: 900; letter-spacing: .08em; text-align: center; }
+.origin-none { color: #59635e; background: #ecece8; }
+.origin-judge-control { color: #075943; background: #e8f4ef; border: 1px solid #abd6c6; }
+.origin-external-webmcp-client { color: #f4fff9; background: #08765a; border: 1px solid #42ad8c; }
 
 .tool-success { margin: 13px; display: flex; align-items: center; gap: 11px; min-height: 72px; padding: 12px; background: #e8f4ef; border: 1px solid #abd6c6; border-radius: 10px; }
 .tool-success > span { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: white; background: var(--green); font-weight: 900; }
@@ -206,11 +225,13 @@ button { font: inherit; }
 .benchmark-cards article > span { display: block; color: #737d78; font-size: 9px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
 .benchmark-cards article > strong { display: block; margin: 7px 0 5px; font-size: 17px; letter-spacing: -.02em; }
 .benchmark-cards article > p { margin: 0; color: #66716b; font-size: 11px; line-height: 1.45; }
-.benchmark-cards .benchmark-actionproof { background: #e8f4ef; border-color: #abd6c6; }
+.benchmark-cards .benchmark-exactdelta { background: #e8f4ef; border-color: #abd6c6; }
 .benchmark-limit { margin: 9px 2px 0; color: #7a827e; font-size: 9px; }
 
 @media (max-width: 1240px) {
   .proof-workspace { width: calc(100vw - 24px); }
+  .agent-handoff { grid-template-columns: auto 1fr; }
+  .agent-handoff small { grid-column: 1 / -1; }
   .topbar { padding-inline: 22px; }
   .hero h1 { font-size: 36px; }
   .proof-node { min-width: 125px; }

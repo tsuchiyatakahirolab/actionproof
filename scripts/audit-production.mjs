@@ -31,15 +31,23 @@ try {
     const activeTools = await page.evaluate(async () =>
       (await document.modelContext.getTools()).map((tool) => tool.name),
     );
-    await page.getByTestId("run-defect").click();
+    await page.evaluate(async ({ workflowId }) => {
+      const tool = (await document.modelContext.getTools())[0];
+      const argumentsRecord = workflowId === "orders"
+        ? { order_id: "#1042" }
+        : { user_id: "Alice", role: "Editor" };
+      await document.modelContext.executeTool(tool, JSON.stringify(argumentsRecord));
+    }, { workflowId: workflow });
     await page.getByTestId("verdict-fail").waitFor();
     const failureText = await page.getByTestId("verdict-fail").innerText();
+    const invocationPath = await page.getByTestId("invocation-origin").innerText();
     await page.getByTestId("run-fixed").click();
     await page.getByTestId("verdict-pass").waitFor();
     const lifecycleText = await page.getByTestId("regression-proof").innerText();
     workflows.push({
       workflow,
       activeTools,
+      externalCallEnteredGate: invocationPath.includes("EXTERNAL WEBMCP CALL"),
       defectDetected: failureText.includes("REAL-WORLD EFFECT FAILED"),
       identicalRegressionPassed: lifecycleText.includes("IDENTICAL REGRESSION") && lifecycleText.includes("PASS"),
     });
@@ -61,6 +69,7 @@ try {
     pass:
       workflows.every((workflow) =>
         workflow.defectDetected &&
+        workflow.externalCallEnteredGate &&
         workflow.identicalRegressionPassed &&
         workflow.activeTools.length === 1 &&
         workflow.activeTools[0] === (workflow.workflow === "orders" ? "cancel_order" : "change_user_role")

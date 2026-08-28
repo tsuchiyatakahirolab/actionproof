@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-27T14:27:19.613Z",
+  "measuredAt": "2026-08-28T10:58:43.843Z",
   "scope": "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
   "conditions": {
     "nativeWebMcp": true,
@@ -24,21 +24,21 @@
       "detectedSeededDefects": true,
       "identicalAssertionsPassedAfterRepair": true
     },
-    "actionProof": {
+    "exactDelta": {
       "nativeChromeUiExitCode": 0,
       "seededDefectsDetected": 2,
       "identicalRegressionsPassedAfterRepair": 2,
       "concretePerRecordExpectedStateAssertionsInScenarioDefinitions": 0,
       "reusableActionBindings": 2,
       "generatedRequiredAndUnchangedChecks": true,
-      "note": "ActionProof still requires an application-owned state adapter and action binding for each action class."
+      "note": "ExactDelta still requires an application-owned state adapter and action binding for each action class."
     }
   },
   "commandDurationsMs": {
-    "evals": 8108,
-    "manualDefect": 21772,
-    "manualFixed": 9484,
-    "actionProofUi": 20501
+    "evals": 6315,
+    "manualDefect": 18484,
+    "manualFixed": 5865,
+    "exactDeltaUi": 15564
   },
   "success": true
 }
