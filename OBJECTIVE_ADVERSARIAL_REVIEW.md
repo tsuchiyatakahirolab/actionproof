@@ -1,6 +1,6 @@
 # ExactDelta objective adversarial review
 
-**Review date:** 2026-08-28 JST  
+**Review date:** 2026-08-29 JST
 **Purpose:** determine what survives reproducible technical review, current public-source comparison, and the official judging rubric. This is not a win prediction and does not use participant opinions as proof of correctness or demand.
 
 ## Evidence hierarchy
@@ -46,10 +46,10 @@ The official criteria are equally weighted. A range is more honest than a self-a
 | Criterion | Defensible range | Evidence that raises it | Evidence that caps it |
 |---|---:|---|---|
 | WebMCP Leverage | **9.5–9.9 / 10** | Native context lifecycle, strict visible-intent schema, direct external call, dialect-safe one-write bridge, separate gate result returned to agent, two workflows | The owned state adapter and tools are bounded fixtures rather than a third-party production integration |
-| Execution | **9.4–9.9 / 10** | First-viewport Effect Trace, coherent release decision, defect → block → repair → identical PASS, executable JSON artifact, 24 unit and 8 native-browser tests, audited video, deterministic gallery, social preview, and accessibility polish | External-system persistence remains outside the prototype; public release remains owner-held |
+| Execution | **9.5–9.9 / 10** | First-viewport Effect Trace, coherent release decision, defect → block → repair → identical PASS, executable JSON artifact, 24 unit and 9 native-browser tests, zero automated WCAG A/AA violations, deterministic build/cold-runtime gates, audited video, gallery, and social preview | External-system persistence remains outside the prototype; public release remains owner-held |
 | Potential Impact | **8.8–9.5 / 10** | Specific developer/QA release decision, standards-derived trust gap, measured manual-assertion baseline, executable retained regression, explicit human-agent roles, and bounded integration guide | Demonstrated impact covers two action classes and does not quantify production-scale efficiency |
 | Creativity & Ambition | **9.1–9.7 / 10** | Exact allowed-delta generation, ownable requested-versus-observed Effect Trace, and retained repair contract are visually and technically distinct | Outcome/UI/state verification already exists separately in several adjacent tools |
-| **Total** | **36.8–39.0 / 40** | **10/10 controllable submission-readiness gates pass, including a no-live-test judge path** | **Not a guaranteed official score or top-10 result** |
+| **Total** | **36.9–39.0 / 40** | **10/10 controllable submission-readiness gates pass, including a no-live-test judge path** | **Not a guaranteed official score or top-10 result** |
 
 The entry's strongest axis is WebMCP Leverage. Its narrowest axis is Potential Impact because the demonstrated scope is two staging action classes. Expanding scope or adding unsupported projections would reduce clarity rather than increase the defensible score.
 
@@ -57,7 +57,7 @@ The entry's strongest axis is WebMCP Leverage. Its narrowest axis is Potential I
 
 Mandatory before submission:
 
-1. All type, unit, build, native-browser, benchmark, media, console, secret, license, and git audits pass on the held revision.
+1. All type, unit, build-budget, cold-runtime, WCAG, native-browser, benchmark, media, console, secret, license, and git audits pass on the held revision.
 2. Re-run the official gallery and public competitor search in the release window.
 3. Push/promote only in the owner-approved window, then repeat native WebMCP and production-header/console checks on the canonical URL.
 4. Upload and watch the exact audited video, update canonical links, and verify the Devpost preview against the official requirements.

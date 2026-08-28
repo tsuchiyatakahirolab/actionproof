@@ -1,9 +1,11 @@
 import ffmpegPath from "ffmpeg-static";
 import { spawnSync } from "node:child_process";
+import { mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
 const videoPath = path.join(root, "submission", "exactdelta-demo-90s.mp4");
+const representativeFrameDirectory = path.join(root, "submission", ".video-audit", "current-final-frames");
 
 function runFfmpeg(args) {
   const result = spawnSync(ffmpegPath, args, {
@@ -44,3 +46,19 @@ for (const [passed, label] of checks) {
 if (checks.some(([passed]) => !passed)) {
   throw new Error("Final video media audit failed.");
 }
+
+await rm(representativeFrameDirectory, { recursive: true, force: true });
+await mkdir(representativeFrameDirectory, { recursive: true });
+const representativeSeconds = [2, 15, 57, 70, 79, 89];
+for (const second of representativeSeconds) {
+  const outputPath = path.join(representativeFrameDirectory, `frame-${String(second).padStart(2, "0")}.png`);
+  const result = spawnSync(
+    ffmpegPath,
+    ["-y", "-ss", String(second), "-i", videoPath, "-frames:v", "1", "-update", "1", outputPath],
+    { cwd: root, encoding: "utf8", maxBuffer: 20 * 1024 * 1024 },
+  );
+  if (result.status !== 0) {
+    throw new Error(`Representative-frame extraction failed at ${second}s.\n${result.stderr}`);
+  }
+}
+console.log(`PASS representative_frames=${representativeSeconds.join(",")}s`);

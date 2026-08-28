@@ -27,9 +27,10 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Hardened the verifier against repeated no-op false proof, mutation-before-error, client abort, identity/invariant ambiguity, entity/field delimiter collision, and regression schema/contract/identity drift.
 - Rebuilt the first viewport around an inspectable Effect Trace so `success: true`, requested `1`, observed `2`, and `RELEASE BLOCKED` are visible together before scrolling.
 - Added a read-only native input-mode probe so Chrome's JSON-string and ChatGPT in-app-browser's object `executeTool()` dialects both reach the same gate without retrying an application write.
-- Removed a premature visual `PASS` during repaired-run animation; the lifecycle now shows `VERIFYING` until the identical regression actually completes. The final suite is 24 unit and 8 native-browser tests, including exactly-once write coverage for both native input dialects.
+- Removed a premature visual `PASS` during repaired-run animation; the lifecycle now shows `VERIFYING` until the identical regression actually completes. The final suite is 24 unit and 9 native-browser tests, including exactly-once write coverage for both native input dialects and automated WCAG A/AA checks in initial and blocked states.
 - Regenerated the 16:9 thumbnail and 90-second video from the held build; media audit and representative-frame review pass against the revised UI.
 - Added a deterministic five-image native-Chrome judge gallery because the official rules allow judging from text, images, and video without live testing; every image is regenerated from the current defect/repair flow with console-error collection.
+- Repaired table semantics and every detected contrast failure, then added deterministic distribution-size/social-metadata checks plus a three-cold-run desktop performance/accessibility gate. The gate is explicitly bounded lab evidence, not field performance or a Lighthouse score.
 
 ## Release-gated remaining work
 

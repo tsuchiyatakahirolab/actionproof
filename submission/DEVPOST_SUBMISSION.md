@@ -58,7 +58,8 @@ Before this flow, a QA engineer could inspect an agent trace and separately auth
 - Two in-memory fake-data action bindings with seeded defect/repair toggles
 - Visible pre-release gate state and downloadable `exactdelta.regression.v1` CI artifact
 - JSON-driven CI runner with schema, intent, arguments, contract, and regression-identity enforcement
-- Vitest unit coverage and Playwright native-Chrome E2E coverage
+- Vitest unit coverage, Playwright native-Chrome E2E coverage, and axe-core WCAG A/AA regression checks
+- Deterministic production-build budgets and a three-cold-run Chrome desktop quality gate
 - Controlled comparison using the official `webmcp-evals` 0.0.3 trajectory matcher plus manual Playwright state assertions
 
 ## Controlled comparison
@@ -83,6 +84,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - The same downloaded JSON artifact can be loaded and executed as a CI release gate
 - A reproducible, source-visible Evals + Playwright comparison
 - A deterministic five-image judge gallery generated from the native held build
+- Zero automated WCAG A/AA violations in initial and blocked states, with bounded build and cold-browser performance gates
 - No credentials, external writes, or private data
 
 ## What we learned

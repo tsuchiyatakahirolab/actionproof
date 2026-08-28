@@ -428,7 +428,7 @@ export default function App() {
               onClick={() => void runSequence(true)}
               type="button"
             >
-              {running ? "Running proof…" : "Run seeded defect"}
+              {running ? (traceIsLive ? "Proof complete" : "Running proof…") : "Run seeded defect"}
             </button>
             <button
               className="button button-secondary"
@@ -552,10 +552,10 @@ export default function App() {
             </div>
             <div className="record-table" role="table">
               <div className="record-row record-head" role="row">
-                <span>Selected</span>
-                <span>ID</span>
-                {definition.columns.map((column) => <span key={column.field}>{column.label}</span>)}
-                <span>Effect</span>
+                <span role="columnheader">Selected</span>
+                <span role="columnheader">ID</span>
+                {definition.columns.map((column) => <span key={column.field} role="columnheader">{column.label}</span>)}
+                <span role="columnheader">Effect</span>
               </div>
               {records.map((record) => {
                 const selected = record.id === selectedId;
@@ -570,7 +570,7 @@ export default function App() {
                     key={record.id}
                     role="row"
                   >
-                    <span className="checkbox-cell">
+                    <span className="checkbox-cell" role="cell">
                       <button
                         aria-label={`Select ${record.id}`}
                         aria-pressed={selected}
@@ -583,13 +583,13 @@ export default function App() {
                         {selected ? "✓" : "○"}
                       </button>
                     </span>
-                    <strong>{record.id}</strong>
+                    <strong role="cell">{record.id}</strong>
                     {definition.columns.map((column) => (
-                      <span key={column.field} className={column.field === definition.mutation.field && changed ? "changed-value" : ""}>
+                      <span key={column.field} className={column.field === definition.mutation.field && changed ? "changed-value" : ""} role="cell">
                         {String(record[column.field])}
                       </span>
                     ))}
-                    <span>
+                    <span role="cell">
                       {phase < 3 ? (
                         <span className="effect-label waiting">Waiting</span>
                       ) : unexpected ? (

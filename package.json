@@ -13,6 +13,8 @@
     "benchmark": "npm run build && node scripts/run-benchmark.mjs",
     "regression:ci": "tsx scripts/run-regression.ts",
     "regression:ci:all": "npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation repaired --expect ACTION_PROVEN && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation repaired --expect ACTION_PROVEN",
+    "audit:build": "npm run build && node scripts/audit-build.mjs",
+    "audit:runtime": "node scripts/audit-runtime.mjs",
     "audit:production": "node scripts/audit-production.mjs",
     "demo:audio": "powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/audit-narration.mjs",
     "demo:audit": "node scripts/audit-narration.mjs && node scripts/audit-video.mjs",
@@ -26,6 +28,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.62.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",

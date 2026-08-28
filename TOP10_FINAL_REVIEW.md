@@ -1,6 +1,6 @@
 # ExactDelta final top-10 review
 
-2026-08-28 JST / internal adversarial scorecard / not an official judging result
+2026-08-29 JST / internal adversarial scorecard / not an official judging result
 
 ## Verdict
 
@@ -13,10 +13,10 @@ No score or implementation can guarantee a top-10 result. The remaining mandator
 | Official criterion | Internal score | Concrete evidence | Residual deduction |
 |---|---:|---|---|
 | WebMCP Leverage | 9.5–9.9 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; one-write dialect-safe bridge; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Demonstrated against two owned staging fixtures rather than a third-party production integration |
-| Execution | 9.4–9.9 / 10 | First-viewport Effect Trace; coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; 24 unit tests; 8 native E2E tests; audited video; deterministic five-image static judge path; social preview; accessibility polish | Release promotion is deliberately owner-held; external-system persistence remains outside the bounded prototype |
+| Execution | 9.5–9.9 / 10 | First-viewport Effect Trace; coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; 24 unit tests; 9 native E2E tests; zero automated WCAG A/AA violations; deterministic build/performance gates; audited video; five-image static judge path; social preview | Release promotion is deliberately owner-held; external-system persistence remains outside the bounded prototype |
 | Potential Impact | 8.8–9.5 / 10 | Specific developer/QA release decision; standards-derived trust gap; measured manual-assertion baseline; executable regression; explicit human-agent collaboration and integration boundary | Demonstrated impact is bounded to two action classes and does not quantify production-scale efficiency |
 | Creativity & Ambition | 9.1–9.7 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; ownable Effect Trace; same artifact returns to agent and survives as repair regression | Outcome, UI, stateful, and explicit assertion verification already exist separately in adjacent products |
-| **Total** | **36.8–39.0 / 40** | **All controllable submission-readiness gates pass; strong top-10 evidence even if judges do not test the live app** | **Not a guaranteed official score or placement** |
+| **Total** | **36.9–39.0 / 40** | **All controllable submission-readiness gates pass; strong top-10 evidence even if judges do not test the live app** | **Not a guaranteed official score or placement** |
 
 ## Controllable readiness gate
 
@@ -29,7 +29,7 @@ No score or implementation can guarantee a top-10 result. The remaining mandator
 | Evals + Playwright comparison is measured and narrowly claimed | PASS |
 | First viewport explains requested versus observed effect | PASS |
 | 90-second media, narration pauses, thumbnail, and representative frames are audited | PASS |
-| Build, type, unit, browser, CI runner, dependency, secret, console, and held-preview checks pass | PASS |
+| Build budget, cold-runtime metrics, WCAG, type, unit, browser, CI runner, dependency, secret, console, and held-preview checks pass | PASS |
 | Public claims remain bounded to demonstrated evidence | PASS |
 | Publication and final submission remain owner-gated | PASS |
 

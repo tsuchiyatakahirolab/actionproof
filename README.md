@@ -133,17 +133,21 @@ npm run build       # Production Vite build
 npm run test:ui     # Native Chrome WebMCP + UI/E2E + console checks
 npm run benchmark   # Evals matcher + manual Playwright + ExactDelta comparison
 npm run regression:ci:all # Load and execute both versioned JSON regressions against defect + repair
+npm run audit:build # Build-size, external-asset, source-map, metadata, and social-card gate
+npm run audit:runtime # Three cold desktop runs; set RUNTIME_AUDIT_URL when preview is not on :4173
 npm run submission:images # Regenerate five native-Chrome Devpost gallery images
 ```
 
 Current deterministic suite:
 
 - 24 unit tests pass, including both native `executeTool()` input dialects, exactly-once application-write enforcement in each dialect, artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
-- 8 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, a 1280×720 judge-path overflow control, hero Effect Trace state, and a temporal guard that forbids regression `PASS` before verification completes.
+- 9 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, a 1280×720 judge-path overflow control, hero Effect Trace state, a temporal guard that forbids regression `PASS` before verification completes, and automated WCAG A/AA checks in both initial and blocked states.
 - Four CI runner executions pass: each committed JSON detects its seeded defect and proves its repaired implementation with identical identity, intent, arguments, and contract.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
+- The deterministic production-build gate keeps all emitted JavaScript at 70,063 gzip bytes and CSS at 5,492 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
+- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run FCP and LCP are 768 ms, TBT is 0 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
 
 ### Rebuild the submission video
 
@@ -167,6 +171,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `tests/browser/` — native Chrome end-to-end proof
 - `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
 - `scripts/run-regression.ts` / `regressions/` — CI runner and committed versioned fixtures
+- `scripts/audit-build.mjs` / `scripts/audit-runtime.mjs` — deterministic distribution budget and bounded cold-browser quality gates
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
 - `submission/GALLERY.md` — deterministic Devpost image order, captions, and regeneration command
 - `DOCUMENTATION.md` / `PLANS.md` — reproducible development record and release-gated execution source of truth

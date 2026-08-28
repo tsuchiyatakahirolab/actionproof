@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 import { readFile } from "node:fs/promises";
 
 test("the seeded defect is silently legible and the repaired run passes", async ({ page }) => {
@@ -172,6 +173,27 @@ test("the judge path remains usable without horizontal overflow at 1280 by 720",
   expect(viewport.scrollWidth).toBe(viewport.clientWidth);
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByTestId("run-fixed")).toBeEnabled();
+});
+
+test("the initial and blocked proof states have no automated WCAG A or AA violations", async ({ page }) => {
+  await page.goto("/?speed=0.01");
+  await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");
+
+  const initialAudit = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(initialAudit.violations.flatMap((violation) =>
+    violation.nodes.map((node) => `${violation.id}: ${node.target.join(" > ")}`),
+  )).toEqual([]);
+
+  await page.getByTestId("run-defect").click();
+  await expect(page.getByTestId("verdict-fail")).toBeVisible();
+  const blockedAudit = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(blockedAudit.violations.flatMap((violation) =>
+    violation.nodes.map((node) => `${violation.id}: ${node.target.join(" > ")}`),
+  )).toEqual([]);
 });
 
 test("the second workflow uses the same UI and verifier", async ({ page }) => {
