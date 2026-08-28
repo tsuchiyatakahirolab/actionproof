@@ -16,7 +16,7 @@ This specification keeps the Effect Contract and verification core approved in v
 - **Failure burden demonstrated:** a correct tool and correct arguments can return success while an unselected order or user is changed.
 - **Product outcome:** collateral change blocks the effect gate; the identical retained regression must pass after repair before the gate clears.
 
-No customer, production incident, market size, paid demand, or universal integration is claimed.
+No production incident, market size, measured demand, or universal integration is claimed.
 
 ## Locked proof chain
 

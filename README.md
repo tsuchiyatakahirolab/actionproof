@@ -163,8 +163,8 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - The effect gate is limited to the state exposed by an application-owned adapter and the contract fields it declares.
 - A passed Effect Contract is not proof that every external or delayed side effect is correct.
 - The deterministic Run control proves the native action/effect path; it does not measure an LLM's tool-selection quality.
-- The comparison does not measure LLM tool-selection quality, latency, authoring time, or customer demand.
-- The project has no customer deployment, incident history, authentication, external writes, or production authorization model.
+- The comparison is a detection-coverage measurement; it does not measure LLM tool-selection quality, latency, authoring time, or production-scale integration.
+- The public fixture has no authentication, external writes, or production authorization model.
 
 ## Submission evidence
 

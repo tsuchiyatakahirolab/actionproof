@@ -16,7 +16,7 @@ This specification supersedes v0.5. It preserves the Effect Contract core and tw
 - **Application:** an owned state adapter exposes the independent pre/post snapshot; the tool's return payload is not treated as effect evidence.
 - **Decision:** collateral state change blocks the write tool from release; the identical contract must pass after a developer-reviewed repair.
 
-No customer, production incident, market size, paid demand, automatic repair, or universal integration is claimed.
+No production incident, market size, measured demand, automatic repair, or universal integration is claimed.
 
 ## Locked proof chain
 

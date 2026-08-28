@@ -25,7 +25,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **Standards-derived problem evidence:** WebMCP's security discussion states that declared intent is not guaranteed to match actual behavior and that agents cannot confirm real effects from tool descriptions; ExactDelta demonstrates the accidental collateral-mutation case rather than claiming to solve malicious-code containment or authorization.
 - **Visible outcome:** a collateral mutation blocks the effect gate; the identical retained regression clears it after repair.
 - **Measured evidence:** official Evals 0.0.3 matcher passed 2/2 correct calls, rejected 2/2 wrong-argument negative controls, while 2/2 seeded collateral defects remained. Four manual Playwright state assertions caught both. ExactDelta generated the checks from two action bindings.
-- **Honesty boundary:** the project claims no customers, incidents, universal adapters, demand, or production readiness.
+- **Claim boundary:** the project does not claim production incidents, universal adapters, measured market demand, or production certification.
 - **Reusable direction:** explicit Effect Contracts become downloadable CI regression artifacts for action classes in owned SaaS staging environments.
 
 ## 4. Creativity & Ambition

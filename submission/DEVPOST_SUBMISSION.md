@@ -75,7 +75,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - One verification core for order and permission workflows
 - Deterministic defect → detection → repair → identical regression PASS
 - A reproducible, source-visible Evals + Playwright comparison
-- No credentials, external writes, private data, or invented customer evidence
+- No credentials, external writes, or private data
 
 ## What we learned
 

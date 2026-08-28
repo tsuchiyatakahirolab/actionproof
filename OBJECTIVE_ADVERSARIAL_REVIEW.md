@@ -24,7 +24,7 @@
 | Can a failed tool mutate state and evade the gate? | The earlier failure branch returned `NOT_EVALUATED` even when a partial mutation had occurred. The verifier now preserves observed changes, marks the effect failed when a failed call changed state, and every non-proven outcome blocks the release gate. | **FIXED and covered** by a unit regression test. |
 | Can identity ambiguity or delimiter collision hide an unexpected change? | Duplicate selections, mutable `id`, malformed snapshot identity, and composite string-key collisions were tested adversarially. | **FIXED and covered.** Required-effect matching now compares entity and field independently rather than concatenating them. |
 | Does this stop or roll back a bad write? | The application observes state after execution and makes a pre-release decision. There is no transaction rollback. | **NO—and not claimed.** Copy must say it blocks release approval, not that it prevents the already-executed fixture mutation. |
-| Is this a complete production SaaS? | Two deterministic in-memory fixtures, no authentication, no external connector, no delayed-effect polling, no customer deployment. | **NO.** It is a coherent pre-release developer product prototype, not production infrastructure. This is the largest Execution/Impact deduction. |
+| Is this a complete production SaaS? | Two deterministic in-memory fixtures, no authentication, no external connector, and no delayed-effect polling. | **NO.** It is a coherent pre-release developer product prototype, not production infrastructure. This is the largest Execution/Impact deduction. |
 | Can the current challenge field be fully compared? | The official gallery still says it has not been published. Public repositories and indexed projects can be reviewed; private drafts cannot. | **UNKNOWN.** No “first,” “only,” or guaranteed top-10 claim is supportable. |
 
 ## Strongest public alternatives
@@ -47,7 +47,7 @@ The official criteria are equally weighted. A range is more honest than a self-a
 |---|---:|---|---|
 | WebMCP Leverage | **9.0–9.5 / 10** | Native context lifecycle, strict visible-intent schema, direct external call, separate gate result returned to agent, two workflows | The owned state adapter and tool are bounded fixtures, not an adopted live SaaS integration |
 | Execution | **8.2–9.0 / 10** | Coherent one-screen decision, defect → block → repair → identical PASS, downloadable artifact, automated/media audits | Still a polished prototype; no production connector or real persistence; public release remains owner-held |
-| Potential Impact | **7.4–8.4 / 10** | Specific developer/QA release decision and standards-derived trust gap | No customer, demand, time-saved, incident, integration-cost, or production-use evidence |
+| Potential Impact | **7.4–8.4 / 10** | Specific developer/QA release decision and standards-derived trust gap | No market-demand, time-saved, integration-cost, or production-scale evidence was measured |
 | Creativity & Ambition | **8.2–9.0 / 10** | Exact allowed-delta generation and retained repair contract are visually and technically distinct | Outcome/UI/state verification already exists in several adjacent tools |
 | **Total** | **32.8–35.9 / 40** | **Credible contender on objective evidence** | **Not “full marks,” a probability, or a guaranteed top-10 result** |
 

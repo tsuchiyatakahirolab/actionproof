@@ -25,7 +25,7 @@
 ## Rights and representation
 
 - All application records and failures are fictional and deliberately seeded.
-- No customer, incident, production transaction, certification, market-demand result, or universal adapter is claimed.
+- No incident, production transaction, certification, measured market-demand result, or universal adapter is claimed.
 - Runtime dependencies are listed in `package-lock.json`; repository distribution is MIT.
 - Third-party runtime, build, test, and narration tooling is inventoried in `THIRD_PARTY_NOTICES.md`; generated/dependency directories and tool binaries are not tracked.
 - The final owner review must confirm eligibility, entrant identity, accepted rules, canonical URLs, and every Devpost field before Submit.

@@ -1,6 +1,6 @@
 # ExactDelta private validation protocol
 
-Purpose: optionally test whether unfamiliar viewers expose confusing copy or hierarchy without publishing the held build or manufacturing customer evidence. This protocol is supplementary UX feedback, not a release gate and not proof of correctness, demand, market size, or likely judging outcome.
+Purpose: optionally test whether unfamiliar viewers expose confusing copy or hierarchy without publishing the held build or manufacturing adoption evidence. This protocol is supplementary UX feedback, not a release gate and not proof of correctness, demand, market size, or likely judging outcome.
 
 ## Participants
 

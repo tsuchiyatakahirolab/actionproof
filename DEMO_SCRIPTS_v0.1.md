@@ -162,7 +162,7 @@ Synthetic screen recording containing a fake API token and email. Solid opaque r
 
 画面: 独立した状態差分が未選択の注文を指す。戻り値の `success` と実際の変更IDを並べる。AIが最短の再現手順を作る。
 
-> The tool returned success. An independent state check finds the extra cancellation. The agent turns that failure into a replayable test: this selection, these arguments, this unexpected change. No customer order was touched; this is a disposable test store.
+> The tool returned success. An independent state check finds the extra cancellation. The agent turns that failure into a replayable test: this selection, these arguments, this unexpected change. No external order was touched; this is a disposable test store.
 
 ### 40–60 seconds
 

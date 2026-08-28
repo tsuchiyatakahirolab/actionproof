@@ -6,7 +6,7 @@ This file is the compact implementation and release record for the WebMCP Challe
 
 ExactDelta is a pre-release effect gate for state-changing WebMCP tools. The human's visible selection and pre-action state generate an Effect Contract; a native WebMCP call is executed; application-owned post-state is observed independently of the return payload; the gate blocks on collateral change and clears only after the identical retained regression passes.
 
-The product remains intentionally bounded to two disposable in-memory workflows: order cancellation and permission change. No customer, production incident, external transaction, universal adapter, or automatic repair is represented.
+The product remains intentionally bounded to two disposable in-memory workflows: order cancellation and permission change. No production incident, external transaction, universal adapter, or automatic repair is represented.
 
 ## Milestones
 
