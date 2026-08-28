@@ -35,6 +35,7 @@ npm run benchmark
 npm run audit:production
 npm run demo:record
 npm run demo:audit
+npm run submission:images
 npm audit --audit-level=high
 ```
 
@@ -50,6 +51,7 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 - Manual Playwright: four concrete state assertions detect both defects and pass unchanged after repair.
 - ExactDelta: two reusable action bindings, zero per-record expected-state assertions in scenario definitions, two defects detected, two identical regressions passed.
 - Demo: 90.00 seconds, H.264 1440×900, AAC English `en-US-AndrewMultilingualNeural` narration. All 26 sentences are separate clips; every measured pause is at least 600 ms. The seeded effect failure is fully visible by 15 seconds. Final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
+- Static judge path: five 1440×900 images reproduce the native hook, failure proof, identical repair, permission portability, and bounded comparison; generation fails on console errors and captions are fixed in `submission/GALLERY.md`.
 - Held local production preview: native WebMCP, correct context-matched tool per workflow, `tools=*`, zero console errors; see `submission/private/HELD_PRODUCTION_AUDIT.json` (ignored from public release).
 - Public-source review: official issue #45 and Chrome Evals guidance support the bounded trust-gap claim; webmcpify, Postcept, Playwright, Schemathesis, and AgentSynth cap broader novelty claims. The official gallery was still unpublished. See `OBJECTIVE_ADVERSARIAL_REVIEW.md`.
 - Latest clean-install rerun plus compatibility regression: typecheck PASS, unit 24/24, native E2E 8/8, four JSON-driven regression executions PASS, build PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, and held local production audit PASS.

@@ -18,6 +18,7 @@
     "demo:audit": "node scripts/audit-narration.mjs && node scripts/audit-video.mjs",
     "demo:record": "npm run build && npm run demo:audio && node scripts/record-demo.mjs",
     "thumbnail:render": "npm run build && node scripts/render-thumbnail.mjs",
+    "submission:images": "npm run build && node scripts/render-submission-gallery.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {

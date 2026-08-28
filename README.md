@@ -133,6 +133,7 @@ npm run build       # Production Vite build
 npm run test:ui     # Native Chrome WebMCP + UI/E2E + console checks
 npm run benchmark   # Evals matcher + manual Playwright + ExactDelta comparison
 npm run regression:ci:all # Load and execute both versioned JSON regressions against defect + repair
+npm run submission:images # Regenerate five native-Chrome Devpost gallery images
 ```
 
 Current deterministic suite:
@@ -167,6 +168,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
 - `scripts/run-regression.ts` / `regressions/` — CI runner and committed versioned fixtures
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
+- `submission/GALLERY.md` — deterministic Devpost image order, captions, and regeneration command
 - `DOCUMENTATION.md` / `PLANS.md` — reproducible development record and release-gated execution source of truth
 
 ## Scope and limitations

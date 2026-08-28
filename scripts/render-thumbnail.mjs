@@ -1,11 +1,14 @@
 import { chromium } from "@playwright/test";
 import { spawn } from "node:child_process";
+import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceOutput = path.join(root, "submission", "youtube-thumbnail.png");
 const output = path.join(root, "submission", "youtube-thumbnail-v2.png");
+const publicDirectory = path.join(root, "public");
+const socialOutput = path.join(publicDirectory, "og-exactdelta.png");
 const vite = spawn(
   process.execPath,
   [path.join(root, "node_modules", "vite", "bin", "vite.js"), "preview", "--host", "127.0.0.1", "--port", "4178", "--strictPort"],
@@ -46,9 +49,11 @@ try {
   });
   await page.getByTestId("verdict-fail").waitFor();
   await page.evaluate(() => window.scrollTo(0, 0));
+  await mkdir(publicDirectory, { recursive: true });
   await page.screenshot({ path: sourceOutput, type: "png" });
   await page.screenshot({ path: output, type: "png" });
-  process.stdout.write(`${sourceOutput}\n${output}\n`);
+  await page.screenshot({ path: socialOutput, type: "png" });
+  process.stdout.write(`${sourceOutput}\n${output}\n${socialOutput}\n`);
 } finally {
   if (browser) await browser.close();
   vite.kill();

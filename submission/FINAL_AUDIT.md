@@ -18,6 +18,7 @@
 | `npm run benchmark` | PASS — controlled comparison succeeded |
 | `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
+| `npm run submission:images` | PASS — five 1440×900 native-Chrome judge images regenerated from live defect/repair flows with zero console errors |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
 | `npm audit --audit-level=high` | PASS — 0 vulnerabilities |
 | dependency/license inventory | REVIEWED after clean install — runtime React packages are MIT; development tooling including `tsx` is recorded; non-runtime MPL/GPL build tools are disclosed in `THIRD_PARTY_NOTICES.md`; no dependency directory or tool binary is tracked |
@@ -41,7 +42,7 @@
 - The registration uses same-origin `exposedTo`; the app header remains `Permissions-Policy: tools=*` for the top-level WebMCP feature.
 - Collected local-preview console errors: zero.
 
-The existing `submission/PRODUCTION_AUDIT.json` records the previous public revision and must be replaced by the release-day audit before submission. `submission/private/HELD_PRODUCTION_AUDIT.json` records the refreshed held build against a local production preview: native WebMCP, both context-matched tools, both defect detections, both identical regression passes, `tools=*`, and zero console errors.
+The existing `submission/PRODUCTION_AUDIT.json` records the previous public revision and must be replaced by the release-day audit before submission. `submission/private/HELD_PRODUCTION_AUDIT.json` records the refreshed held build against a local production preview: native WebMCP, both context-matched tools, both defect detections, both identical regression passes, `tools=*`, a valid PNG social card, and zero console errors.
 
 ## Benchmark evidence
 
@@ -60,11 +61,12 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Duration: 90.00 seconds
 - Video: H.264 High, 1440×900, 25 fps
 - Audio: AAC-LC, English `en-US-AndrewMultilingualNeural` narration generated with pinned `edge-tts` 7.2.8
-- Audio level: mean −22.2 dB, peak −4.0 dB
-- Sentence timing: 26 separate clips; minimum measured inter-sentence pause 600 ms; 30 final-video silence intervals ≥350 ms detected
-- SHA-256: `61A0D7F487E246194191DED738B58E926520A977818947E3CCAD7717E74C1D8C`
+- Audio level: mean −22.3 dB, peak −4.0 dB
+- Sentence timing: 26 separate clips; minimum measured inter-sentence pause 600 ms; 29 final-video silence intervals ≥350 ms detected
+- SHA-256: `6CF2BA78AD05745A2B6CEE39861DF80563ED022EBC685B3C4905CC98A532AF6A`
 - 16:9 upload thumbnail: `submission/youtube-thumbnail-v2.png` (deterministically rendered from the native held build after the external seeded call; the hero Effect Trace and release decision are visible in one frame)
 - Silent-audit source screen: `submission/thumbnail.png`
+- Devpost gallery order and captions: `submission/GALLERY.md`; five current-UI images cover the hook, full failure proof, identical repair, second workflow, and measured comparison.
 
 Representative-frame review confirmed the seeded Effect Trace at 2 seconds, the full external-call order failure proof by 15 seconds, `VERIFYING` rather than premature `PASS` during repair at 57 seconds, the permission failure at 70 seconds, the identical permission regression PASS and comparison cards at 79 seconds, and the final composition. The narration text and starts are fixed in `scripts/narration-timeline.json`; `scripts/audit-narration.mjs` measures the generated files rather than trusting scheduled timings.
 

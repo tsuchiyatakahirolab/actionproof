@@ -8,6 +8,7 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   });
 
   await page.goto("/?speed=0.01");
+  await expect.poll(async () => (await page.request.get("/og-exactdelta.png")).status()).toBe(200);
   await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");
   await expect.poll(() => page.evaluate(async () =>
     (await document.modelContext!.getTools()).map((tool) => tool.name),

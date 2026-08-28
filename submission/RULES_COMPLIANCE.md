@@ -21,6 +21,7 @@
 | Source, assets, and instructions | Source, test commands, demo fixture instructions, benchmark method, limitations, and final MP4 are present. | PASS LOCALLY |
 | Text explains WebMCP fit, better UX, collaboration, and implementation | `DEVPOST_SUBMISSION.md` contains dedicated sections for all four requirements. | PASS |
 | Demo video | Audited 90.00-second English H.264/AAC file exists locally. Public upload and end-to-end playback remain owner release gates. | PASS LOCALLY / PUBLIC URL REQUIRED |
+| Static judging path | Five current-UI 1440×900 captures and bounded captions are generated from native-Chrome defect/repair flows in `submission/GALLERY.md`. | PASS |
 
 ## Rights and representation
 

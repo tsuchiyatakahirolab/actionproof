@@ -42,6 +42,10 @@ Without WebMCP, ExactDelta would be a conventional application-specific regressi
 
 The QA operator does not write a record-specific assertion or decode an agent trace. The visible selected target defines the authorized boundary; the browser agent discovers and invokes the corresponding tool. ExactDelta generates the effect boundary, shows the exact call, separates the tool result from observed state, highlights collateral changes, makes the release decision visible, and preserves a regression that developers can rerun after a fix.
 
+## What the human and agent can do together
+
+Before this flow, a QA engineer could inspect an agent trace and separately author application-specific state assertions, but the browser agent's successful tool response did not itself establish which records were allowed to change. ExactDelta joins those responsibilities at the page boundary: the human's visible selection declares the permitted effect, the agent invokes the same native WebMCP action it was given, the application independently observes the resulting state, and the agent receives the separate release-gate verdict. The developer can then rerun the exact retained contract after repair instead of reconstructing the failed case from a trace.
+
 ## How we built it
 
 - React 19, TypeScript, and Vite
@@ -78,6 +82,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - Deterministic defect → detection → repair → identical regression PASS
 - The same downloaded JSON artifact can be loaded and executed as a CI release gate
 - A reproducible, source-visible Evals + Playwright comparison
+- A deterministic five-image judge gallery generated from the native held build
 - No credentials, external writes, or private data
 
 ## What we learned

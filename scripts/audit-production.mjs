@@ -22,6 +22,17 @@ try {
   const response = await page.goto(`${url}/?speed=0.01`);
   if (!response?.ok()) throw new Error(`Production page returned ${response?.status()}.`);
   await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
+  const socialCardMeta = await page.locator('meta[property="og:image"]').getAttribute("content");
+  const socialCardResponse = await fetch(new URL("/og-exactdelta.png", url));
+  const socialCard = {
+    meta: socialCardMeta,
+    assetStatus: socialCardResponse.status,
+    contentType: socialCardResponse.headers.get("content-type"),
+    pass:
+      Boolean(socialCardMeta?.endsWith("/og-exactdelta.png")) &&
+      socialCardResponse.ok &&
+      socialCardResponse.headers.get("content-type")?.startsWith("image/png") === true,
+  };
 
   for (const workflow of ["orders", "permissions"]) {
     if (workflow === "permissions") {
@@ -64,6 +75,7 @@ try {
     nativeWebMcp: true,
     workflows,
     baselineNativeWebMcp: true,
+    socialCard,
     permissionsPolicy: headerResponse.headers.get("permissions-policy"),
     consoleErrors,
     pass:
@@ -75,6 +87,7 @@ try {
         workflow.activeTools[0] === (workflow.workflow === "orders" ? "cancel_order" : "change_user_role")
       ) &&
       headerResponse.headers.get("permissions-policy") === "tools=*" &&
+      socialCard.pass &&
       consoleErrors.length === 0,
   };
   await writeFile(

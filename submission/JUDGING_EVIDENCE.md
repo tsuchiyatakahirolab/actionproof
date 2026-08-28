@@ -9,6 +9,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **Test:** Playwright launches installed Chrome with `WebMCP,WebMCPTesting`, fails if native mode is absent, and proves a call issued through `document.modelContext.executeTool()`—without pressing the replay button—produces the blocked Effect Contract verdict. It also asserts the discoverable tool changes from only `cancel_order` to only `change_user_role` with the visible context.
 - **In-app browser evidence:** Codex's browser client discovered `cancel_order`, invoked it with `#1042`, and received both `{ success: true }` and `effectGate: { status: "blocked", unexpectedChanges: 1 }`; the same in-app runtime also used the visible controls to complete block → repair → identical PASS with zero console warnings or errors.
 - **Video:** the opening third shows the real-agent prompt, registered action, external native invocation, and successful return before revealing the effect failure.
+- **Static judging:** gallery image 01 contains native WebMCP, the external-call result, requested/observed counts, and release block in one frame; image 02 expands it into the full proof chain.
 - **Human-agent UX:** the human declares the target in UI; the agent invokes the page tool; the application-owned adapter verifies the result without trusting the action payload; the same native response returns the separate gate verdict so the agent can report it.
 
 ## 2. Execution
@@ -18,6 +19,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **Breadth without scope creep:** the same core runs order and permission workflows.
 - **Verification:** TypeScript check, production build, 24 unit tests, four JSON-driven regression executions, 8 native Chrome E2E tests including real target/schema rebinding, both native input dialects with exactly-once application writes, repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed, 1280×720 first-viewport behavior, no-premature-PASS timing, console collection, secret scan, and held-build smoke test.
 - **Video:** defect → detection → repair → identical PASS is completed on screen.
+- **Static judging:** gallery images 02 and 03 form a before/after pair with the same order, contract, call, and regression identity.
 
 ## 3. Potential Impact
 
@@ -27,6 +29,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **Measured evidence:** official Evals 0.0.3 matcher passed 2/2 correct calls, rejected 2/2 wrong-argument negative controls, while 2/2 seeded collateral defects remained. Four manual Playwright state assertions caught both. ExactDelta generated the checks from two action bindings.
 - **Claim boundary:** the project does not claim production incidents, universal adapters, measured market demand, or production certification.
 - **Reusable direction:** explicit Effect Contracts become downloadable, executable CI regression artifacts for action classes in owned SaaS staging environments.
+- **Rules-required collaboration:** gallery and submission copy explicitly show the human declaring the allowed effect, the agent invoking the page action, the application independently observing state, and the developer reusing the retained regression.
 
 ## 4. Creativity & Ambition
 

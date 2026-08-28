@@ -20,8 +20,10 @@
 - [x] Public GitHub repository reachable and MIT license detected
 - [ ] Final README revision pushed with setup, architecture, limitations, tests, benchmark, and judge path
 - [ ] Public app/repository slugs match `ExactDelta`, or the retained legacy slugs redirect cleanly; every Devpost, README, and video link uses one verified canonical destination
+- [ ] If the canonical app URL changes, update the absolute `og:image` URL in `index.html`; verify the 1280×720 link preview
 - [ ] Final live build promoted and reachable without sign-in
 - [ ] Public English YouTube video under three minutes with audible narration
+- [ ] Upload `gallery-01` through `gallery-05` in the order and with the captions recorded in `submission/GALLERY.md`
 - [ ] Devpost links point to the final production URL, repository, and video
 
 ## Optional subjective UX check

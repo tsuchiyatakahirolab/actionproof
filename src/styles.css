@@ -21,6 +21,7 @@
 
 body { margin: 0; min-width: 1024px; min-height: 100vh; background: #f3f0e8; }
 button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 3px solid #16866f; outline-offset: 3px; }
 
 .app-shell { min-height: 100vh; }
 
@@ -110,6 +111,15 @@ button { font: inherit; }
 .trace-decision.trace-running span, .trace-decision.trace-running strong { color: #77551d; }
 .trace-decision.trace-running p { color: #765f3b; }
 @keyframes trace-pulse { 50% { opacity: .45; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
 
 .proof-workspace {
   width: min(1380px, calc(100vw - 44px));
