@@ -125,6 +125,7 @@ export async function runExactDelta(input: {
   executeTool: ToolExecutor;
   toolArguments?: Record<string, Scalar>;
   timeoutMs?: number;
+  signal?: AbortSignal;
 }): Promise<VerificationResult> {
   const { store, executeTool, timeoutMs = 5_000 } = input;
   const toolArguments = input.toolArguments ?? store.definition.toolArguments;
@@ -134,8 +135,12 @@ export async function runExactDelta(input: {
   let toolCall: ToolCallRecord;
 
   try {
+    if (input.signal?.aborted) {
+      throw new Error("WebMCP action aborted by the client.");
+    }
     const controller = new AbortController();
     let timeout: ReturnType<typeof setTimeout> | undefined;
+    let abortFromClient: (() => void) | undefined;
     const timeoutPromise = new Promise<never>((_resolve, reject) => {
       timeout = globalThis.setTimeout(
         () => {
@@ -145,6 +150,14 @@ export async function runExactDelta(input: {
         timeoutMs,
       );
     });
+    const clientAbortPromise = new Promise<never>((_resolve, reject) => {
+      if (!input.signal) return;
+      abortFromClient = () => {
+        controller.abort(input.signal?.reason);
+        reject(new Error("WebMCP action aborted by the client."));
+      };
+      input.signal.addEventListener("abort", abortFromClient, { once: true });
+    });
     const result = await Promise.race([
       executeTool(
         store.definition.toolName,
@@ -152,8 +165,12 @@ export async function runExactDelta(input: {
         { signal: controller.signal },
       ),
       timeoutPromise,
+      clientAbortPromise,
     ]).finally(() => {
       if (timeout !== undefined) globalThis.clearTimeout(timeout);
+      if (abortFromClient) {
+        input.signal?.removeEventListener("abort", abortFromClient);
+      }
     });
     toolCall = {
       name: store.definition.toolName,

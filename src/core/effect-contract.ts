@@ -24,6 +24,23 @@ export function generateEffectContract(
     throw new Error("Effect contract requires an explicit UI selection.");
   }
 
+  if (new Set(intent.selectedIds).size !== intent.selectedIds.length) {
+    throw new Error("Effect contract selection contains duplicate entity IDs.");
+  }
+
+  if (intent.mutation.field === "id") {
+    throw new Error("Entity identity cannot be used as a mutable effect field.");
+  }
+
+  const malformedEntry = Object.entries(before).find(
+    ([entityId, record]) => record.id !== entityId,
+  );
+  if (malformedEntry) {
+    throw new Error(
+      `Snapshot key ${malformedEntry[0]} does not match record identity ${malformedEntry[1].id}.`,
+    );
+  }
+
   const selected = new Set(intent.selectedIds);
   const unknownId = intent.selectedIds.find((id) => !before[id]);
   if (unknownId) {
@@ -105,33 +122,27 @@ export function verifyEffect(input: {
     contract,
   };
 
-  if (toolCall.status === "FAILED") {
-    return {
-      verdict: "TOOL_CALL_FAILED",
-      effectStatus: "NOT_EVALUATED",
-      toolCall,
-      contract,
-      observedChanges,
-      requiredSatisfied: [],
-      requiredMissing: contract.required,
-      unexpectedChanges: observedChanges,
-      invariantViolations: [],
-      regressionCase,
-    };
-  }
-
   const requiredSatisfied = contract.required.filter(
-    (effect) => after[effect.entityId]?.[effect.field] === effect.expected,
+    (effect) =>
+      !Object.is(effect.before, effect.expected) &&
+      Object.is(after[effect.entityId]?.[effect.field], effect.expected) &&
+      observedChanges.some(
+        (change) =>
+          change.entityId === effect.entityId &&
+          change.field === effect.field &&
+          Object.is(change.after, effect.expected),
+      ),
   );
   const requiredMissing = contract.required.filter(
-    (effect) => after[effect.entityId]?.[effect.field] !== effect.expected,
+    (effect) => !requiredSatisfied.includes(effect),
   );
 
-  const requiredKeys = new Set(
-    contract.required.map((effect) => `${effect.entityId}:${effect.field}`),
-  );
   const unexpectedChanges = observedChanges.filter(
-    (change) => !requiredKeys.has(`${change.entityId}:${change.field}`),
+    (change) =>
+      !contract.required.some(
+        (effect) =>
+          effect.entityId === change.entityId && effect.field === change.field,
+      ),
   );
 
   const afterIds = Object.keys(after).sort();
@@ -143,6 +154,21 @@ export function verifyEffect(input: {
   }
   if (afterIds.join("|") !== contract.invariants.entityIds.join("|")) {
     invariantViolations.push("Entity identity set changed.");
+  }
+
+  if (toolCall.status === "FAILED") {
+    return {
+      verdict: "TOOL_CALL_FAILED",
+      effectStatus: observedChanges.length > 0 ? "FAILED" : "NOT_EVALUATED",
+      toolCall,
+      contract,
+      observedChanges,
+      requiredSatisfied,
+      requiredMissing,
+      unexpectedChanges,
+      invariantViolations,
+      regressionCase,
+    };
   }
 
   const passed =

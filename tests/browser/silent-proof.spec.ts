@@ -88,6 +88,37 @@ test("an external browser-agent call enters the same effect gate", async ({ page
   await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();
 });
 
+test("a repeated external call cannot turn an already-mutated state into proof", async ({ page }) => {
+  await page.goto("/?speed=0.01");
+  await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");
+
+  const results = await page.evaluate(async () => {
+    const tool = (await document.modelContext!.getTools())[0];
+    const input = JSON.stringify({ order_id: "#1042" });
+    const first = await document.modelContext!.executeTool(tool, input);
+    const second = await document.modelContext!.executeTool(tool, input);
+    return [first, second].map((result) => typeof result === "string" ? JSON.parse(result) : result);
+  });
+
+  expect(results[0].effectGate).toMatchObject({
+    status: "blocked",
+    verdict: "FAILED_EFFECT",
+    requiredMissing: 0,
+    unexpectedChanges: 1,
+  });
+  expect(results[1].effectGate).toMatchObject({
+    status: "blocked",
+    verdict: "FAILED_EFFECT",
+    requiredMissing: 1,
+    unexpectedChanges: 0,
+  });
+  await expect(page.getByTestId("state-gap")).toHaveText("REQUESTED 1 · CHANGED 0");
+  const recordTable = page.locator(".record-table");
+  await expect(recordTable.getByText("UNEXPECTED", { exact: true })).toHaveCount(0);
+  await expect(recordTable.getByText("REQUIRED", { exact: true })).toHaveCount(0);
+  await expect(recordTable.getByText("UNCHANGED", { exact: true })).toHaveCount(2);
+});
+
 test("concurrent external writes fail closed instead of bypassing the gate", async ({ page }) => {
   await page.goto("/?speed=0.01");
   await expect(page.getByTestId("bridge-mode")).toContainText("Native WebMCP · 1 context-matched tool");

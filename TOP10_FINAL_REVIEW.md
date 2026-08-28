@@ -4,19 +4,19 @@
 
 ## Verdict
 
-ExactDelta is now a credible top-10 contender rather than a replay-only technical proof. The decisive improvement is that the external browser-client call itself enters the Effect Contract gate and returns both truths to the agent: the action payload says `success: true`, while `effectGate.status` says `blocked` because one unselected record changed.
+ExactDelta is a credible top-10 contender rather than a replay-only technical proof. The decisive improvement is that the external browser-client call itself enters the Effect Contract gate and returns both truths to the agent: the action payload says `success: true`, while `effectGate.status` says `blocked` because one unselected record changed.
 
-No score or implementation can guarantee a top-10 result. The remaining gates are human comprehension and release execution, not another product feature.
+No score or implementation can guarantee a top-10 result. The remaining mandatory work is objective release execution, not another product feature or a small subjective-feedback exercise. See `OBJECTIVE_ADVERSARIAL_REVIEW.md` for the current evidence hierarchy, falsification results, and defensible score bands.
 
 ## Internal judging score
 
 | Official criterion | Internal score | Concrete evidence | Residual deduction |
 |---|---:|---|---|
-| WebMCP Leverage | 9.4 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Two bounded staging fixtures, not a production SaaS integration |
-| Execution | 9.2 / 10 | Coherent release decision; defect → block → repair → identical regression PASS; CI artifact; 9 unit tests; 5 native E2E tests including concurrent-call fail-closed and 1280×720 overflow controls; audited 90-second demo | Final build is deliberately held from public deployment; unfamiliar-human audit not yet recorded |
-| Potential Impact | 8.3 / 10 | Specific developer/QA user and pre-release decision; official Chrome guidance supports deterministic effect testing; integration guide and retained regression show a plausible workflow | No customer deployment, demand study, time-saved measurement, or production incident—and none is claimed |
-| Creativity & Ambition | 9.1 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; same artifact returns to agent and survives as repair regression | Outcome verification and explicit UI assertions already exist in adjacent products |
-| **Total** | **36.0 / 40** | **Top-10-caliber internal threshold met** | **Not a win probability or judge commitment** |
+| WebMCP Leverage | 9.0–9.5 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Two bounded staging fixtures, not a production SaaS integration |
+| Execution | 8.2–9.0 / 10 | Coherent release decision; defect → block → repair → identical regression PASS; CI artifact; 15 unit tests; 6 native E2E tests including repeated no-op, concurrent-call fail-closed, and 1280×720 controls; audited 90-second demo | A polished prototype without a production connector or persistence; final build is deliberately held from deployment |
+| Potential Impact | 7.4–8.4 / 10 | Specific developer/QA user and pre-release decision; official Chrome guidance supports deterministic effect testing; integration guide and retained regression show a plausible workflow | No customer deployment, demand study, time-saved measurement, production incident, or integration-cost evidence—and none is claimed |
+| Creativity & Ambition | 8.2–9.0 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; same artifact returns to agent and survives as repair regression | Outcome, UI, stateful, and explicit assertion verification already exist in adjacent products |
+| **Total** | **32.8–35.9 / 40** | **Credible contender on objective evidence** | **Not full marks, a win probability, or a judge commitment** |
 
 ## Mandatory gates
 
@@ -25,7 +25,7 @@ No score or implementation can guarantee a top-10 result. The remaining gates ar
 | Real pain and specific user | PASS | Developer/QA release decision; collateral write defect is concrete; no fabricated market claim |
 | One-sentence difference | PASS | `COMPETITIVE_REVIEW.md` |
 | WebMCP necessity | PASS | Browser agent discovers and invokes the page tool; direct native response includes the independent effect gate |
-| Problem understood within 30 seconds | TECHNICALLY PASS / HUMAN PENDING | Full failure proof is visible by 15 seconds; unfamiliar reviewer still required |
+| Problem understood within 30 seconds | ARTIFACT PASS / SUBJECTIVE CHECK OPTIONAL | Full failure proof is visible by 15 seconds; an unfamiliar viewer may still expose copy/layout confusion but does not establish technical or market truth |
 | Meaningful state change within 60–90 seconds | PASS | Two changed records become one; blocked gate becomes passed; identical regression is visible |
 | Evidence for all four criteria | PASS | `submission/JUDGING_EVIDENCE.md` |
 
@@ -40,10 +40,11 @@ The submission must not claim that Playwright or these products cannot catch col
 
 ## Stop conditions before publication
 
-1. An unfamiliar reviewer must pass the 20-second form without prior explanation.
-2. Re-run the public competitor/gallery search immediately before the release window.
-3. Push and deploy only in the owner-approved window; verify native WebMCP, the `effectGate` response, both workflows, headers, and zero console errors on production.
-4. Upload and watch the exact audited MP4, then update the public video URL.
-5. Owner reviews the final Devpost preview and performs the final submit.
+1. Re-run the public competitor/gallery search immediately before the release window.
+2. Push and deploy only in the owner-approved window; verify native WebMCP, the `effectGate` response, both workflows, headers, and zero console errors on production.
+3. Upload and watch the exact audited MP4, then update the public video URL.
+4. Owner reviews the final Devpost preview and performs the final submit.
+
+An unfamiliar-viewer test is supplementary UX evidence only. If run, it may justify a copy/layout revision; it is not a release, correctness, demand, or score gate.
 
 `EXACTDELTA_TOP10_TECHNICAL_GATE_PASS`

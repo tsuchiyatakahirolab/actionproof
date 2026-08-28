@@ -16,7 +16,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **UI:** the 20-second screen makes the QA/release job, `ONLY`, `success: true`, `UNEXPECTED`, `REQUESTED 1 · CHANGED 2`, the split verdict, and `EFFECT GATE BLOCKED` visible at once.
 - **Implementation:** official WebMCP type package, typed contract, exact-change-set semantics, deterministic diff, handler-side intent validation, aborting timeout/tool-failure distinction, required/unexpected/invariant checks, downloadable regression JSON.
 - **Breadth without scope creep:** the same core runs order and permission workflows.
-- **Verification:** TypeScript check, production build, 9 unit tests, 5 native Chrome E2E tests including concurrent-call fail-closed and 1280×720 overflow behavior, console collection, secret scan, and deployment smoke test.
+- **Verification:** TypeScript check, production build, 15 unit tests, 6 native Chrome E2E tests including repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed and 1280×720 overflow behavior, console collection, secret scan, and deployment smoke test.
 - **Video:** defect → detection → repair → identical PASS is completed on screen.
 
 ## 3. Potential Impact

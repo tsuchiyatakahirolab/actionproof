@@ -10,7 +10,7 @@ A pre-release effect gate for WebMCP writes: correct call, wrong effect, caught.
 
 ## Short description
 
-ExactDelta turns the visible selected target into the only permitted application-state delta, gates the external WebMCP call when anything else changes, and retains that identical contract as the repair regression.
+ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.
 
 ## Inspiration
 

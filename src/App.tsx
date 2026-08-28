@@ -59,7 +59,10 @@ export default function App() {
   const [invocationOrigin, setInvocationOrigin] = useState<InvocationOrigin>("none");
   const gateInFlight = useRef(false);
   const nextInvocationPlan = useRef<InvocationPlan | null>(null);
-  const externalInvocationHandler = useRef<(argumentsRecord: Record<string, string | number | boolean | null>) => Promise<unknown>>(
+  const externalInvocationHandler = useRef<(
+    argumentsRecord: Record<string, string | number | boolean | null>,
+    options?: { signal?: AbortSignal },
+  ) => Promise<unknown>>(
     async () => {
       throw new Error("The effect gate is not ready.");
     },
@@ -75,7 +78,7 @@ export default function App() {
   const autoplayStarted = useRef(false);
 
   useEffect(() => {
-    externalInvocationHandler.current = async (argumentsRecord) => {
+    externalInvocationHandler.current = async (argumentsRecord, options) => {
       if (gateInFlight.current) throw new Error("The effect gate is already running.");
       gateInFlight.current = true;
 
@@ -101,6 +104,7 @@ export default function App() {
         const proof = await runExactDelta({
           store,
           toolArguments: argumentsRecord,
+          signal: options?.signal,
           executeTool: async (_name, toolArguments) => {
             toolResult = await store.executeMutation(toolArguments);
             return toolResult;
@@ -118,9 +122,11 @@ export default function App() {
         setPhase(4);
         await sleep(invocationPlan.phaseDelays[4]);
         const effectGate = {
-          status: proof.verdict === "ACTION_PROVEN" ? "passed" : proof.verdict === "FAILED_EFFECT" ? "blocked" : "not-evaluated",
+          status: proof.verdict === "ACTION_PROVEN" ? "passed" : "blocked",
           verdict: proof.verdict,
+          requiredMissing: proof.requiredMissing.length,
           unexpectedChanges: proof.unexpectedChanges.length,
+          invariantViolations: proof.invariantViolations.length,
           regressionId: proof.regressionCase.id,
         };
         return typeof toolResult === "object" && toolResult !== null && !Array.isArray(toolResult)
@@ -146,7 +152,7 @@ export default function App() {
         type: "object",
         properties: Object.fromEntries(
           Object.entries(definition.toolArguments).map(([name, value]) => [name, {
-            type: typeof value,
+            type: value === null ? "null" : typeof value,
             enum: [value],
             description: name === definition.targetArgument
               ? `Must match the record explicitly selected in the visible UI (${definition.targetId}).`
@@ -157,7 +163,8 @@ export default function App() {
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
-      execute: async (argumentsRecord) => externalInvocationHandler.current(argumentsRecord),
+      execute: async (argumentsRecord, options) =>
+        externalInvocationHandler.current(argumentsRecord, options),
     }];
 
     createWebMcpBridge(tools)
@@ -312,7 +319,7 @@ export default function App() {
         <p className="eyebrow">THE PRE-RELEASE EFFECT GATE FOR WEBMCP WRITES</p>
         <h1>The agent did everything right. <em>The result was still wrong.</em></h1>
         <p>
-          Human selection becomes the only permitted state delta. ExactDelta gates the native WebMCP write when anything else changes.
+          Human selection becomes the only permitted state delta. ExactDelta blocks release when the native WebMCP write changes anything else.
         </p>
       </section>
 
@@ -446,17 +453,27 @@ export default function App() {
               <span className="step-number">03</span>
               <div>
                 <span>TOOL RESULT</span>
-                <strong>Invocation succeeded</strong>
+                <strong>{currentResult?.toolCall.status === "FAILED" ? "Invocation failed" : "Invocation succeeded"}</strong>
               </div>
             </div>
-            <div className="tool-success">
-              <span>✓</span>
-              <div>
-                <strong>success: true</strong>
-                <small>Tool returned without error</small>
+            {currentResult?.toolCall.status === "FAILED" ? (
+              <div className="tool-success tool-failure">
+                <span>!</span>
+                <div>
+                  <strong>tool call failed</strong>
+                  <small>{currentResult.toolCall.error}</small>
+                </div>
               </div>
-            </div>
-              <p className="warning-copy">Action success is not effect proof. External clients also receive the independent gate verdict.</p>
+            ) : (
+              <div className="tool-success">
+                <span>✓</span>
+                <div>
+                  <strong>success: true</strong>
+                  <small>Tool returned without error</small>
+                </div>
+              </div>
+            )}
+            <p className="warning-copy">Action success is not effect proof. External clients also receive the independent gate verdict.</p>
           </article>
         </div>
 
@@ -485,6 +502,9 @@ export default function App() {
                 const selected = record.id === selectedId;
                 const unexpected = unexpectedIds.has(record.id);
                 const changed = record[definition.mutation.field] === definition.mutation.value;
+                const required = currentResult?.requiredSatisfied.some(
+                  (effect) => effect.entityId === record.id,
+                ) ?? false;
                 return (
                   <div
                     className={`record-row ${selected ? "selected" : ""} ${unexpected ? "unexpected" : ""}`}
@@ -503,7 +523,7 @@ export default function App() {
                         <span className="effect-label waiting">Waiting</span>
                       ) : unexpected ? (
                         <span className="effect-label unexpected-label">UNEXPECTED</span>
-                      ) : changed ? (
+                      ) : required ? (
                         <span className="effect-label required-label">REQUIRED</span>
                       ) : (
                         <span className="effect-label unchanged-label">UNCHANGED</span>

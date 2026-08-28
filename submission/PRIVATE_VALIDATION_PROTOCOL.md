@@ -1,6 +1,6 @@
 # ExactDelta private validation protocol
 
-Purpose: test judge comprehension and real-audience relevance without publishing the held build or manufacturing customer evidence.
+Purpose: optionally test whether unfamiliar viewers expose confusing copy or hierarchy without publishing the held build or manufacturing customer evidence. This protocol is supplementary UX feedback, not a release gate and not proof of correctness, demand, market size, or likely judging outcome.
 
 ## Participants
 
@@ -46,10 +46,10 @@ Do not ask whether the participant “likes” the UI, reveal the target score, 
 - Never call participants customers, deployments, or production users.
 - Never convert a private opinion into a market-size or time-saved claim.
 
-## Release decision
+## Use of results
 
-- Part A fail: revise the first-screen wording or composition and repeat with fresh participants.
-- Part B fail: do not claim validated demand; keep the standards-derived problem evidence and bounded developer/QA audience claim.
-- Both pass: add one short anonymous validation sentence to Potential Impact and record the aggregate in `FINAL_AUDIT.md`.
+- Part A confusion may justify revising the first-screen wording or composition if objective evidence remains accurate.
+- Part B answers must never be converted into a demand claim; keep the standards-derived problem evidence and bounded developer/QA audience claim.
+- A pass does not raise the technical gate or official rubric score. A consented anonymous aggregate may be retained privately, but is unnecessary for submission.
 
 `EXACTDELTA_PRIVATE_VALIDATION_PROTOCOL_LOCKED`

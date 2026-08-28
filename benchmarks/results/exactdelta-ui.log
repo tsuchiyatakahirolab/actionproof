@@ -1,14 +1,15 @@
 
-Running 5 tests using 1 worker
+Running 6 tests using 1 worker
 
-  ok 1 tests\browser\silent-proof.spec.ts:4:1 › the seeded defect is silently legible and the repaired run passes (4.8s)
-  ok 2 tests\browser\silent-proof.spec.ts:60:1 › an external browser-agent call enters the same effect gate (1.1s)
-  ok 3 tests\browser\silent-proof.spec.ts:91:1 › concurrent external writes fail closed instead of bypassing the gate (1.0s)
-  ok 4 tests\browser\silent-proof.spec.ts:114:1 › the judge path remains usable without horizontal overflow at 1280 by 720 (1.1s)
-  ok 5 tests\browser\silent-proof.spec.ts:130:1 › the second workflow uses the same UI and verifier (1.5s)
+  ok 1 tests\browser\silent-proof.spec.ts:4:1 › the seeded defect is silently legible and the repaired run passes (5.0s)
+  ok 2 tests\browser\silent-proof.spec.ts:60:1 › an external browser-agent call enters the same effect gate (809ms)
+  ok 3 tests\browser\silent-proof.spec.ts:91:1 › a repeated external call cannot turn an already-mutated state into proof (926ms)
+  ok 4 tests\browser\silent-proof.spec.ts:122:1 › concurrent external writes fail closed instead of bypassing the gate (729ms)
+  ok 5 tests\browser\silent-proof.spec.ts:145:1 › the judge path remains usable without horizontal overflow at 1280 by 720 (880ms)
+  ok 6 tests\browser\silent-proof.spec.ts:161:1 › the second workflow uses the same UI and verifier (1.2s)
 
-  5 passed (14.6s)
-[WebServer] (node:30244) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+  6 passed (13.6s)
+[WebServer] (node:14452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-(node:38768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:36356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)

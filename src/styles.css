@@ -150,6 +150,9 @@ button { font: inherit; }
 .tool-success div { display: flex; flex-direction: column; gap: 2px; }
 .tool-success strong { font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
 .tool-success small { color: #64716a; font-size: 10px; }
+.tool-failure { background: #fff0ed; border-color: #e5b1a8; }
+.tool-failure > span { background: var(--red-dark); }
+.tool-failure small { color: #824d44; }
 .warning-copy { margin: 0 13px 12px; color: #7c6540; font-size: 10px; }
 
 .effect-stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(310px, .7fr); gap: 12px; padding: 0 15px 12px; transition: opacity .3s ease; }

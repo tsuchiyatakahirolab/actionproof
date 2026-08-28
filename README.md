@@ -2,7 +2,7 @@
 
 > **The agent did everything right. The result was still wrong.**
 
-**ExactDelta turns the visible selected target into the only permitted application-state delta, gates the external WebMCP call when anything else changes, and retains that identical contract as the repair regression.**
+**ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.**
 
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
@@ -127,8 +127,8 @@ npm run benchmark   # Evals matcher + manual Playwright + ExactDelta comparison
 
 Current deterministic suite:
 
-- 9 unit tests pass, including actual external-argument capture, wrong-value, and timeout controls.
-- 5 native Chrome UI/E2E tests pass, including a direct external WebMCP invocation, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
+- 15 unit tests pass, including repeated no-op rejection, post-mutation failure, client abort, identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
+- 6 native Chrome UI/E2E tests pass, including direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
@@ -171,6 +171,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - [Formal GO decision](GO_DECISION.md)
 - [Current top-10 release specification v0.6](WINNING_SPEC_v0.6.md)
 - [Dated competitive review](COMPETITIVE_REVIEW.md)
+- [Objective adversarial review](OBJECTIVE_ADVERSARIAL_REVIEW.md)
 - [Final internal top-10 scorecard](TOP10_FINAL_REVIEW.md)
 - [Architecture gate specification v0.4](WINNING_SPEC_v0.4.md)
 - [Top-10 gate report](TOP10_GATE_REPORT.md)
@@ -182,8 +183,8 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - [Rules compliance record](submission/RULES_COMPLIANCE.md)
 - [Third-party dependency and media-tool notice](THIRD_PARTY_NOTICES.md)
 - [Submission owner checklist](submission/FINAL_CHECKLIST.md)
-- [20-second unfamiliar-reviewer form](submission/BLIND_REVIEW_FORM.md)
-- [Private comprehension and relevance protocol](submission/PRIVATE_VALIDATION_PROTOCOL.md)
+- [Optional 20-second unfamiliar-viewer form](submission/BLIND_REVIEW_FORM.md)
+- [Optional private comprehension protocol](submission/PRIVATE_VALIDATION_PROTOCOL.md)
 
 ## License
 

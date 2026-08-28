@@ -23,10 +23,12 @@
 - [ ] Public English YouTube video under three minutes with audible narration
 - [ ] Devpost links point to the final production URL, repository, and video
 
-## Human audits
+## Optional subjective UX check
 
-- [ ] Run `submission/PRIVATE_VALIDATION_PROTOCOL.md` with 3 unfamiliar participants; keep raw notes private and add only a consented anonymous aggregate if its thresholds pass
-- [ ] Unfamiliar reviewers see the final 20-second silent screen and can answer: who has the problem, what release decision ExactDelta made, what went wrong, why call checks were insufficient, and why WebMCP matters
+- [ ] If time permits, use `submission/PRIVATE_VALIDATION_PROTOCOL.md` only to detect confusing copy or layout; do not treat three opinions as correctness, market-demand, or score evidence
+
+## Owner audits
+
 - [ ] Owner watches the final uploaded video end to end with captions/audio enabled
 - [ ] Owner verifies every submission statement against the repository and measured artifacts
 

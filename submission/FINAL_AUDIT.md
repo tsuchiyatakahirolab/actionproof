@@ -11,9 +11,9 @@
 |---|---|
 | `npm ci` | PASS — 200 packages installed; 0 vulnerabilities reported |
 | `npm run check` | PASS — TypeScript project check |
-| `npm test` | PASS — 9/9 unit tests, including actual external-argument capture, wrong-value, and timeout controls |
+| `npm test` | PASS — 15/15 unit tests, including repeated no-op rejection, post-mutation failure, client abort, identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls |
 | `npm run build` | PASS — production Vite build |
-| `npm run test:ui` | PASS — 5/5 native Chrome WebMCP E2E tests, including the direct external-call gate, concurrent-call fail-closed control, and 1280×720 judge-path layout control |
+| `npm run test:ui` | PASS — 6/6 native Chrome WebMCP E2E tests, including direct and repeated external-call gates, concurrent-call fail-closed control, and 1280×720 judge-path layout control |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
 | `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
@@ -75,10 +75,9 @@ Representative-frame review confirmed the hook and agent prompt, the full extern
 - No improved commit has been pushed, no Vercel promotion has occurred, and no YouTube upload has been made.
 - Release-day order: canonical ExactDelta URL/redirect decision → final clean audit → push → CI → deploy/promote → production audit → public YouTube → update every submission URL → Devpost preview → owner submit.
 
-## Human-only gates not represented as automated PASS
+## Human-only owner gates not represented as automated PASS
 
-- An unfamiliar human's recorded 20-second comprehension answers.
 - Owner review of the public YouTube upload after transcoding.
 - Owner review and final click on Devpost Submit.
 
-These are kept separate so automated evidence is not presented as human validation.
+An unfamiliar-viewer check is optional UX feedback only and is not represented as correctness, demand, or submission-readiness evidence.

@@ -38,24 +38,39 @@ export async function createWebMcpBridge(tools: WebMcpTool[]): Promise<WebMcpBri
     modelContext.getTools &&
     modelContext.executeTool
   ) {
-    await Promise.all(
-      tools.map((tool) =>
-        modelContext.registerTool(tool as WebMCP.ModelContextTool, {
-          signal: controller.signal,
-          exposedTo: [window.location.origin],
-        }),
-      ),
-    );
+    try {
+      await Promise.all(
+        tools.map((tool) =>
+          modelContext.registerTool(tool as WebMCP.ModelContextTool, {
+            signal: controller.signal,
+            exposedTo: [window.location.origin],
+          }),
+        ),
+      );
+    } catch (error) {
+      controller.abort();
+      throw error;
+    }
 
     return {
       mode: "native-webmcp",
       executeTool: async (name, argumentsRecord, options) => {
         const registeredTools = await modelContext.getTools();
-        const tool = registeredTools.find((candidate) => candidate.name === name);
-        if (!tool) {
+        const matchingTools = registeredTools.filter(
+          (candidate) =>
+            candidate.name === name && candidate.origin === window.location.origin,
+        );
+        if (matchingTools.length === 0) {
           throw new Error(`Native WebMCP tool ${name} is not registered.`);
         }
-        return modelContext.executeTool(tool, JSON.stringify(argumentsRecord), options);
+        if (matchingTools.length > 1) {
+          throw new Error(`Native WebMCP tool ${name} is registered more than once for this origin.`);
+        }
+        return modelContext.executeTool(
+          matchingTools[0],
+          JSON.stringify(argumentsRecord),
+          options,
+        );
       },
       dispose: () => controller.abort(),
     };

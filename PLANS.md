@@ -22,10 +22,13 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Rebranded to the non-colliding `ExactDelta` name while retaining the owner-gated public URLs until release.
 - Routed direct external browser-client WebMCP invocations through the same Effect Contract gate and added native E2E proof.
 - Added a dated competitive review and v0.6 release specification with a bounded one-sentence difference.
+- Replaced the subjective-review release gate with an objective evidence hierarchy and adversarial review; unfamiliar-viewer feedback is now optional copy/layout evidence only.
+- Hardened the verifier against repeated no-op false proof, mutation-before-error, client abort, identity/invariant ambiguity, and entity/field delimiter collision; expanded the suites to 15 unit and 6 native-browser tests.
 
 ## Release-gated remaining work
 
-- Obtain an unfamiliar-human 20-second comprehension record against the final build.
+- Re-run the official gallery and public competitor search in the owner-approved release window.
 - In the owner-approved window only: resolve and verify the canonical ExactDelta app/repository URLs (including redirects if legacy slugs remain), push the held commit, wait for CI, promote Vercel, rerun the production audit, upload the public YouTube video, update every submission URL, review the final preview, and submit.
+- An unfamiliar-viewer check remains available as an optional wording/layout test. It is not technical, demand, or submission-readiness evidence.
 
 No other feature work is authorized by this plan unless it fixes a release blocker at equal or lower scope.

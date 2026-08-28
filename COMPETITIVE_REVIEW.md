@@ -15,7 +15,7 @@ This is a bounded search finding, not a claim that no similar product exists. Th
 
 ## One-sentence difference
 
-> **ExactDelta turns the visible selected target into the only permitted application-state delta, gates the external WebMCP call when anything else changes, and retains that identical contract as the repair regression.**
+> **ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.**
 
 ## Strongest adjacent alternatives
 
