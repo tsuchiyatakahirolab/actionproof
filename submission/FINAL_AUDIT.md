@@ -9,17 +9,18 @@
 
 | Check | Result |
 |---|---|
-| `npm ci` | PASS — 200 packages installed; 0 vulnerabilities reported |
+| `npm ci` | PASS — 203 packages installed; 0 vulnerabilities reported |
 | `npm run check` | PASS — TypeScript project check |
-| `npm test` | PASS — 15/15 unit tests, including repeated no-op rejection, post-mutation failure, client abort, identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls |
+| `npm test` | PASS — 20/20 unit tests, including JSON artifact parsing/re-execution, contract/identity-drift fail-before-write, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls |
 | `npm run build` | PASS — production Vite build |
-| `npm run test:ui` | PASS — 6/6 native Chrome WebMCP E2E tests, including direct and repeated external-call gates, concurrent-call fail-closed control, and 1280×720 judge-path layout control |
+| `npm run test:ui` | PASS — 7/7 native Chrome WebMCP E2E tests, including human target reselection with native schema rebinding, direct and repeated external-call gates, concurrent-call fail-closed control, and 1280×720 judge-path layout control |
+| `npm run regression:ci:all` | PASS — four JSON-driven executions: both artifacts detect the seeded defect and prove the repair with identical intent, arguments, contract, and regression identity |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
 | `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
 | `npm audit --audit-level=high` | PASS — 0 vulnerabilities |
-| dependency/license inventory | REVIEWED — 182 installed package records; runtime React packages are MIT; non-runtime MPL/GPL build tools are disclosed in `THIRD_PARTY_NOTICES.md`; no dependency directory or tool binary is tracked |
+| dependency/license inventory | REVIEWED after clean install — runtime React packages are MIT; development tooling including `tsx` is recorded; non-runtime MPL/GPL build tools are disclosed in `THIRD_PARTY_NOTICES.md`; no dependency directory or tool binary is tracked |
 | credential-pattern scan | PASS — no credential-shaped matches |
 | `git diff --check` | PASS |
 | GitHub Actions CI | RELEASE GATE — held revision has not been pushed |
@@ -30,6 +31,7 @@
 - Local production preview reported `Native WebMCP · 1 context-matched tool`.
 - Chrome `getTools()` exposed only `cancel_order` in the order context and only `change_user_role` in the permission context.
 - Registered schemas exposed exact enums for the visible target/value and rejected additional properties.
+- Selecting Order #1043 in the visible table regenerated the Effect Contract and intent, re-registered the native tool with `order_id.enum = ["#1043"]`, executed that target, and produced regression ID `orders__1043__status__to-cancelled`; the unselected #1042 became the detected collateral effect.
 - A direct `executeTool()` call from the external browser-client path preserved the original `{ success: true }` payload and added a separate blocked `effectGate` verdict; the UI independently showed the external-call label and unexpected collateral mutation without using the deterministic replay button.
 - Codex's in-app browser repeated that real client path after the single-flight hardening and received the original success payload plus `effectGate.status: blocked`, `unexpectedChanges: 1`, and the regression ID; the UI showed `EXTERNAL WEBMCP CALL`, `REQUESTED 1 · CHANGED 2`, and the blocked split verdict with zero console errors. `submission/exactdelta-agent-proof.png` preserves the earlier local proof screen.
 - Two simultaneous external calls produced one verified execution and one native WebMCP rejection; the second call did not mutate state or bypass the in-flight gate.
@@ -61,7 +63,7 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Audio level: mean −22.2 dB, peak −4.0 dB
 - Sentence timing: 26 separate clips; minimum measured inter-sentence pause 600 ms; 30 final-video silence intervals ≥350 ms detected
 - SHA-256: `EA617582F1F1457505D874AB427E6D1E5C43F4577EC7769578638C6E82089B22`
-- 16:9 upload thumbnail: `submission/youtube-thumbnail.png`
+- 16:9 upload thumbnail: `submission/youtube-thumbnail-v2.png` (deterministic text-only revision; zero changed pixels outside the subtitle strip)
 - Silent-audit source screen: `submission/thumbnail.png`
 
 Representative-frame review confirmed the hook and agent prompt, the full external-call order failure proof by 15 seconds, the permission failure at 70 seconds, the identical permission regression PASS at 75 seconds, the comparison cards at 79 seconds, and the final composition. The narration text and starts are fixed in `scripts/narration-timeline.json`; `scripts/audit-narration.mjs` measures the generated files rather than trusting scheduled timings.

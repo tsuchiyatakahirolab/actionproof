@@ -1,6 +1,6 @@
 # 20-second unfamiliar-reviewer audit
 
-Show only `youtube-thumbnail.png` or the final failure frame for 20 seconds. Do not explain the product first.
+Show only `youtube-thumbnail-v2.png` or the final failure frame for 20 seconds. Do not explain the product first.
 
 Ask the reviewer to answer in their own words:
 

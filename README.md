@@ -6,7 +6,7 @@
 
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
-The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ExactDelta generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a CI-ready regression artifact, and passes that identical gate after repair.
+The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ExactDelta generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a versioned regression artifact, and re-executes that exact JSON in CI against the defect and repair.
 
 ## Try it
 
@@ -15,6 +15,7 @@ The deterministic staging demo registers native WebMCP write tools for two ficti
 - **Real agent path:** ask the in-app browser agent, `Cancel only the order selected on this page, then report whether the effect gate passes.` The direct tool call must be labeled **EXTERNAL WEBMCP CALL** and the seeded collateral effect must block the gate.
 - **20-second proof:** open the demo, keep **Order cancellation** selected, and click **Run seeded defect**; the effect gate must block the write tool
 - **Repair proof:** click **Run repaired version**; the same regression ID, contract, and tool arguments must pass and clear the gate
+- **Selection proof:** select the other row; the visible intent, generated contract, tool schema enum, call arguments, and regression ID must all follow that target
 - **Second workflow:** switch to **Permission change** and repeat
 
 All records are fake, all defects are deliberately seeded, and no transaction leaves the browser fixture.
@@ -62,7 +63,7 @@ The repository includes a plain WebMCP fixture, official WebMCP Evals `0.0.3` tr
 | Evals + manual Playwright | 4 concrete expected-state assertions detected both defects; identical assertions PASS after repair |
 | ExactDelta | 2 reusable action bindings; 0 per-record expected-state assertions in scenario definitions; both generated regressions detect the defect and PASS after repair |
 
-This is a detection-coverage comparison, not a runtime-performance, universal-support, or market-demand claim. ExactDelta still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
+This comparison measures detection coverage only. ExactDelta still requires an application-owned state adapter and one binding per action class. See [the technical benchmark report](BENCHMARK_REPORT.md) and [the machine-readable result](benchmarks/results/latest.json).
 
 ## Public alternatives and precise difference
 
@@ -86,6 +87,14 @@ Run the measurement:
 
 ```bash
 npm run benchmark
+```
+
+Re-execute the committed `exactdelta.regression.v1` JSON fixtures through the same verifier:
+
+```bash
+npm run regression:ci:all
+# or one exported artifact:
+npm run regression:ci -- path/to/artifact.json --implementation repaired --expect ACTION_PROVEN
 ```
 
 ## Local setup
@@ -123,12 +132,14 @@ npm test            # Effect Contract unit tests
 npm run build       # Production Vite build
 npm run test:ui     # Native Chrome WebMCP + UI/E2E + console checks
 npm run benchmark   # Evals matcher + manual Playwright + ExactDelta comparison
+npm run regression:ci:all # Load and execute both versioned JSON regressions against defect + repair
 ```
 
 Current deterministic suite:
 
-- 15 unit tests pass, including repeated no-op rejection, post-mutation failure, client abort, identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
-- 6 native Chrome UI/E2E tests pass, including direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
+- 20 unit tests pass, including artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter-collision, external-argument, wrong-value, and timeout controls.
+- 7 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, and a 1280×720 judge-path overflow control.
+- Four CI runner executions pass: each committed JSON detects its seeded defect and proves its repaired implementation with identical identity, intent, arguments, and contract.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
@@ -145,6 +156,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 ## Repository map
 
 - `src/core/effect-contract.ts` — contract generation, state diff, verification, retained regression
+- `src/core/regression.ts` — versioned artifact validation, identity checks, and JSON-driven re-execution
 - `src/core/scenario.ts` — two fictional application bindings and deterministic defect/repair handlers
 - `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, same-origin exposure, and labeled local fallback
 - `src/App.tsx` — judge-first proof UI
@@ -153,6 +165,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `benchmarks/` — official matcher inputs, manual Playwright baseline, raw and summarized results
 - `tests/browser/` — native Chrome end-to-end proof
 - `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
+- `scripts/run-regression.ts` / `regressions/` — CI runner and committed versioned fixtures
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
 - `DOCUMENTATION.md` / `PLANS.md` — reproducible development record and release-gated execution source of truth
 

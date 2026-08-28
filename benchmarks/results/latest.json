@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-28T11:20:24.293Z",
-  "scope": "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
+  "measuredAt": "2026-08-28T12:34:16.633Z",
+  "scope": "Two deterministic fake-data workflows; detection-coverage benchmark only.",
   "conditions": {
     "nativeWebMcp": true,
     "scenarios": [
@@ -35,10 +35,10 @@
     }
   },
   "commandDurationsMs": {
-    "evals": 4311,
-    "manualDefect": 15881,
-    "manualFixed": 4829,
-    "exactDeltaUi": 14331
+    "evals": 4146,
+    "manualDefect": 15452,
+    "manualFixed": 4704,
+    "exactDeltaUi": 15228
   },
   "success": true
 }

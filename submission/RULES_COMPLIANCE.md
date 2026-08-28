@@ -8,7 +8,7 @@
 |---|---|---|
 | New or meaningfully extended during the submission period | The first design files are dated 2026-08-26. Repository history begins on 2026-08-27, after the official 2026-08-25 start. No pre-hackathon product code is represented. | PASS |
 | WebMCP-powered web app | Native imperative `document.modelContext.registerTool()`, context lifecycle, discovery, and execution are implemented in source and exercised in Chrome. | PASS |
-| Runs as depicted | Production build, 15 unit tests, 6 native Chrome E2E tests, controlled benchmark, and audited 90-second video are recorded in `FINAL_AUDIT.md`. | PASS LOCALLY / PRODUCTION RE-AUDIT REQUIRED |
+| Runs as depicted | Production build, 20 unit tests, four JSON-driven regression executions, 7 native Chrome E2E tests, controlled benchmark, and audited 90-second video are recorded in `FINAL_AUDIT.md`. | PASS LOCALLY / PRODUCTION RE-AUDIT REQUIRED |
 | Human-agent collaboration | The human-visible selection generates the permitted delta; the browser agent invokes the matching page tool; the application verifies and returns the separate effect-gate verdict. | PASS |
 
 ## Required submission artifacts
@@ -25,7 +25,7 @@
 ## Rights and representation
 
 - All application records and failures are fictional and deliberately seeded.
-- No incident, production transaction, certification, measured market-demand result, or universal adapter is claimed.
+- No incident, production transaction, certification, or universal adapter is claimed.
 - Runtime dependencies are listed in `package-lock.json`; repository distribution is MIT.
 - Third-party runtime, build, test, and narration tooling is inventoried in `THIRD_PARTY_NOTICES.md`; generated/dependency directories and tool binaries are not tracked.
 - The final owner review must confirm eligibility, entrant identity, accepted rules, canonical URLs, and every Devpost field before Submit.

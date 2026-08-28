@@ -55,7 +55,21 @@ The owner defines the action semantics once. Record-specific obligations come fr
 
 ## CI artifact
 
-The downloadable `exactdelta.regression.v1` JSON preserves the workflow, explicit intent, tool arguments, and generated Effect Contract. The demo proves that the same artifact identity and contract fail against the seeded handler and pass after the only code-path difference—the reviewed repair.
+The downloadable `exactdelta.regression.v1` JSON preserves the workflow, explicit intent, tool arguments, and generated Effect Contract. `runRegressionArtifact()` validates that schema, selects the recorded target, rejects intent/argument/contract drift before invoking a write, executes the recorded tool arguments, and rejects any change in the resulting regression identity.
+
+The repository runs both committed artifacts against the seeded and repaired implementations in GitHub Actions:
+
+```bash
+npm run regression:ci:all
+```
+
+To gate one exported artifact against an application adapter:
+
+```bash
+npm run regression:ci -- path/to/artifact.json --implementation repaired --expect ACTION_PROVEN
+```
+
+The included CLI maps the two demo workflow IDs to their `ScenarioStore` adapters. A real integration supplies the corresponding authorized store adapter and executor while retaining the same parser and runner. The demo proves that one loaded artifact fails against the seeded handler and passes after the only code-path difference—the reviewed repair.
 
 The artifact is evidence for this bounded effect contract. It is not an application-wide security certificate.
 

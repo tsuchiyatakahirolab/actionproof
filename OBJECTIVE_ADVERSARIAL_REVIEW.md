@@ -46,8 +46,8 @@ The official criteria are equally weighted. A range is more honest than a self-a
 | Criterion | Defensible range | Evidence that raises it | Evidence that caps it |
 |---|---:|---|---|
 | WebMCP Leverage | **9.0–9.5 / 10** | Native context lifecycle, strict visible-intent schema, direct external call, separate gate result returned to agent, two workflows | The owned state adapter and tool are bounded fixtures, not an adopted live SaaS integration |
-| Execution | **8.2–9.0 / 10** | Coherent one-screen decision, defect → block → repair → identical PASS, downloadable artifact, automated/media audits | Still a polished prototype; no production connector or real persistence; public release remains owner-held |
-| Potential Impact | **7.4–8.4 / 10** | Specific developer/QA release decision and standards-derived trust gap | No market-demand, time-saved, integration-cost, or production-scale evidence was measured |
+| Execution | **8.2–9.0 / 10** | Coherent one-screen decision, defect → block → repair → identical PASS, executable JSON artifact, target/schema rebinding, automated/media audits | Still a polished prototype; no production connector or real persistence; public release remains owner-held |
+| Potential Impact | **7.4–8.4 / 10** | Specific developer/QA release decision and standards-derived trust gap | Time-saved, integration-cost, and production-scale effects were not measured |
 | Creativity & Ambition | **8.2–9.0 / 10** | Exact allowed-delta generation and retained repair contract are visually and technically distinct | Outcome/UI/state verification already exists in several adjacent tools |
 | **Total** | **32.8–35.9 / 40** | **Credible contender on objective evidence** | **Not “full marks,” a probability, or a guaranteed top-10 result** |
 

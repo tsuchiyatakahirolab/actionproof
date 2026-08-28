@@ -9,6 +9,7 @@
 - [x] `npm run build`
 - [x] `npm run test:ui`
 - [x] `npm run benchmark`
+- [x] `npm run regression:ci:all`
 - [ ] Final held build promoted and Chrome native WebMCP badge plus both workflows reverified on the production URL
 - [x] Console errors: zero in primary demo path
 - [x] Secret scan clean
@@ -25,7 +26,7 @@
 
 ## Optional subjective UX check
 
-- [ ] If time permits, use `submission/PRIVATE_VALIDATION_PROTOCOL.md` only to detect confusing copy or layout; do not treat three opinions as correctness, market-demand, or score evidence
+- [ ] If time permits, use `submission/PRIVATE_VALIDATION_PROTOCOL.md` only to detect confusing copy or layout; do not treat three opinions as correctness or score evidence
 
 ## Owner audits
 

@@ -14,7 +14,8 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 ## Completed
 
 - Reframed UI as `STAGING QA` / `Release decision` with dynamic `EFFECT GATE BLOCKED` and `EFFECT GATE PASSED` states.
-- Added CI regression artifact language and a bounded integration guide.
+- Added a versioned regression parser and executable CI runner, committed fixtures, drift-before-write rejection, and a bounded integration guide.
+- Made the human target selection operable; the visible intent, contract, WebMCP enum, call arguments, collateral target, and regression ID now rebind together.
 - Updated README, Devpost copy, judging evidence, video script, YouTube metadata, and blind audit questions.
 - Replaced desktop Zira narration with sentence-level Andrew Neural TTS; all 26 measured inter-sentence pauses are at least 600 ms and the final-media audio audit passes.
 - Added v0.5 release framing incorporating the Falsify lesson, then superseded it with v0.6's direct external-agent-call proof and competitive claim boundary.
@@ -23,7 +24,7 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Routed direct external browser-client WebMCP invocations through the same Effect Contract gate and added native E2E proof.
 - Added a dated competitive review and v0.6 release specification with a bounded one-sentence difference.
 - Replaced the subjective-review release gate with an objective evidence hierarchy and adversarial review; unfamiliar-viewer feedback is now optional copy/layout evidence only.
-- Hardened the verifier against repeated no-op false proof, mutation-before-error, client abort, identity/invariant ambiguity, and entity/field delimiter collision; expanded the suites to 15 unit and 6 native-browser tests.
+- Hardened the verifier against repeated no-op false proof, mutation-before-error, client abort, identity/invariant ambiguity, entity/field delimiter collision, and regression schema/contract/identity drift; expanded the suites to 20 unit and 7 native-browser tests.
 
 ## Release-gated remaining work
 

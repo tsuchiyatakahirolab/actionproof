@@ -91,7 +91,7 @@ try {
     exactDeltaUi.exitCode === 0;
   summary = {
     measuredAt: new Date().toISOString(),
-    scope: "Two deterministic fake-data workflows; not a runtime-performance or market-demand benchmark.",
+    scope: "Two deterministic fake-data workflows; detection-coverage benchmark only.",
     conditions: {
       nativeWebMcp: true,
       scenarios: ["orders", "permissions"],

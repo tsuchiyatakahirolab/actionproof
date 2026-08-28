@@ -14,9 +14,9 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 ## 2. Execution
 
 - **UI:** the 20-second screen makes the QA/release job, `ONLY`, `success: true`, `UNEXPECTED`, `REQUESTED 1 · CHANGED 2`, the split verdict, and `EFFECT GATE BLOCKED` visible at once.
-- **Implementation:** official WebMCP type package, typed contract, exact-change-set semantics, deterministic diff, handler-side intent validation, aborting timeout/tool-failure distinction, required/unexpected/invariant checks, downloadable regression JSON.
+- **Implementation:** official WebMCP type package, typed contract, exact-change-set semantics, deterministic diff, handler-side intent validation, aborting timeout/tool-failure distinction, required/unexpected/invariant checks, downloadable regression JSON, and a schema-validating JSON-driven CI runner.
 - **Breadth without scope creep:** the same core runs order and permission workflows.
-- **Verification:** TypeScript check, production build, 15 unit tests, 6 native Chrome E2E tests including repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed and 1280×720 overflow behavior, console collection, secret scan, and deployment smoke test.
+- **Verification:** TypeScript check, production build, 20 unit tests, four JSON-driven regression executions, 7 native Chrome E2E tests including real target/schema rebinding, repeated no-op rejection, identity/invariant controls, concurrent-call fail-closed and 1280×720 overflow behavior, console collection, secret scan, and deployment smoke test.
 - **Video:** defect → detection → repair → identical PASS is completed on screen.
 
 ## 3. Potential Impact
@@ -26,7 +26,7 @@ The official WebMCP Challenge judging criteria are equally weighted. This map id
 - **Visible outcome:** a collateral mutation blocks the effect gate; the identical retained regression clears it after repair.
 - **Measured evidence:** official Evals 0.0.3 matcher passed 2/2 correct calls, rejected 2/2 wrong-argument negative controls, while 2/2 seeded collateral defects remained. Four manual Playwright state assertions caught both. ExactDelta generated the checks from two action bindings.
 - **Claim boundary:** the project does not claim production incidents, universal adapters, measured market demand, or production certification.
-- **Reusable direction:** explicit Effect Contracts become downloadable CI regression artifacts for action classes in owned SaaS staging environments.
+- **Reusable direction:** explicit Effect Contracts become downloadable, executable CI regression artifacts for action classes in owned SaaS staging environments.
 
 ## 4. Creativity & Ambition
 

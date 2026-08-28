@@ -38,4 +38,4 @@ English
 ## Assets
 
 - Video: `submission/exactdelta-demo-90s.mp4`
-- Thumbnail: `submission/youtube-thumbnail.png`
+- Thumbnail: `submission/youtube-thumbnail-v2.png`

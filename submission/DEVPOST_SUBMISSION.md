@@ -28,7 +28,7 @@ In an owned staging environment, the human selects one target in the application
 - every unselected record must remain unchanged;
 - entity identity and count must remain stable.
 
-The browser agent then directly invokes the registered native WebMCP tool. The invocation itself enters ExactDelta's gate. ExactDelta does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. The native response preserves the action result and adds an independent `effectGate` verdict so the agent can accurately report whether the release gate passed. A collateral mutation blocks the gate and becomes a downloadable CI regression artifact. After the handler is repaired, the identical contract, tool arguments, and regression ID must pass before the gate clears.
+The browser agent then directly invokes the registered native WebMCP tool. The invocation itself enters ExactDelta's gate. ExactDelta does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. The native response preserves the action result and adds an independent `effectGate` verdict so the agent can accurately report whether the release gate passed. A collateral mutation blocks the gate and becomes a downloadable CI regression artifact. A checked-in runner loads that exact JSON, rejects schema or contract drift before the write, replays the recorded arguments, and requires the repaired implementation to return `ACTION_PROVEN` with identical regression identity.
 
 The demo uses two fictional workflows—order cancellation and permission change—with the same verification core.
 
@@ -52,6 +52,7 @@ The QA operator does not write a record-specific assertion or decode an agent tr
 - Deterministic snapshot diff for required, unexpected, and invariant changes
 - Two in-memory fake-data action bindings with seeded defect/repair toggles
 - Visible pre-release gate state and downloadable `exactdelta.regression.v1` CI artifact
+- JSON-driven CI runner with schema, intent, arguments, contract, and regression-identity enforcement
 - Vitest unit coverage and Playwright native-Chrome E2E coverage
 - Controlled comparison using the official `webmcp-evals` 0.0.3 trajectory matcher plus manual Playwright state assertions
 
@@ -59,7 +60,7 @@ The QA operator does not write a record-specific assertion or decode an agent tr
 
 Across two deterministic native WebMCP workflows, the official Evals matcher passed 2/2 correct calls, rejected 2/2 wrong-argument controls, and still left collateral defects in 2/2 resulting states. Adding four concrete expected-state assertions in Playwright caught both defects and passed unchanged after repair. ExactDelta caught both and passed both identical retained regressions using two reusable action bindings and zero per-record expected-state assertions in the scenario definitions.
 
-This is a detection-coverage result, not a runtime-performance, universal-support, or customer-demand claim. ExactDelta still requires an application-owned state adapter and an action binding for each action class.
+This comparison measures detection coverage only. ExactDelta still requires an application-owned state adapter and an action binding for each action class.
 
 ## Challenges
 
@@ -74,6 +75,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - An explicit product decision: effect gate blocked on collateral change, passed after identical repair regression
 - One verification core for order and permission workflows
 - Deterministic defect → detection → repair → identical regression PASS
+- The same downloaded JSON artifact can be loaded and executed as a CI release gate
 - A reproducible, source-visible Evals + Playwright comparison
 - No credentials, external writes, or private data
 
@@ -83,7 +85,7 @@ An invocation trace answers “what did the agent ask the page to do?” An Effe
 
 ## What's next
 
-A production-oriented version would add application-owned server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, authorization-aware contract scopes, and CI enforcement around the retained artifact. Those extensions are intentionally outside this submission.
+A production-oriented version would add application-owned server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, and authorization-aware contract scopes. Those extensions are intentionally outside this submission.
 
 ## Links
 
@@ -102,6 +104,7 @@ A production-oriented version would add application-owned server-state adapters,
 4. Confirm `EXTERNAL WEBMCP CALL`, `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, `EFFECT GATE BLOCKED`, and unselected Order #1043 marked `UNEXPECTED`.
 5. If an agent is unavailable, click **Run seeded defect** to replay the same native path deterministically.
 6. Click **Run repaired version** and confirm `EFFECT GATE PASSED` plus `IDENTICAL REGRESSION PASS`.
-7. Switch to Permission change and repeat.
+7. Select the other row and confirm the intent, contract, WebMCP call, and regression ID follow the new target.
+8. Switch to Permission change and repeat.
 
 All demo data is fictional and all failures are deliberately seeded.
