@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import ffmpegPath from "ffmpeg-static";
 import { spawn, spawnSync } from "node:child_process";
-import { access, mkdir, rm } from "node:fs/promises";
+import { access, mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { buildNarrationMix, loadNarration } from "./narration.mjs";
 
@@ -33,6 +33,20 @@ async function waitForServer() {
   throw new Error(`Preview did not start.\n${serverOutput}`);
 }
 
+async function closeBrowserBounded(instance) {
+  await Promise.race([
+    instance.close(),
+    new Promise((resolve) => setTimeout(resolve, 2_000)),
+  ]);
+}
+
+async function settleBounded(promise, milliseconds) {
+  return Promise.race([
+    promise,
+    new Promise((resolve) => setTimeout(() => resolve(undefined), milliseconds)),
+  ]);
+}
+
 let browser;
 try {
   await waitForServer();
@@ -58,20 +72,33 @@ try {
 
   await waitUntil(7_000);
 
-  await page.locator(".proof-workspace").scrollIntoViewIfNeeded();
-  await page.getByTestId("run-defect").click();
+  await page.locator(".proof-workspace").evaluate((element) => {
+    element.scrollIntoView({ block: "start", behavior: "instant" });
+  });
+  await waitUntil(12_500);
+  await page.evaluate(async () => {
+    const tool = (await document.modelContext.getTools())[0];
+    await document.modelContext.executeTool(tool, JSON.stringify({ order_id: "#1042" }));
+  });
   await page.getByTestId("verdict-fail").waitFor({ timeout: 50_000 });
   await page.screenshot({ path: path.join(submissionDirectory, "thumbnail.png") });
-  await waitUntil(57_000);
+  await waitUntil(56_000);
 
   await page.getByTestId("run-fixed").click();
   await page.getByTestId("verdict-pass").waitFor();
-  await waitUntil(68_000);
+  await waitUntil(66_500);
 
   await page.getByRole("button", { name: /Permission change/ }).click();
   await page.getByTestId("bridge-mode").filter({ hasText: "Native WebMCP · 1 context-matched tool" }).waitFor();
-  await page.getByTestId("run-defect").click();
+  await page.locator(".proof-workspace").evaluate((element) => {
+    element.scrollIntoView({ block: "start", behavior: "instant" });
+  });
+  await page.evaluate(async () => {
+    const tool = (await document.modelContext.getTools())[0];
+    await document.modelContext.executeTool(tool, JSON.stringify({ user_id: "Alice", role: "Editor" }));
+  });
   await page.getByTestId("verdict-fail").waitFor();
+  await waitUntil(72_000);
   await page.getByTestId("run-fixed").click();
   await page.getByTestId("verdict-pass").waitFor();
   await waitUntil(77_000);
@@ -81,9 +108,15 @@ try {
   await page.locator(".hero").scrollIntoViewIfNeeded();
   await waitUntil(91_000);
 
-  await context.close();
-  const rawVideo = await video.path();
-  void browser.close();
+  await settleBounded(context.close().catch(() => undefined), 5_000);
+  const pathFromPlaywright = await settleBounded(video.path().catch(() => undefined), 5_000);
+  const fallbackRecording = (await readdir(recordingDirectory))
+    .filter((name) => name.endsWith(".webm"))
+    .sort()
+    .at(-1);
+  const rawVideo = pathFromPlaywright ?? (fallbackRecording && path.join(recordingDirectory, fallbackRecording));
+  if (!rawVideo) throw new Error("Browser recording did not produce a WebM file.");
+  await closeBrowserBounded(browser);
   browser = undefined;
 
   const narration = await loadNarration(root);
@@ -91,7 +124,7 @@ try {
   const inputs = ["-i", rawVideo];
   for (const clip of narration.clips) inputs.push("-i", clip.audioPath);
   const filter = buildNarrationMix(narration.clips);
-  const outputPath = path.join(submissionDirectory, "actionproof-demo-90s.mp4");
+  const outputPath = path.join(submissionDirectory, "exactdelta-demo-90s.mp4");
   const ffmpeg = spawnSync(
     ffmpegPath,
     [
@@ -117,6 +150,11 @@ try {
   }
   console.log(`Created ${outputPath}`);
 } finally {
-  if (browser) void browser.close();
+  if (browser) await closeBrowserBounded(browser);
   vite.kill();
+  vite.unref();
 }
+
+// Playwright can retain an already-closed Windows transport handle after video capture.
+// Reaching this line means recording, muxing, and all explicit checks completed successfully.
+process.exit(0);

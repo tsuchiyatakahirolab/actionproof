@@ -16,7 +16,7 @@ await Promise.all(narration.clips.map((clip) => access(clip.audioPath)));
 const inputs = ["-i", rawVideo];
 for (const clip of narration.clips) inputs.push("-i", clip.audioPath);
 const filter = buildNarrationMix(narration.clips);
-const outputPath = path.join(submissionDirectory, "actionproof-demo-90s.mp4");
+const outputPath = path.join(submissionDirectory, "exactdelta-demo-90s.mp4");
 const ffmpeg = spawnSync(
   ffmpegPath,
   [

@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 
 const root = process.cwd();
-const videoPath = path.join(root, "submission", "actionproof-demo-90s.mp4");
+const videoPath = path.join(root, "submission", "exactdelta-demo-90s.mp4");
 
 function runFfmpeg(args) {
   const result = spawnSync(ffmpegPath, args, {
