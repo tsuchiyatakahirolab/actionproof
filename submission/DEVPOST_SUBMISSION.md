@@ -78,6 +78,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 
 - A real browser-client WebMCP invocation that automatically enters the effect gate
 - A 20-second silent proof of correct call / failed effect
+- A one-frame proof graphic that names the accepted call, permitted target, collateral target, and release decision without narration
 - An explicit product decision: effect gate blocked on collateral change, passed after identical repair regression
 - One verification core for order and permission workflows
 - Deterministic defect → detection → repair → identical regression PASS

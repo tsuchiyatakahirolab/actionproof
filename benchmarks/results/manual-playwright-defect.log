@@ -65,7 +65,7 @@ Running 2 tests using 1 worker
   2 failed
     benchmarks\manual-playwright.spec.ts:5:1 › order state is exactly the intended state ───────────
     benchmarks\manual-playwright.spec.ts:16:1 › permission state is exactly the intended state ─────
-(node:29592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:22004) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:48884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:47388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)

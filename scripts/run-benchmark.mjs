@@ -13,14 +13,21 @@ const vite = spawn(
 );
 
 let serverOutput = "";
+let viteExit = null;
 vite.stdout.on("data", (chunk) => { serverOutput += chunk.toString(); });
 vite.stderr.on("data", (chunk) => { serverOutput += chunk.toString(); });
+vite.once("exit", (code, signal) => {
+  viteExit = { code, signal };
+});
 
 async function waitForServer() {
   for (let attempt = 0; attempt < 60; attempt += 1) {
+    if (viteExit) {
+      throw new Error(`Benchmark preview exited before readiness (${JSON.stringify(viteExit)}).\n${serverOutput}`);
+    }
     try {
       const response = await fetch("http://127.0.0.1:4175/baseline.html");
-      if (response.ok) return;
+      if (response.ok && serverOutput.includes("Local:")) return;
     } catch {
       // Preview is still starting.
     }

@@ -32,6 +32,7 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Added a deterministic five-image native-Chrome judge gallery because the official rules allow judging from text, images, and video without live testing; every image is regenerated from the current defect/repair flow with console-error collection.
 - Repaired table semantics and every detected contrast failure, then added deterministic distribution-size/social-metadata checks plus a three-cold-run desktop performance/accessibility gate. The gate is explicitly bounded lab evidence, not field performance or a Lighthouse score.
 - Refreshed the controlled comparison to the current official `webmcp-evals` 0.0.4 release, fixed an identity-set delimiter-collision weakness with a permanent regression, tightened the synthetic-effect language, and regenerated every local media artifact with 600 ms sentence gaps.
+- Converted the hero from an abstract count trace into a concrete one-frame proof: accepted tool and target, permitted target set, observed target set, isolated collateral ID, and release consequence. Added restrained one-shot sequencing without text fading, verified reduced-motion behavior, and regenerated every static/video submission asset.
 
 ## Release-gated remaining work
 

@@ -4,7 +4,7 @@ Upload in this order. All five images are deterministic 1440×900 captures of th
 
 1. **`gallery-01-effect-trace.png`**  
    Caption: **Correct call. Wrong effect. Release blocked.**  
-   The opening image contains the complete hook: native WebMCP, `success: true`, requested one, observed two, and the blocked release decision.
+   The opening image contains the complete hook: native WebMCP, accepted `cancel_order(#1042)`, `success: true`, permitted `#1042 only`, observed `#1042 + #1043`, and the blocked release decision.
 
 2. **`gallery-02-failure-proof.png`**  
    Caption: **The selected order changed—and so did one that was never selected.**  

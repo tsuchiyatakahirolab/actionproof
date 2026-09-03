@@ -289,6 +289,25 @@ export default function App() {
   const traceState = traceIsLive
     ? currentResult?.verdict === "ACTION_PROVEN" ? "passed" : "blocked"
     : running ? "running" : "preview";
+  const collateralId = definition.records.find((record) => record.id !== selectedId)?.id ?? "other record";
+  const traceTargets = traceObserved === null
+    ? "reading application state"
+    : traceObserved === 0
+      ? "no state change"
+      : traceObserved === 1
+        ? `${selectedId} only`
+        : traceObserved === 2
+          ? `${selectedId} + ${collateralId}`
+          : `${traceObserved} targets changed`;
+  const traceDecisionDetail = traceState === "passed"
+    ? `Only ${selectedId} changed. Exact contract satisfied.`
+    : traceState === "running"
+      ? "Tool result received. Independent state check running."
+      : traceIsLive && currentResult?.unexpectedChanges.length === 0
+        ? currentResult?.requiredMissing.length
+          ? `Required change to ${selectedId} is missing. Release stopped.`
+          : "The observed state violated the exact contract. Release stopped."
+        : `Unexpected: ${collateralId} changed too. Release stopped.`;
   const regressionVerificationRunning = Boolean(failedRun && running);
   const visibleRegressionPass = identicalRegressionPassed && gateState === "passed";
 
@@ -375,16 +394,31 @@ export default function App() {
             <div className="trace-receipt">
               <span>TOOL RETURN</span>
               <strong>success: true</strong>
-              <small>Correct call accepted</small>
+              <small><code>{definition.toolName}</code>({selectedId}) accepted</small>
             </div>
             <div className="trace-connector" aria-hidden="true">
               <span />
-              <b>≠</b>
+              <div>
+                <b>≠</b>
+                <small>CALL ≠ EFFECT</small>
+              </div>
               <span />
             </div>
             <div className="trace-delta">
-              <div><span>REQUESTED</span><strong>1</strong><small>selected target</small></div>
-              <div className="trace-observed"><span>OBSERVED</span><strong>{traceObserved ?? "…"}</strong><small>{traceObserved === 1 ? "exact change" : traceObserved === 2 ? "one collateral" : "reading state"}</small></div>
+              <div className="trace-requested">
+                <span>REQUESTED DELTA</span>
+                <strong>1</strong>
+                <small><code>{selectedId}</code> only</small>
+              </div>
+              <div className="trace-observed">
+                <span>OBSERVED DELTA</span>
+                <strong>{traceObserved ?? "…"}</strong>
+                <small>
+                  {traceObserved === 2 ? (
+                    <><code>{selectedId}</code> + <code className="collateral-target">{collateralId}</code></>
+                  ) : traceTargets}
+                </small>
+              </div>
             </div>
           </div>
           <div className={`trace-decision trace-${traceState}`}>
@@ -392,7 +426,7 @@ export default function App() {
               <span>EXACTDELTA DECISION</span>
               <strong>{traceDecision}</strong>
             </div>
-            <p>{traceState === "passed" ? "Observed state matches the exact contract." : traceState === "running" ? "Tool result received. Independent state check running." : "The tool succeeded; the observed effect did not."}</p>
+            <p>{traceDecisionDetail}</p>
           </div>
         </div>
       </section>

@@ -146,8 +146,8 @@ Current deterministic suite:
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
-- The deterministic production-build gate keeps all emitted JavaScript at 70,063 gzip bytes and CSS at 5,492 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
-- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 28.6 ms, FCP and LCP are 1,440 ms, TBT is 3 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
+- The deterministic production-build gate keeps all emitted JavaScript at 70,272 gzip bytes and CSS at 5,824 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
+- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 54.2 ms, FCP and LCP are 1,564 ms, TBT is 18 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
 
 ### Rebuild the submission video
 

@@ -13,12 +13,12 @@
 | `npm run check` | PASS — TypeScript project check |
 | `npm test` | PASS — 25/25 unit tests, including both native input dialects, exactly-once application-write enforcement in each dialect, JSON artifact parsing/re-execution, contract/identity-drift fail-before-write, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, entity/field and identity-set delimiter collisions, external-argument, wrong-value, and timeout controls |
 | `npm run build` | PASS — production Vite build |
-| `npm run test:ui` | PASS — 9/9 native Chrome WebMCP E2E tests, including hero Effect Trace assertions, human target reselection with native schema rebinding, direct and repeated external-call gates, concurrent-call fail-closed control, 1280×720 first-viewport layout, no premature regression PASS, and zero automated WCAG A/AA violations in initial and blocked states |
+| `npm run test:ui` | PASS — 9/9 native Chrome WebMCP E2E tests, including concrete `#1042 only` versus `#1042 + #1043` hero proof assertions, permission-workflow equivalents, human target reselection with native schema rebinding, direct and repeated external-call gates, concurrent-call fail-closed control, 1280×720 first-viewport layout, no premature regression PASS, and zero automated WCAG A/AA violations in initial and blocked states |
 | `npm run regression:ci:all` | PASS — four JSON-driven executions: both artifacts detect the seeded defect and prove the repair with identical intent, arguments, contract, and regression identity |
-| `npm run audit:build` | PASS — 70,063 gzip bytes total emitted JS, 5,492 gzip bytes CSS, 795 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
-| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 28.6 ms, FCP/LCP 1,440 ms, TBT 3 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
+| `npm run audit:build` | PASS — 70,272 gzip bytes total emitted JS, 5,824 gzip bytes CSS, 797 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
+| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 54.2 ms, FCP/LCP 1,564 ms, TBT 18 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
-| `npm run demo:record` | PASS — regenerated 90.00-second H.264/AAC demo with sentence-level neural narration |
+| `node scripts/record-demo.mjs` | PASS — regenerated the held UI as a 90.00-second H.264/AAC demo with the existing audited sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
 | `npm run submission:images` | PASS — five 1440×900 native-Chrome judge images regenerated from live defect/repair flows with zero console errors |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
@@ -48,10 +48,11 @@ The existing `submission/PRODUCTION_AUDIT.json` records the previous public revi
 
 ## Delivery-quality evidence
 
-- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,063 gzip bytes JS, 5,492 gzip bytes CSS, and 795 gzip bytes HTML.
+- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,272 gzip bytes JS, 5,824 gzip bytes CSS, and 797 gzip bytes HTML.
 - The build has no externally loaded runtime scripts/styles, no production source maps, complete description/Open Graph/Twitter metadata, and a signature/dimension-validated 1280×720 PNG social card.
-- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 28.6 ms, FCP/LCP 1,440 ms, TBT 3 ms, and CLS 0.0007.
+- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 54.2 ms, FCP/LCP 1,564 ms, TBT 18 ms, and CLS 0.0007.
 - axe-core reports zero automated WCAG A/AA violations in the initial and blocked proof states. The interactive record grid now has complete table/row/header/cell semantics and all detected contrast failures were repaired.
+- The first viewport now names the accepted native call, renders the allowed target (`#1042 only`) beside the observed target set (`#1042 + #1043`), marks the collateral ID independently, and states the stopped-release consequence. A one-shot staged reveal uses only transform and outline emphasis—never faded text—and honors reduced-motion preferences.
 - These values are bounded local lab evidence, not field telemetry, a Lighthouse score, or a guarantee for every device/network.
 
 ## Benchmark evidence
@@ -73,8 +74,9 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Audio: AAC-LC, English `en-US-AndrewMultilingualNeural` narration generated with pinned `edge-tts` 7.2.8
 - Audio level: mean −22.3 dB, peak −2.8 dB
 - Sentence timing: 26 separate clips; 25 gaps are 600 ms and the final tail is 1,310 ms; 27 final-video silence intervals ≥350 ms detected
-- SHA-256: `EC07990EBCCE9A5E9350BCC2E224DC2B745604A529CE945BAF00464C947F1086`
+- SHA-256: `67DA7A180B55AEF584BE1829AA7F3B4483FBB134864DE01D1C4B04B1E1256A23`
 - 16:9 upload thumbnail: `submission/youtube-thumbnail-v2.png` (deterministically rendered from the native held build after the external seeded call; the hero Effect Trace and release decision are visible in one frame)
+- Thumbnail SHA-256: `17294087DCEA3A8F2176D12891F321BE8AA63E54068C939FFD6207F1BBD475EE`
 - Silent-audit source screen: `submission/thumbnail.png`
 - Devpost gallery order and captions: `submission/GALLERY.md`; five current-UI images cover the hook, full failure proof, identical repair, second workflow, and measured comparison.
 
