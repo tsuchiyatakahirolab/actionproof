@@ -19,19 +19,19 @@
 - [x] `npm run test:ui`
 - [x] `npm run benchmark`
 - [x] `npm run regression:ci:all`
-- [ ] Final held build promoted and Chrome native WebMCP badge plus both workflows reverified on the production URL
+- [x] Final build promoted and Chrome native WebMCP badge plus both workflows reverified on the production URL
 - [x] Console errors: zero in primary demo path
 - [x] Secret scan clean
-- [ ] Final held git diff/status audited and pushed at release time
+- [x] Final git diff/status audited and pushed at release time
 
 ## Public artifacts
 
 - [x] Public GitHub repository reachable and MIT license detected
-- [ ] Final README revision pushed with setup, architecture, limitations, tests, benchmark, and judge path
-- [ ] Public app/repository slugs match `ExactDelta`, or the retained legacy slugs redirect cleanly; every Devpost, README, and video link uses one verified canonical destination
-- [ ] If the canonical app URL changes, update the absolute `og:image` URL in `index.html`; verify the 1280×720 link preview
-- [ ] Final live build promoted and reachable without sign-in
-- [ ] Public English YouTube video under three minutes with audible narration
+- [x] Final README revision pushed with setup, architecture, limitations, tests, benchmark, and judge path
+- [x] Retained stable public app/repository URLs verified; all submission materials use the same destinations
+- [x] Canonical app URL retained; absolute `og:image` and validated 1280×720 link preview verified
+- [x] Final live build promoted and reachable without sign-in
+- [x] Public English YouTube video under three minutes with audible narration
 - [ ] Upload `gallery-01` through `gallery-05` in the order and with the captions recorded in `submission/GALLERY.md`
 - [ ] Devpost links point to the final production URL, repository, and video
 
@@ -44,10 +44,10 @@
 - [ ] Owner watches the final uploaded video end to end with captions/audio enabled
 - [ ] Owner verifies every submission statement against the repository and measured artifacts
 
-## Final owner-controlled action
+## Final owner-authorized action
 
 - [ ] Read and accept the official rules
 - [ ] Approve the final Devpost preview
 - [ ] Click **Submit**
 
-Codex must stop before the final Devpost submission action.
+The owner explicitly authorized Codex to complete the final Devpost synchronization and submission in the release window.

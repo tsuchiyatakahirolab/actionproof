@@ -39,8 +39,8 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 
 ## Release-gated remaining work
 
-- Re-run the official gallery and public competitor search in the owner-approved release window.
-- In the owner-approved window only: resolve and verify the canonical ExactDelta app/repository URLs (including redirects if legacy slugs remain), push the held commit, wait for CI, promote Vercel, rerun the production audit, upload the public YouTube video, update every submission URL, review the final preview, and submit.
+- Completed in the owner-approved window: final public competitor scan, clean audit, push, CI, Vercel production promotion, production WebMCP audit, and public YouTube upload.
+- Synchronize the existing Devpost draft with the approved story, public links, five-image gallery, testing instructions, and final preview; then submit under the owner's explicit approval.
 - An unfamiliar-viewer check remains available as an optional wording/layout test. It is not technical, demand, or submission-readiness evidence.
 
 No other feature work is authorized by this plan unless it fixes a release blocker at equal or lower scope.

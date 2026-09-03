@@ -105,7 +105,7 @@ A production-oriented deployment would add authenticated server-state adapters, 
 
 - Live app: `https://actionproof.vercel.app`
 - Public repository: `https://github.com/tsuchiyatakahirolab/actionproof`
-- Public demo video: `[INSERT AFTER YOUTUBE UPLOAD]`
+- Public demo video: `https://youtu.be/RQTKcWN5t9s`
 - Technical benchmark: `BENCHMARK_REPORT.md` in the repository
 - WebMCP trust-boundary discussion: `https://github.com/webmachinelearning/webmcp/issues/45`
 - Chrome Evals guidance: `https://developer.chrome.com/docs/ai/webmcp/evals`

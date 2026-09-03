@@ -25,7 +25,8 @@ The product remains intentionally bounded to two disposable in-memory workflows:
 | 2026-09-03 | Evals 0.0.4 refresh, identity-set collision repair, evidence-language tightening, and complete media regeneration | Complete |
 | 2026-09-03 | Concrete first-impression proof (`#1042 only` vs. `#1042 + #1043`), accessible one-shot motion, and synchronized gallery/thumbnail/video | Complete |
 | 2026-09-03 | Public adapter API, typed ESM distribution, generic regression replay, and fresh-project packed-install audit | Complete |
-| Release window | Push, promote, public YouTube, Devpost preview | Owner-controlled |
+| 2026-09-04 | Public repository, CI, Vercel promotion, production re-audit, and public YouTube release | Complete |
+| Release window | Devpost synchronization, preview, and final submission | In progress |
 
 ## Reproducible commands
 
@@ -60,12 +61,12 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 - ExactDelta: two reusable action bindings, zero per-record expected-state assertions in scenario definitions, two defects detected, two identical regressions passed.
 - Demo: 90.00 seconds, H.264 1440×900, AAC English `en-US-AndrewMultilingualNeural` narration. All 26 sentences are separate clips; every measured pause is at least 600 ms. The seeded effect failure is fully visible by 15 seconds. Final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
 - Static judge path: five 1440×900 images reproduce the native hook, failure proof, identical repair, permission portability, and bounded comparison; generation fails on console errors and captions are fixed in `submission/GALLERY.md`.
-- Held local production preview: native WebMCP, correct context-matched tool per workflow, `tools=*`, zero console errors; see `submission/private/HELD_PRODUCTION_AUDIT.json` (ignored from public release).
+- Final production deployment: native WebMCP, correct context-matched tool per workflow, external call entering the gate, executable regression returned, both seeded defects detected, both identical regressions passed, `tools=*`, valid social card, and zero console errors; see `submission/PRODUCTION_AUDIT.json`.
 - Deterministic build audit: all emitted JS 70,536 gzip bytes, all CSS 5,942 gzip bytes, HTML 796 gzip bytes, no external runtime assets, no production source maps, complete social metadata, and a validated 1280×720 PNG social card.
-- Three cold Chrome desktop lab runs at 40 ms latency / 10 Mbps down / 5 Mbps up / 1x CPU: worst TTFB 18 ms, FCP/LCP 1,312 ms, TBT 0 ms, CLS 0.0007, zero cross-origin runtime requests, zero automated WCAG A/AA violations, and zero console errors. This is a bounded lab gate, not field data or a Lighthouse score; raw output is kept in the ignored `submission/private/RUNTIME_QUALITY_AUDIT.json`.
+- Final release-window three-run cold Chrome desktop lab gate at 40 ms latency / 10 Mbps down / 5 Mbps up / 1x CPU: worst TTFB 41.4 ms, FCP/LCP 1,564 ms, TBT 0 ms, CLS 0.0007, zero cross-origin runtime requests, zero automated WCAG A/AA violations, and zero console errors. This is bounded lab evidence, not field data or a Lighthouse score.
 - Public-source review: official issue #45 and Chrome Evals guidance support the bounded trust-gap claim; webmcpify, Postcept, Playwright, Schemathesis, and AgentSynth cap broader novelty claims. Public challenge entries including SheetCanvas, VT, Redini-Atelier, 2D WebMCP, and MCPencil were re-reviewed on 2026-09-03; private and late entries remain unknowable. See `COMPETITIVE_REVIEW.md` and `OBJECTIVE_ADVERSARIAL_REVIEW.md`.
-- Latest product-evidence rerun: typecheck PASS, unit 28/28, native E2E 9/9, packed fresh-project consumer plus dry-run distribution PASS, four JSON-driven regression executions PASS, build/budget PASS, cold-runtime quality PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, and held local production audit PASS.
+- Final release-window rerun: clean install PASS, typecheck PASS, unit 28/28, native E2E 9/9, packed fresh-project consumer plus dry-run distribution PASS, four JSON-driven regression executions PASS, build/budget PASS, cold-runtime quality PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, GitHub CI PASS, and production WebMCP audit PASS.
 
-## Release safety
+## Release status
 
-The improved revision is deliberately held locally until the owner-approved release window. The release sequence is documented in `submission/FINAL_CHECKLIST.md`; Codex must stop before the final Devpost submit click.
+The owner-approved release window began on 2026-09-04 JST. The final source, live application, and audited public YouTube demo are public; Devpost synchronization and final submission are the only remaining delivery steps.

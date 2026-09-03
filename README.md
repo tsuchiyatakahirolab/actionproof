@@ -159,7 +159,7 @@ Current deterministic suite:
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
 - The deterministic production-build gate keeps all emitted JavaScript at 70,536 gzip bytes and CSS at 5,942 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
-- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 18 ms, FCP and LCP are 1,312 ms, TBT is 0 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
+- The release build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; the final release-window rerun recorded worst-run TTFB of 41.4 ms, FCP and LCP of 1,564 ms, TBT of 0 ms, CLS of 0.0007, and zero automated WCAG A/AA violations, cross-origin runtime requests, or console errors. These are bounded lab results, not field data or a Lighthouse score.
 
 ### Rebuild the submission video
 
