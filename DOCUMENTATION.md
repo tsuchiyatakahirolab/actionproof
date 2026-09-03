@@ -26,7 +26,7 @@ The product remains intentionally bounded to two disposable in-memory workflows:
 | 2026-09-03 | Concrete first-impression proof (`#1042 only` vs. `#1042 + #1043`), accessible one-shot motion, and synchronized gallery/thumbnail/video | Complete |
 | 2026-09-03 | Public adapter API, typed ESM distribution, generic regression replay, and fresh-project packed-install audit | Complete |
 | 2026-09-04 | Public repository, CI, Vercel promotion, production re-audit, and public YouTube release | Complete |
-| Release window | Devpost synchronization, preview, and final submission | In progress |
+| 2026-09-04 | Devpost synchronization, preview, and final submission | Complete |
 
 ## Reproducible commands
 
@@ -69,4 +69,4 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 
 ## Release status
 
-The owner-approved release window began on 2026-09-04 JST. The final source, live application, and audited public YouTube demo are public; Devpost synchronization and final submission are the only remaining delivery steps.
+The owner-approved release window completed on 2026-09-04 JST. The final source, live application, audited public YouTube demo, five-image gallery, testing instructions, and public Devpost page are synchronized. Devpost displayed `Project submitted!` and `SUBMITTED TO — The WebMCP Challenge` at 01:10 JST. Submission URL: `https://devpost.com/software/exactdelta`.

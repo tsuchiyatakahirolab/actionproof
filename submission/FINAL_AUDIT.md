@@ -99,11 +99,12 @@ Representative-frame review confirmed the seeded Effect Trace at 2 seconds, the 
 - The final source is public on GitHub with MIT detected, and CI passed the release revision.
 - The final application is deployed to `https://actionproof.vercel.app`; the release-day production audit passes.
 - The audited final MP4 is public at `https://youtu.be/RQTKcWN5t9s` with the approved title, description, custom thumbnail, audience, language, category, and AI-use disclosure settings.
-- Devpost synchronization, public preview verification, and submission confirmation remain.
+- Devpost synchronization is complete: the final story, 11 technology tags, production and repository links, five-image gallery with captions, public video, project thumbnail, testing instructions, and solo contribution statement were verified on the project page.
+- Devpost displayed `Project submitted!` and `SUBMITTED TO — The WebMCP Challenge` on 2026-09-04 at 01:10 JST. Submission URL: `https://devpost.com/software/exactdelta`.
 
 ## Human-only owner gates not represented as automated PASS
 
 - Owner review of the public YouTube upload after transcoding.
-- Final Devpost preview and submission confirmation under the owner's explicit approval.
+- Owner-authorized Devpost preview and submission are complete; the remaining human-only check is the optional owner end-to-end watch of the transcoded YouTube upload.
 
 An unfamiliar-viewer check is optional UX feedback only and is not represented as correctness, demand, or submission-readiness evidence.

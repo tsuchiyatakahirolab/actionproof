@@ -40,7 +40,7 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 ## Release-gated remaining work
 
 - Completed in the owner-approved window: final public competitor scan, clean audit, push, CI, Vercel production promotion, production WebMCP audit, and public YouTube upload.
-- Synchronize the existing Devpost draft with the approved story, public links, five-image gallery, testing instructions, and final preview; then submit under the owner's explicit approval.
+- Completed under the owner's explicit approval: synchronized the Devpost story, public links, five-image gallery and captions, testing instructions, project thumbnail, and contribution statement; verified the public preview and submitted to The WebMCP Challenge at 01:10 JST on 2026-09-04.
 - An unfamiliar-viewer check remains available as an optional wording/layout test. It is not technical, demand, or submission-readiness evidence.
 
 No other feature work is authorized by this plan unless it fixes a release blocker at equal or lower scope.

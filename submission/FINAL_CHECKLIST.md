@@ -32,8 +32,8 @@
 - [x] Canonical app URL retained; absolute `og:image` and validated 1280×720 link preview verified
 - [x] Final live build promoted and reachable without sign-in
 - [x] Public English YouTube video under three minutes with audible narration
-- [ ] Upload `gallery-01` through `gallery-05` in the order and with the captions recorded in `submission/GALLERY.md`
-- [ ] Devpost links point to the final production URL, repository, and video
+- [x] Upload `gallery-01` through `gallery-05` in the order and with the captions recorded in `submission/GALLERY.md`
+- [x] Devpost links point to the final production URL, repository, and video
 
 ## Optional subjective UX check
 
@@ -46,8 +46,10 @@
 
 ## Final owner-authorized action
 
-- [ ] Read and accept the official rules
-- [ ] Approve the final Devpost preview
-- [ ] Click **Submit**
+- [x] Read and accept the official rules
+- [x] Approve the final Devpost preview
+- [x] Click **Submit**
 
 The owner explicitly authorized Codex to complete the final Devpost synchronization and submission in the release window.
+
+Submission confirmation: Devpost displayed `Project submitted!` and `SUBMITTED TO — The WebMCP Challenge` on 2026-09-04 at 01:10 JST. The public project page is `https://devpost.com/software/exactdelta`.
