@@ -1,20 +1,36 @@
 {
-  "auditedAt": "2026-08-27T04:04:00.976Z",
+  "auditedAt": "2026-09-03T15:45:45.647Z",
   "url": "https://actionproof.vercel.app",
   "nativeWebMcp": true,
   "workflows": [
     {
       "workflow": "orders",
+      "activeTools": [
+        "cancel_order"
+      ],
+      "externalCallEnteredGate": true,
+      "executableRegressionReturned": true,
       "defectDetected": true,
       "identicalRegressionPassed": true
     },
     {
       "workflow": "permissions",
+      "activeTools": [
+        "change_user_role"
+      ],
+      "externalCallEnteredGate": true,
+      "executableRegressionReturned": true,
       "defectDetected": true,
       "identicalRegressionPassed": true
     }
   ],
   "baselineNativeWebMcp": true,
+  "socialCard": {
+    "meta": "https://actionproof.vercel.app/og-exactdelta.png",
+    "assetStatus": 200,
+    "contentType": "image/png",
+    "pass": true
+  },
   "permissionsPolicy": "tools=*",
   "consoleErrors": [],
   "pass": true
