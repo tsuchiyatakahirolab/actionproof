@@ -44,7 +44,7 @@ Without narration or the project description, the final blocked screen must simu
 3. `EXTERNAL WEBMCP CALL · BROWSER CLIENT PATH`;
 4. a correct tool, valid argument, and `success: true`;
 5. one required and one unexpected state change;
-6. `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, and `EFFECT GATE BLOCKED`.
+6. `TOOL CALL PASSED`, `OBSERVED EFFECT FAILED`, and `EFFECT GATE BLOCKED`.
 
 The repaired screen must show `EFFECT GATE PASSED` and `IDENTICAL REGRESSION PASS` with the same regression ID, contract, and tool arguments.
 

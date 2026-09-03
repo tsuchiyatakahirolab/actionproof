@@ -60,7 +60,7 @@ Before this flow, a QA engineer could inspect an agent trace and separately auth
 - JSON-driven CI runner with schema, intent, arguments, contract, and regression-identity enforcement
 - Vitest unit coverage, Playwright native-Chrome E2E coverage, and axe-core WCAG A/AA regression checks
 - Deterministic production-build budgets and a three-cold-run Chrome desktop quality gate
-- Controlled comparison using the official `webmcp-evals` 0.0.3 trajectory matcher plus manual Playwright state assertions
+- Controlled comparison using the official `webmcp-evals` 0.0.4 trajectory matcher plus manual Playwright state assertions
 
 ## Controlled comparison
 
@@ -109,7 +109,7 @@ A production-oriented version would add application-owned server-state adapters,
 1. Open the live app in ChatGPT's in-app browser or another WebMCP-capable browser.
 2. Confirm **Native WebMCP · 1 context-matched tool**.
 3. Ask the browser agent: `Cancel only the order selected on this page, then report whether the effect gate passes.`
-4. Confirm `EXTERNAL WEBMCP CALL`, `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, `EFFECT GATE BLOCKED`, and unselected Order #1043 marked `UNEXPECTED`.
+4. Confirm `EXTERNAL WEBMCP CALL`, `TOOL CALL PASSED`, `OBSERVED EFFECT FAILED`, `EFFECT GATE BLOCKED`, and unselected Order #1043 marked `UNEXPECTED`.
 5. If an agent is unavailable, click **Run seeded defect** to replay the same native path deterministically.
 6. Click **Run repaired version** and confirm `EFFECT GATE PASSED` plus `IDENTICAL REGRESSION PASS`.
 7. Select the other row and confirm the intent, contract, WebMCP call, and regression ID follow the new target.

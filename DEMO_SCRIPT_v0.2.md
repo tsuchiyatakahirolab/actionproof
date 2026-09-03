@@ -12,7 +12,7 @@ No narration, captions, cursor callouts, or project description are assumed. The
 | 4–8s | The second panel activates and shows the structured call | `AGENT ACTION` · `Correct WebMCP call` · `cancel_order` · `{ "order_id": "#1042" }` · `Target matches visible selection` | The agent chose the correct WebMCP action and target |
 | 8–11s | The result panel activates | `TOOL RESULT` · `success: true` · `Tool returned without error` | The invocation layer believes it succeeded |
 | 11–15s | The independent state table reveals that both rows changed | `OBSERVED EFFECT` · `2 orders changed` · `#1042 REQUIRED` · `#1043 UNEXPECTED` | The application changed an extra record despite the correct call |
-| 15–20s | The verdict compares expected and actual | `Expected changes 1` · `Unexpected changes 1` · `TOOL CALL PASSED` · `REAL-WORLD EFFECT FAILED` | ExactDelta detected the discrepancy at the effect layer |
+| 15–20s | The verdict compares expected and actual | `Expected changes 1` · `Unexpected changes 1` · `TOOL CALL PASSED` · `OBSERVED EFFECT FAILED` | ExactDelta detected the discrepancy at the effect layer |
 
 Persistent framing visible throughout:
 
@@ -66,13 +66,13 @@ The tool returns `success: true`. Then both orders become `cancelled`.
 
 **Judge understanding**
 
-Tool-call success and real-world effect have diverged.
+Tool-call success and observed application effect have diverged.
 
 ### 40–60 seconds — generated contract and independent diff
 
 **Screen**
 
-`#1042` is labeled `REQUIRED`; `#1043` is labeled `UNEXPECTED`. Verdict: `TOOL CALL PASSED / REAL-WORLD EFFECT FAILED`.
+`#1042` is labeled `REQUIRED`; `#1043` is labeled `UNEXPECTED`. Verdict: `TOOL CALL PASSED / OBSERVED EFFECT FAILED`.
 
 **Narration**
 

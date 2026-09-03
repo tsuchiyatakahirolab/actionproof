@@ -59,7 +59,7 @@ try {
       workflow,
       activeTools,
       externalCallEnteredGate: invocationPath.includes("EXTERNAL WEBMCP CALL"),
-      defectDetected: failureText.includes("REAL-WORLD EFFECT FAILED"),
+      defectDetected: failureText.includes("OBSERVED EFFECT FAILED"),
       identicalRegressionPassed: lifecycleText.includes("IDENTICAL REGRESSION") && lifecycleText.includes("PASS"),
     });
   }

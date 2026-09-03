@@ -31,6 +31,7 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await expect(page.getByTestId("hero-effect-trace")).toContainText("RELEASE BLOCKED");
   await expect(page.getByRole("heading", { name: "Cancel only Order #1042" })).toBeVisible();
   await expect(page.getByText("Release decision: can this WebMCP write tool ship?")).toBeVisible();
+  await expect(page.getByText("WebMCP Evals 0.0.4 matcher")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE PENDING");
   await expect(page.getByTestId("effect-contract")).toContainText("#1042.status → cancelled");
   await expect(page.getByText("Correct WebMCP call")).toBeVisible();
@@ -38,7 +39,7 @@ test("the seeded defect is silently legible and the repaired run passes", async 
   await page.getByTestId("run-defect").click();
   await expect(page.getByTestId("verdict-fail")).toBeVisible();
   await expect(page.getByText("TOOL CALL PASSED")).toBeVisible();
-  await expect(page.getByText("REAL-WORLD EFFECT FAILED")).toBeVisible();
+  await expect(page.getByText("OBSERVED EFFECT FAILED")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByTestId("state-gap")).toHaveText("REQUESTED 1 · CHANGED 2");
   await expect(page.getByTestId("hero-effect-trace")).toContainText("LIVE VERIFIED EFFECT");
@@ -93,7 +94,7 @@ test("an external browser-agent call enters the same effect gate", async ({ page
   await expect(page.getByTestId("invocation-origin")).toContainText("EXTERNAL WEBMCP CALL");
   await expect(page.getByTestId("verdict-fail")).toBeVisible();
   await expect(page.getByText("TOOL CALL PASSED")).toBeVisible();
-  await expect(page.getByText("REAL-WORLD EFFECT FAILED")).toBeVisible();
+  await expect(page.getByText("OBSERVED EFFECT FAILED")).toBeVisible();
   await expect(page.getByTestId("gate-status")).toContainText("EFFECT GATE BLOCKED");
   await expect(page.getByTestId("state-gap")).toHaveText("REQUESTED 1 · CHANGED 2");
   await expect(page.getByText("UNEXPECTED", { exact: true })).toBeVisible();

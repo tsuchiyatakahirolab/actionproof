@@ -37,7 +37,7 @@ Why this is not merely a Playwright wrapper: Playwright only drives and asserts 
 
 - The sequence uses fixed 4/4/3/4/5-second phases.
 - Human intent, agent action, tool result, observed effect, and verdict are visually separate.
-- The exact contrast appears without narration: `TOOL CALL PASSED` / `REAL-WORLD EFFECT FAILED`.
+- The exact contrast appears without narration: `TOOL CALL PASSED` / `OBSERVED EFFECT FAILED`.
 - The target row is checked and labeled `ONLY`; the adjacent row is unselected and later labeled `UNEXPECTED`.
 - Browser tests assert the essential visible text and result states.
 
@@ -61,7 +61,7 @@ The tests prove:
 - disabling the seeded defect makes the identical retained order regression pass;
 - the main UI produces no console errors in the tested sequence.
 
-Current release-hold evidence has superseded these counts: 24 unit tests, 9 native Chrome E2E tests including exactly-once native input-dialect handling, real target/schema rebinding, direct/repeated external-call gates, first-viewport Effect Trace, temporal verdict controls, and automated WCAG A/AA checks; four JSON-driven regression executions; official matcher negative controls; context-matched tool lifecycle assertions; deterministic build/cold-runtime gates; and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
+Current release-hold evidence has superseded these counts: 25 unit tests, 9 native Chrome E2E tests including exactly-once native input-dialect handling, real target/schema rebinding, direct/repeated external-call gates, identity-set delimiter-collision protection, first-viewport Effect Trace, temporal verdict controls, and automated WCAG A/AA checks; four JSON-driven regression executions; official matcher negative controls; context-matched tool lifecycle assertions; deterministic build/cold-runtime gates; and the full controlled benchmark. See `submission/FINAL_AUDIT.md` and `benchmarks/results/latest.json` for the final record.
 
 ## Strongest argument against ExactDelta
 

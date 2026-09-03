@@ -42,7 +42,7 @@ Without narration or prior description, the screen must expose all of the follow
 3. a correct WebMCP tool and schema-bound target;
 4. `success: true` kept separate from observed state;
 5. one required and one unexpected state change;
-6. `TOOL CALL PASSED`, `REAL-WORLD EFFECT FAILED`, and `EFFECT GATE BLOCKED` simultaneously.
+6. `TOOL CALL PASSED`, `OBSERVED EFFECT FAILED`, and `EFFECT GATE BLOCKED` simultaneously.
 
 The repaired run must visibly switch to `EFFECT GATE PASSED` and preserve the same regression identity, arguments, and contract.
 

@@ -1,12 +1,12 @@
 # ExactDelta detection-coverage benchmark
 
-**Measured:** 2026-08-27 JST  
+**Measured:** 2026-09-03 JST
 **Technical audience:** WebMCP application developers, QA engineers, and hackathon judges  
 **Result:** the controlled comparison reproduced the call/effect gap in both workflows and showed precisely what manual assertions add.
 
 ## Technical summary
 
-Two correct native WebMCP calls were executed against two deterministic fake-data handlers containing the same class of seeded collateral-mutation defect. The official `webmcp-evals` 0.0.3 trajectory matcher passed both tool calls because the function names and arguments matched. As a negative control, it rejected a deliberately wrong target argument in both workflows. Application-state reads performed independently of the return payload confirmed that both correct calls also changed an unselected neighboring record.
+Two correct native WebMCP calls were executed against two deterministic fake-data handlers containing the same class of seeded collateral-mutation defect. The official `webmcp-evals` 0.0.4 trajectory matcher passed both tool calls because the function names and arguments matched. As a negative control, it rejected a deliberately wrong target argument in both workflows. Application-state reads performed independently of the return payload confirmed that both correct calls also changed an unselected neighboring record.
 
 Adding four concrete expected-state assertions in Playwright detected both defects; the identical assertions passed after the handler repairs. ExactDelta detected both defects and passed both identical retained regressions using two action bindings and generated required/unchanged checks, with no per-record expected-state assertions in the scenario definitions.
 
@@ -48,7 +48,7 @@ The benchmark does not measure wall-clock product performance. Command durations
 2. Launch installed Chrome 151 headlessly with `--enable-features=WebMCP,WebMCPTesting`.
 3. Open the plain `baseline.html` fixture with the seeded defect enabled.
 4. Invoke the registered tool through `document.modelContext.getTools()` and `executeTool()`.
-5. Score the captured name/arguments with `evaluateExecutionTrajectory()` from the installed official `webmcp-evals` 0.0.3 package.
+5. Score the captured name/arguments with `evaluateExecutionTrajectory()` from the installed official `webmcp-evals` 0.0.4 package.
 6. Score a deliberately wrong target argument as a negative control; it must fail.
 7. Read the post-action target and unselected-neighbor fields from the page.
 8. Run the manual Playwright suite against the defective handler. A non-zero exit is the expected detection result.

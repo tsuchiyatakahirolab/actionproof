@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-28T14:59:36.575Z",
+  "measuredAt": "2026-09-03T05:15:50.223Z",
   "scope": "Two deterministic fake-data workflows; detection-coverage benchmark only.",
   "conditions": {
     "nativeWebMcp": true,
@@ -11,7 +11,7 @@
   },
   "measurements": {
     "webmcpEvalsCallLayer": {
-      "version": "0.0.3",
+      "version": "0.0.4",
       "commandExitCode": 0,
       "matchedCorrectCalls": 2,
       "rejectedWrongArgumentControls": 2,
@@ -35,10 +35,10 @@
     }
   },
   "commandDurationsMs": {
-    "evals": 4419,
-    "manualDefect": 17681,
-    "manualFixed": 6195,
-    "exactDeltaUi": 23393
+    "evals": 6965,
+    "manualDefect": 19521,
+    "manualFixed": 8742,
+    "exactDeltaUi": 29212
   },
   "success": true
 }

@@ -40,7 +40,7 @@ describe("ExactDelta effect verification", () => {
     ]);
   });
 
-  it("distinguishes tool-call failure from a failed real-world effect", async () => {
+  it("distinguishes tool-call failure from a failed observed effect", async () => {
     const store = new ScenarioStore(orders);
     const result = await runExactDelta({
       store,
@@ -294,6 +294,39 @@ describe("ExactDelta effect verification", () => {
     expect(extraField.unexpectedChanges).toEqual([
       expect.objectContaining({ entityId: "#1042", field: "auditMarker" }),
     ]);
+  });
+
+  it("detects identity-set changes even when IDs contain the old join delimiter", () => {
+    const before = {
+      a: { id: "a", status: "active" },
+      "b|c": { id: "b|c", status: "active" },
+    };
+    const intent = {
+      workflowId: "identity-delimiter-test",
+      resourceLabel: "record",
+      selectedIds: ["a"],
+      summary: "Cancel only a",
+      mutation: { field: "status", value: "cancelled" },
+    };
+    const contract = generateEffectContract(intent, before);
+
+    const result = verifyEffect({
+      intent,
+      contract,
+      before,
+      after: {
+        "a|b": { id: "a|b", status: "cancelled" },
+        c: { id: "c", status: "active" },
+      },
+      toolCall: {
+        name: "cancel_record",
+        arguments: { record_id: "a" },
+        status: "PASSED",
+      },
+    });
+
+    expect(result.verdict).toBe("FAILED_EFFECT");
+    expect(result.invariantViolations).toContain("Entity identity set changed.");
   });
 
   it.each(scenarioDefinitions)(

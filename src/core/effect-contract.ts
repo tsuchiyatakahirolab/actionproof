@@ -152,7 +152,10 @@ export function verifyEffect(input: {
       `Entity count changed from ${contract.invariants.entityCount} to ${afterIds.length}.`,
     );
   }
-  if (afterIds.join("|") !== contract.invariants.entityIds.join("|")) {
+  const identitySetChanged =
+    afterIds.length !== contract.invariants.entityIds.length ||
+    afterIds.some((entityId, index) => entityId !== contract.invariants.entityIds[index]);
+  if (identitySetChanged) {
     invariantViolations.push("Entity identity set changed.");
   }
 

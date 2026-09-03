@@ -636,7 +636,7 @@ export default function App() {
                 <div className="score-line danger"><span>Unexpected changes</span><strong>{currentResult.unexpectedChanges.length}</strong></div>
                 <div className="state-gap" data-testid="state-gap">REQUESTED {currentResult.contract.required.length} · CHANGED {observedCount}</div>
                 <div className="verdict-message call-passed">TOOL CALL PASSED</div>
-                <div className="verdict-message fail-message">REAL-WORLD EFFECT FAILED</div>
+                <div className="verdict-message fail-message">OBSERVED EFFECT FAILED</div>
                 <div className="ship-decision ship-blocked">EFFECT GATE BLOCKED</div>
               </div>
             )}
@@ -689,7 +689,7 @@ export default function App() {
         </div>
         <div className="benchmark-cards">
           <article>
-            <span>WebMCP Evals 0.0.3 matcher</span>
+            <span>WebMCP Evals 0.0.4 matcher</span>
             <strong>2 / 2 correct calls matched</strong>
             <p>2/2 wrong-argument controls failed; both effect defects remained.</p>
           </article>

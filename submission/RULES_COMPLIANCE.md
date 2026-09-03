@@ -1,6 +1,6 @@
 # WebMCP Challenge rules compliance record
 
-2026-08-29 JST / pre-release internal audit / owner must re-check the final Devpost form
+2026-09-03 JST / pre-release internal audit / owner must re-check the final Devpost form
 
 ## Project eligibility and timing
 
@@ -8,7 +8,7 @@
 |---|---|---|
 | New or meaningfully extended during the submission period | The first design files are dated 2026-08-26. Repository history begins on 2026-08-27, after the official 2026-08-25 start. No pre-hackathon product code is represented. | PASS |
 | WebMCP-powered web app | Native imperative `document.modelContext.registerTool()`, context lifecycle, discovery, and execution are implemented in source and exercised in Chrome. | PASS |
-| Runs as depicted | Production build, 24 unit tests, four JSON-driven regression executions, 9 native Chrome E2E tests, build/runtime quality gates, in-app-browser verification, controlled benchmark, and audited 90-second video are recorded in `FINAL_AUDIT.md`. | PASS LOCALLY / PRODUCTION RE-AUDIT REQUIRED |
+| Runs as depicted | Production build, 25 unit tests, four JSON-driven regression executions, 9 native Chrome E2E tests, build/runtime quality gates, in-app-browser verification, controlled benchmark, and audited 90-second video are recorded in `FINAL_AUDIT.md`. | PASS LOCALLY / PRODUCTION RE-AUDIT REQUIRED |
 | Human-agent collaboration | The human-visible selection generates the permitted delta; the browser agent invokes the matching page tool; the application verifies and returns the separate effect-gate verdict. | PASS |
 
 ## Required submission artifacts

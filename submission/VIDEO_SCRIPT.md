@@ -24,7 +24,7 @@ Target duration: 86–90 seconds. English neural narration. No music is required
 - The hero action must be an external browser-client WebMCP invocation, not the deterministic replay button.
 - Keep the native WebMCP badge visible at least once.
 - Do not imply that a real customer, production incident, or external transaction is shown.
-- Show `TOOL CALL PASSED` and `REAL-WORLD EFFECT FAILED` simultaneously.
+- Show `TOOL CALL PASSED` and `OBSERVED EFFECT FAILED` simultaneously.
 - Show `EFFECT GATE BLOCKED` and later `EFFECT GATE PASSED`.
 - Show the lifecycle ending in `IDENTICAL REGRESSION PASS`.
 - Keep the benchmark limitation line legible or state it in narration.
