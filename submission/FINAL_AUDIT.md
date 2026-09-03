@@ -15,9 +15,9 @@
 | `npm run build` | PASS — production Vite build |
 | `npm run test:ui` | PASS — 9/9 native Chrome WebMCP E2E tests, including concrete `#1042 only` versus `#1042 + #1043` hero proof assertions, permission-workflow equivalents, human target reselection with native schema rebinding, direct and repeated external-call gates, concurrent-call fail-closed control, 1280×720 first-viewport layout, no premature regression PASS, and zero automated WCAG A/AA violations in initial and blocked states |
 | `npm run regression:ci:all` | PASS — four JSON-driven executions: both artifacts detect the seeded defect and prove the repair with identical intent, arguments, contract, and regression identity |
-| `npm run audit:build` | PASS — 70,524 gzip bytes total emitted JS, 5,942 gzip bytes CSS, 795 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
-| `npm run audit:package` | PASS — NodeNext consumer typecheck, typed zero-runtime-dependency ESM distribution, 10,804-byte bundle, generated declarations, external consumer `ACTION_PROVEN`, and `npm pack --dry-run` (15.7 KB tarball estimate) |
-| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 31.2 ms, FCP/LCP 1,444 ms, TBT 0 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
+| `npm run audit:build` | PASS — 70,536 gzip bytes total emitted JS, 5,942 gzip bytes CSS, 796 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
+| `npm run audit:package` | PASS — NodeNext consumer typecheck, typed zero-runtime-dependency ESM distribution, 10,804-byte bundle, generated declarations, actual tarball installation into a fresh project, support-ticket `FAILED_EFFECT` → identical `ACTION_PROVEN`, and `npm pack --dry-run` (16.1 KB tarball estimate) |
+| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 18 ms, FCP/LCP 1,312 ms, TBT 0 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
 | `node scripts/record-demo.mjs` | PASS — regenerated the held UI as a 90.00-second H.264/AAC demo with the existing audited sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
@@ -36,7 +36,7 @@
 - Chrome `getTools()` exposed only `cancel_order` in the order context and only `change_user_role` in the permission context.
 - Registered schemas exposed exact enums for the visible target/value and rejected additional properties.
 - Selecting Order #1043 in the visible table regenerated the Effect Contract and intent, re-registered the native tool with `order_id.enum = ["#1043"]`, executed that target, and produced regression ID `orders__1043__status__to-cancelled`; the unselected #1042 became the detected collateral effect.
-- A direct `executeTool()` call from the external browser-client path preserved the original `{ success: true }` payload and added a separate blocked `effectGate` verdict; the UI independently showed the external-call label and unexpected collateral mutation without using the deterministic replay button.
+- A direct `executeTool()` call from the external browser-client path preserved the original `{ success: true }` payload and added a separate blocked `effectGate` verdict plus the complete executable `exactdelta.regression.v1` artifact; the UI independently showed the external-call label and unexpected collateral mutation without using the deterministic replay button.
 - Codex's in-app browser accepted object input after the read-only dialect probe, received the original success payload plus `effectGate.status: blocked`, `unexpectedChanges: 1`, and the regression ID, and then completed the visible defect → block → repair → identical PASS path with zero console warnings or errors. Chrome's JSON-string path remains covered by the native E2E suite; no application write is retried for compatibility.
 - Two simultaneous external calls produced one verified execution and one native WebMCP rejection; the second call did not mutate state or bypass the in-flight gate.
 - Order workflow: seeded defect detected; identical regression passed after repair.
@@ -49,9 +49,9 @@ The existing `submission/PRODUCTION_AUDIT.json` records the previous public revi
 
 ## Delivery-quality evidence
 
-- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,524 gzip bytes JS, 5,942 gzip bytes CSS, and 795 gzip bytes HTML.
+- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,536 gzip bytes JS, 5,942 gzip bytes CSS, and 796 gzip bytes HTML.
 - The build has no externally loaded runtime scripts/styles, no production source maps, complete description/Open Graph/Twitter metadata, and a signature/dimension-validated 1280×720 PNG social card.
-- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 31.2 ms, FCP/LCP 1,444 ms, TBT 0 ms, and CLS 0.0007.
+- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 18 ms, FCP/LCP 1,312 ms, TBT 0 ms, and CLS 0.0007.
 - axe-core reports zero automated WCAG A/AA violations in the initial and blocked proof states. The interactive record grid now has complete table/row/header/cell semantics and all detected contrast failures were repaired.
 - The first viewport now names the accepted native call, renders the allowed target (`#1042 only`) beside the observed target set (`#1042 + #1043`), marks the collateral ID independently, and states the stopped-release consequence. A one-shot staged reveal uses only transform and outline emphasis—never faded text—and honors reduced-motion preferences.
 - These values are bounded local lab evidence, not field telemetry, a Lighthouse score, or a guarantee for every device/network.
@@ -60,9 +60,10 @@ The existing `submission/PRODUCTION_AUDIT.json` records the previous public revi
 
 - `src/exactdelta.ts` exposes `runEffectGate()`, the Effect Contract primitives, artifact parsing/creation, and `runRegressionWithAdapter()` as a typed ESM API.
 - The demo's `runExactDelta()` now delegates to the same public gate instead of owning a fixture-only verification implementation.
-- A separate support-ticket consumer imports `package-dist/exactdelta.js` and reaches `ACTION_PROVEN` without using `ScenarioStore`.
+- A separate support-ticket consumer imports the package by name without using `ScenarioStore`, detects a collateral ticket write as `FAILED_EFFECT`, exports that regression, and reaches `ACTION_PROVEN` with the identical artifact against the repaired adapter.
+- The audit creates the actual tarball, installs it into a fresh temporary project with scripts disabled, and repeats that full consumer flow through the installed artifact.
 - Generic artifact replay rejects consumer argument drift before invoking the write and passes the identical artifact against a repaired external adapter.
-- The distribution bundle is 10,804 bytes raw (3.34 KB gzip), has generated declarations and no runtime dependencies, passes a strict NodeNext consumer typecheck, and produces a 15.7 KB dry-run package manifest. This is distribution evidence, not npm publication, customer adoption, production certification, or measured demand.
+- The distribution bundle is 10,804 bytes raw (3.34 KB gzip), has generated declarations and no runtime dependencies, passes a strict NodeNext consumer typecheck, and produces a 16.1 KB dry-run package manifest. This is packed-install evidence, not npm publication, customer adoption, production certification, or measured demand.
 
 ## Benchmark evidence
 

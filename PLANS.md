@@ -7,7 +7,7 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 ## Locked scope
 
 1. Keep the Effect Contract generator, independent state diff, native WebMCP bridge, two workflows, seeded defect, repair toggle, regression artifact, and comparison benchmark.
-2. Expose the same verifier as a typed ESM SDK with an application-owned adapter and generic regression replay API; prove the built package from an external consumer fixture.
+2. Expose the same verifier as a typed ESM SDK with an application-owned adapter and generic regression replay API; prove the packed artifact after installation into a fresh consumer project.
 3. Make the first 20 seconds answer who, when, decision, failure, intervention, and WebMCP role without narration.
 4. Keep all synthetic data, seeded defects, and limitations explicit.
 5. Do not add automatic code repair, generic dashboards, model scoring, customer claims, production certification, or a third UI workflow.
@@ -35,6 +35,7 @@ Deliver the strongest honest WebMCP Challenge entry by making the existing Effec
 - Refreshed the controlled comparison to the current official `webmcp-evals` 0.0.4 release, fixed an identity-set delimiter-collision weakness with a permanent regression, tightened the synthetic-effect language, and regenerated every local media artifact with 600 ms sentence gaps.
 - Converted the hero from an abstract count trace into a concrete one-frame proof: accepted tool and target, permitted target set, observed target set, isolated collateral ID, and release consequence. Added restrained one-shot sequencing without text fading, verified reduced-motion behavior, and regenerated every static/video submission asset.
 - Extracted the verifier into a public `runEffectGate()` adapter API, added generic artifact replay with fail-before-write identity/contract checks, built a typed ESM distribution, and added an external consumer/package audit without changing the two-workflow demo.
+- Strengthened the package gate from a repository-local import to an actual tarball install in a fresh project; a third support-ticket adapter now proves collateral detection and identical repair replay through the installed package.
 
 ## Release-gated remaining work
 

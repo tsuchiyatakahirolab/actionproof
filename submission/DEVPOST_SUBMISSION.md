@@ -28,11 +28,11 @@ In an owned staging environment, the human selects one target in the application
 - every unselected record must remain unchanged;
 - entity identity and count must remain stable.
 
-The browser agent then directly invokes the registered native WebMCP tool. The invocation itself enters ExactDelta's gate. ExactDelta does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. The native response preserves the action result and adds an independent `effectGate` verdict so the agent can accurately report whether the release gate passed. A collateral mutation blocks the gate and becomes a downloadable CI regression artifact. A checked-in runner loads that exact JSON, rejects schema or contract drift before the write, replays the recorded arguments, and requires the repaired implementation to return `ACTION_PROVEN` with identical regression identity.
+The browser agent then directly invokes the registered native WebMCP tool. The invocation itself enters ExactDelta's gate. ExactDelta does not trust `success: true`; it snapshots application-owned post-action state independently of that payload and separates required changes from unexpected changes. The native response preserves the action result and adds both an independent `effectGate` verdict and the executable `exactdelta.regression.v1` artifact, so the agent can accurately report whether the release gate passed and hand the failed contract directly to CI. The same artifact is also downloadable in the UI. A checked-in runner loads that exact JSON, rejects schema or contract drift before the write, replays the recorded arguments, and requires the repaired implementation to return `ACTION_PROVEN` with identical regression identity.
 
 The demo uses two fictional workflows—order cancellation and permission change—with the same verification core.
 
-That core is not tied to the demo store. The repository builds a typed, zero-runtime-dependency ESM SDK whose `runEffectGate()` accepts an application-owned intent/snapshot adapter and action binding. Its generic regression API applies the same schema, identity, argument, and regenerated-contract checks before replaying a write. A package audit type-checks a NodeNext consumer, imports the built distribution from a separate fixture, and requires `ACTION_PROVEN`; registry publication is not claimed.
+That core is not tied to the demo store. The repository builds a typed, zero-runtime-dependency ESM SDK whose `runEffectGate()` accepts an application-owned intent/snapshot adapter and action binding. Its generic regression API applies the same schema, identity, argument, and regenerated-contract checks before replaying a write. A package audit type-checks a NodeNext consumer, packs and installs the tarball into a fresh project, then makes a third support-ticket adapter detect a collateral write and replay the identical artifact to `ACTION_PROVEN` after repair; registry publication is not claimed.
 
 ## Why this is a WebMCP use case
 
@@ -46,7 +46,7 @@ The QA operator does not write a record-specific assertion or decode an agent tr
 
 ## What the human and agent can do together
 
-Before this flow, a QA engineer could inspect an agent trace and separately author application-specific state assertions, but the browser agent's successful tool response did not itself establish which records were allowed to change. ExactDelta joins those responsibilities at the page boundary: the human's visible selection declares the permitted effect, the agent invokes the same native WebMCP action it was given, the application independently observes the resulting state, and the agent receives the separate release-gate verdict. The developer can then rerun the exact retained contract after repair instead of reconstructing the failed case from a trace.
+Before this flow, a QA engineer could inspect an agent trace and separately author application-specific state assertions, but the browser agent's successful tool response did not itself establish which records were allowed to change. ExactDelta joins those responsibilities at the page boundary: the human's visible selection declares the permitted effect, the agent invokes the same native WebMCP action it was given, the application independently observes the resulting state, and the agent receives both the separate release-gate verdict and its executable regression artifact. The developer can then rerun the exact returned contract after repair instead of reconstructing the failed case from a trace.
 
 ## How we built it
 
@@ -89,7 +89,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - The same downloaded JSON artifact can be loaded and executed as a CI release gate
 - A reproducible, source-visible Evals + Playwright comparison
 - A deterministic five-image judge gallery generated from the native held build
-- A built-package consumer proof and dry-run package manifest
+- A fresh-project packed-install proof using a third workflow, plus a dry-run package manifest
 - Zero automated WCAG A/AA violations in initial and blocked states, with bounded build and cold-browser performance gates
 - No credentials, external writes, or private data
 

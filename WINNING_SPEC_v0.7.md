@@ -13,7 +13,7 @@ This specification supersedes v0.6 without changing the locked 90-second proof. 
 - `runEffectGate()` accepts a small application-owned `EffectGateAdapter` and action binding; it has no dependency on the demo `ScenarioStore`.
 - `runRegressionWithAdapter()` validates schema, identity, intent, arguments, and regenerated contract before invoking a consumer write.
 - `src/exactdelta.ts` is the documented public API and builds as a typed ESM package with no runtime dependencies.
-- A package audit type-checks a NodeNext self-reference consumer, imports the built distribution from an external fixture, requires `ACTION_PROVEN`, enforces a 30 KB bundle ceiling, and runs `npm pack --dry-run`.
+- A package audit type-checks a NodeNext self-reference consumer, packs the distribution, installs it into a fresh temporary project, and runs a third support-ticket workflow from detected collateral write to identical repaired `ACTION_PROVEN`; it also enforces a 30 KB bundle ceiling and runs `npm pack --dry-run`.
 - The existing order and permission demos now consume the same public gate API rather than owning a separate verifier path.
 
 ## Why public real data is not the proof

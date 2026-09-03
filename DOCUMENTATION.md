@@ -24,7 +24,7 @@ The product remains intentionally bounded to two disposable in-memory workflows:
 | 2026-08-28 | WCAG semantics/contrast repair plus deterministic build and three-run cold-browser quality gates | Complete |
 | 2026-09-03 | Evals 0.0.4 refresh, identity-set collision repair, evidence-language tightening, and complete media regeneration | Complete |
 | 2026-09-03 | Concrete first-impression proof (`#1042 only` vs. `#1042 + #1043`), accessible one-shot motion, and synchronized gallery/thumbnail/video | Complete |
-| 2026-09-03 | Public adapter API, typed ESM distribution, generic regression replay, and external consumer/package audit | Complete |
+| 2026-09-03 | Public adapter API, typed ESM distribution, generic regression replay, and fresh-project packed-install audit | Complete |
 | Release window | Push, promote, public YouTube, Devpost preview | Owner-controlled |
 
 ## Reproducible commands
@@ -51,7 +51,7 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 ## Current evidence
 
 - 28/28 unit tests pass, including Chrome JSON-string and in-app-browser object input-mode detection, exactly-once application-write enforcement in both modes, artifact parsing, contract/identity-drift fail-before-write, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, entity/field and identity-set delimiter collisions, actual external-argument capture, a consumer adapter independent of `ScenarioStore`, generic repaired-artifact replay, and consumer argument-drift rejection before write.
-- The typed ESM SDK builds independently, remains below its 30 KB distribution gate, passes a strict NodeNext consumer typecheck, imports successfully from an external fixture, returns `ACTION_PROVEN`, and passes `npm pack --dry-run`.
+- The typed ESM SDK builds independently, remains below its 30 KB distribution gate, and passes a strict NodeNext consumer typecheck. The audit then packs and installs it into a fresh temporary project, where a third support-ticket adapter detects one collateral write and replays the identical artifact to `ACTION_PROVEN` after repair; `npm pack --dry-run` also passes.
 - 9/9 native Chrome WebMCP E2E flows pass, including concrete requested/collateral target proof in both workflows, interactive target reselection and schema rebinding, direct and repeated external tool invocation, concurrent-call fail-closed behavior, 1280×720 judge-path layout, hero Effect Trace transitions, context tool lifecycle, the rule that regression `PASS` cannot render while verification is still running, and automated WCAG A/AA checks before and after the seeded failure.
 - `npm run regression:ci:all` loads both committed JSON artifacts and executes each against the seeded defect and repaired implementation; all four expected verdicts and artifact-identity checks pass.
 - Codex's in-app browser discovered and directly invoked `cancel_order` through its object-input native API; the UI replay path also completed defect block and identical repair PASS after the compatibility fix, with zero console warnings or errors.
@@ -61,10 +61,10 @@ The production audit accepts `PRODUCTION_URL` and `AUDIT_OUTPUT` environment var
 - Demo: 90.00 seconds, H.264 1440×900, AAC English `en-US-AndrewMultilingualNeural` narration. All 26 sentences are separate clips; every measured pause is at least 600 ms. The seeded effect failure is fully visible by 15 seconds. Final SHA-256 is recorded in `submission/FINAL_AUDIT.md`.
 - Static judge path: five 1440×900 images reproduce the native hook, failure proof, identical repair, permission portability, and bounded comparison; generation fails on console errors and captions are fixed in `submission/GALLERY.md`.
 - Held local production preview: native WebMCP, correct context-matched tool per workflow, `tools=*`, zero console errors; see `submission/private/HELD_PRODUCTION_AUDIT.json` (ignored from public release).
-- Deterministic build audit: all emitted JS 70,524 gzip bytes, all CSS 5,942 gzip bytes, HTML 795 gzip bytes, no external runtime assets, no production source maps, complete social metadata, and a validated 1280×720 PNG social card.
-- Three cold Chrome desktop lab runs at 40 ms latency / 10 Mbps down / 5 Mbps up / 1x CPU: worst TTFB 31.2 ms, FCP/LCP 1,444 ms, TBT 0 ms, CLS 0.0007, zero cross-origin runtime requests, zero automated WCAG A/AA violations, and zero console errors. This is a bounded lab gate, not field data or a Lighthouse score; raw output is kept in the ignored `submission/private/RUNTIME_QUALITY_AUDIT.json`.
+- Deterministic build audit: all emitted JS 70,536 gzip bytes, all CSS 5,942 gzip bytes, HTML 796 gzip bytes, no external runtime assets, no production source maps, complete social metadata, and a validated 1280×720 PNG social card.
+- Three cold Chrome desktop lab runs at 40 ms latency / 10 Mbps down / 5 Mbps up / 1x CPU: worst TTFB 18 ms, FCP/LCP 1,312 ms, TBT 0 ms, CLS 0.0007, zero cross-origin runtime requests, zero automated WCAG A/AA violations, and zero console errors. This is a bounded lab gate, not field data or a Lighthouse score; raw output is kept in the ignored `submission/private/RUNTIME_QUALITY_AUDIT.json`.
 - Public-source review: official issue #45 and Chrome Evals guidance support the bounded trust-gap claim; webmcpify, Postcept, Playwright, Schemathesis, and AgentSynth cap broader novelty claims. Public challenge entries including SheetCanvas, VT, Redini-Atelier, 2D WebMCP, and MCPencil were re-reviewed on 2026-09-03; private and late entries remain unknowable. See `COMPETITIVE_REVIEW.md` and `OBJECTIVE_ADVERSARIAL_REVIEW.md`.
-- Latest product-evidence rerun: typecheck PASS, unit 28/28, native E2E 9/9, package consumer/dry-run distribution PASS, four JSON-driven regression executions PASS, build/budget PASS, cold-runtime quality PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, and held local production audit PASS.
+- Latest product-evidence rerun: typecheck PASS, unit 28/28, native E2E 9/9, packed fresh-project consumer plus dry-run distribution PASS, four JSON-driven regression executions PASS, build/budget PASS, cold-runtime quality PASS, benchmark PASS, media audit PASS, dependency audit 0 vulnerabilities, secret scan PASS, and held local production audit PASS.
 
 ## Release safety
 

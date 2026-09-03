@@ -52,7 +52,7 @@
     "regression:ci:all": "npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation repaired --expect ACTION_PROVEN && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation repaired --expect ACTION_PROVEN",
     "audit:build": "npm run build && node scripts/audit-build.mjs",
     "audit:package": "npm run build:sdk && node scripts/audit-package.mjs && npm pack --dry-run",
-    "prepack": "npm run build:sdk && node scripts/audit-package.mjs",
+    "prepack": "npm run build:sdk",
     "prepare": "npm run build:sdk",
     "audit:runtime": "node scripts/audit-runtime.mjs",
     "audit:production": "node scripts/audit-production.mjs",

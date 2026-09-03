@@ -42,12 +42,13 @@ try {
     const activeTools = await page.evaluate(async () =>
       (await document.modelContext.getTools()).map((tool) => tool.name),
     );
-    await page.evaluate(async ({ workflowId }) => {
+    const toolResult = await page.evaluate(async ({ workflowId }) => {
       const tool = (await document.modelContext.getTools())[0];
       const argumentsRecord = workflowId === "orders"
         ? { order_id: "#1042" }
         : { user_id: "Alice", role: "Editor" };
-      await document.modelContext.executeTool(tool, JSON.stringify(argumentsRecord));
+      const result = await document.modelContext.executeTool(tool, JSON.stringify(argumentsRecord));
+      return typeof result === "string" ? JSON.parse(result) : result;
     }, { workflowId: workflow });
     await page.getByTestId("verdict-fail").waitFor();
     const failureText = await page.getByTestId("verdict-fail").innerText();
@@ -59,6 +60,13 @@ try {
       workflow,
       activeTools,
       externalCallEnteredGate: invocationPath.includes("EXTERNAL WEBMCP CALL"),
+      executableRegressionReturned:
+        toolResult?.effectGate?.regressionArtifact?.schemaVersion === "exactdelta.regression.v1" &&
+        toolResult?.effectGate?.regressionArtifact?.regressionCase?.id === (
+          workflow === "orders"
+            ? "orders__1042__status__to-cancelled"
+            : "permissions__alice__role__to-editor"
+        ),
       defectDetected: failureText.includes("OBSERVED EFFECT FAILED"),
       identicalRegressionPassed: lifecycleText.includes("IDENTICAL REGRESSION") && lifecycleText.includes("PASS"),
     });
@@ -82,6 +90,7 @@ try {
       workflows.every((workflow) =>
         workflow.defectDetected &&
         workflow.externalCallEnteredGate &&
+        workflow.executableRegressionReturned &&
         workflow.identicalRegressionPassed &&
         workflow.activeTools.length === 1 &&
         workflow.activeTools[0] === (workflow.workflow === "orders" ? "cancel_order" : "change_user_role")

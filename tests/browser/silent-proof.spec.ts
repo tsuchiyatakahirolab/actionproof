@@ -92,6 +92,14 @@ test("an external browser-agent call enters the same effect gate", async ({ page
       verdict: "FAILED_EFFECT",
       unexpectedChanges: 1,
       regressionId: "orders__1042__status__to-cancelled",
+      regressionArtifact: {
+        schemaVersion: "exactdelta.regression.v1",
+        regressionCase: {
+          id: "orders__1042__status__to-cancelled",
+          toolName: "cancel_order",
+          arguments: { order_id: "#1042" },
+        },
+      },
     },
   });
   await expect(page.getByTestId("invocation-origin")).toContainText("EXTERNAL WEBMCP CALL");

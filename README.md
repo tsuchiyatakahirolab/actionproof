@@ -4,7 +4,7 @@
 
 **ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.**
 
-The verifier is also built as a typed, zero-runtime-dependency ESM SDK. Its public `runEffectGate()` API accepts an application-owned intent/snapshot adapter and action binding; `runRegressionWithAdapter()` replays the exported JSON against a consumer adapter with identity and contract validation before the write. The package audit type-checks a NodeNext consumer, imports the built distribution from a separate support-ticket fixture, and requires `ACTION_PROVEN`.
+The verifier is also built as a typed, zero-runtime-dependency ESM SDK. Its public `runEffectGate()` API accepts an application-owned intent/snapshot adapter and action binding; `runRegressionWithAdapter()` replays the exported JSON against a consumer adapter with identity and contract validation before the write. The package audit type-checks a NodeNext consumer, packs the SDK, installs that tarball into a fresh temporary project, and requires a separate support-ticket workflow to detect `FAILED_EFFECT` before the identical artifact reaches `ACTION_PROVEN` after repair.
 
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
@@ -35,7 +35,7 @@ visible human selection + pre-action state
 → inspectable verdict + retained regression
 ```
 
-The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. A read-only startup probe resolves the current Chrome JSON-string and in-app-browser object input dialects before any application write is exposed; the selected write is then invoked exactly once. A direct call from the browser client enters the Effect Contract gate automatically and returns the original action payload plus an independent `effectGate` verdict, so the agent can report the release result instead of trusting `success: true`. The Run button uses the same native boundary as a deterministic judge replay. Without WebMCP there is no structured page-exposed write boundary for a browser agent to discover and invoke; it becomes an ordinary application-specific test.
+The page registers the one tool relevant to the visible workflow with `document.modelContext.registerTool()`, unregisters it on a workflow change, discovers it with `getTools()`, and invokes it through `executeTool()`. Its schema constrains the target and requested value to the visible human intent, and `exposedTo` limits access to the same origin. A read-only startup probe resolves the current Chrome JSON-string and in-app-browser object input dialects before any application write is exposed; the selected write is then invoked exactly once. A direct call from the browser client enters the Effect Contract gate automatically and returns the original action payload, an independent `effectGate` verdict, and the executable `exactdelta.regression.v1` artifact in the same response. The agent can report the release result instead of trusting `success: true`, while a developer can hand the returned artifact directly to the checked-in CI runner. The Run button uses the same native boundary as a deterministic judge replay. Without WebMCP there is no structured page-exposed write boundary for a browser agent to discover and invoke; it becomes an ordinary application-specific test.
 
 ## Human and agent roles
 
@@ -103,7 +103,8 @@ Build and smoke-test the distributable package:
 
 ```bash
 npm run audit:package
-# Produces a dry-run package manifest and runs examples/package-consumer.mjs
+# Packs and installs into a fresh project, runs defect → identical repair replay,
+# and produces a dry-run package manifest.
 ```
 
 The package is distribution-ready but intentionally not published to a registry before the owner-approved release window. That is packaging evidence, not adoption or production-readiness evidence.
@@ -157,8 +158,8 @@ Current deterministic suite:
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
-- The deterministic production-build gate keeps all emitted JavaScript at 70,524 gzip bytes and CSS at 5,942 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
-- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 31.2 ms, FCP and LCP are 1,444 ms, TBT is 0 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
+- The deterministic production-build gate keeps all emitted JavaScript at 70,536 gzip bytes and CSS at 5,942 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
+- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 18 ms, FCP and LCP are 1,312 ms, TBT is 0 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
 
 ### Rebuild the submission video
 

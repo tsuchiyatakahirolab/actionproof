@@ -1,5 +1,14 @@
 # Submission owner checklist
 
+## Recommended release clock — JST
+
+- **Until 00:30:** keep the final revision private; only blocker fixes are allowed.
+- **00:30–01:30:** final competitor scan, clean audit, push, and make the required repository/live artifacts public.
+- **By 02:00:** complete CI, Vercel promotion, production WebMCP/header/console checks, and canonical-link verification.
+- **By 02:30:** make the already-audited YouTube upload public and verify public playback, audio, thumbnail, and HD processing.
+- **By 03:30:** synchronize Devpost text, five images, URLs, and preview; owner performs final Submit.
+- **04:00 hard stop:** preserve one hour before the 05:00 JST deadline for recovery. Do not intentionally defer the first public release past 01:30.
+
 ## Automated evidence
 
 - [x] New-project timing and rule requirements mapped in `submission/RULES_COMPLIANCE.md`

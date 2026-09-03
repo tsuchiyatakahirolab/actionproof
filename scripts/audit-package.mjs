@@ -1,5 +1,16 @@
-import { access, readFile, stat } from "node:fs/promises";
+import {
+  access,
+  copyFile,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { tmpdir } from "node:os";
+import path from "node:path";
 
 const required = [
   "package-dist/exactdelta.js",
@@ -24,22 +35,59 @@ if (!manifest.exports?.["."]?.import || !manifest.exports?.["."]?.types) {
   throw new Error("Package exports are incomplete.");
 }
 
-await new Promise((resolve, reject) => {
-  const child = spawn(
-    process.execPath,
-    ["node_modules/typescript/bin/tsc", "-p", "tsconfig.consumer.json"],
-    { stdio: "inherit" },
-  );
-  child.once("error", reject);
-  child.once("exit", (code) => code === 0 ? resolve() : reject(new Error(`Consumer typecheck exited ${code}.`)));
-});
-
-await new Promise((resolve, reject) => {
-  const child = spawn(process.execPath, ["examples/package-consumer.mjs"], {
-    stdio: "inherit",
+function run(command, argumentsList, options = {}) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, argumentsList, { stdio: "inherit", ...options });
+    child.once("error", reject);
+    child.once("exit", (code) => code === 0
+      ? resolve()
+      : reject(new Error(`${command} exited ${code}.`)));
   });
-  child.once("error", reject);
-  child.once("exit", (code) => code === 0 ? resolve() : reject(new Error(`Consumer smoke exited ${code}.`)));
-});
+}
 
-console.log(`ExactDelta package audit passed (${bundle.size} byte ESM bundle).`);
+await run(
+  process.execPath,
+  ["node_modules/typescript/bin/tsc", "-p", "tsconfig.consumer.json"],
+);
+
+await run(process.execPath, ["examples/package-consumer.mjs"]);
+
+const temporaryRoot = await mkdtemp(path.join(tmpdir(), "exactdelta-package-audit-"));
+try {
+  const packDirectory = path.join(temporaryRoot, "pack");
+  const consumerDirectory = path.join(temporaryRoot, "consumer");
+  await mkdir(packDirectory);
+  await mkdir(consumerDirectory);
+
+  const npmCli = process.env.npm_execpath;
+  if (!npmCli) throw new Error("npm_execpath is required for the packed-install audit.");
+  await access(npmCli);
+  await run(
+    process.execPath,
+    [npmCli, "pack", ".", "--ignore-scripts", "--pack-destination", packDirectory],
+    { cwd: process.cwd() },
+  );
+
+  const packageStem = manifest.name.replace(/^@/, "").replaceAll("/", "-");
+  const tarballPath = path.join(packDirectory, `${packageStem}-${manifest.version}.tgz`);
+  await access(tarballPath);
+  await writeFile(
+    path.join(consumerDirectory, "package.json"),
+    `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
+    "utf8",
+  );
+  await copyFile(
+    "examples/package-consumer.mjs",
+    path.join(consumerDirectory, "consumer.mjs"),
+  );
+  await run(
+    process.execPath,
+    [npmCli, "install", tarballPath, "--ignore-scripts", "--no-package-lock", "--no-audit", "--no-fund"],
+    { cwd: consumerDirectory },
+  );
+  await run(process.execPath, ["consumer.mjs"], { cwd: consumerDirectory });
+} finally {
+  await rm(temporaryRoot, { recursive: true, force: true });
+}
+
+console.log(`ExactDelta package audit passed (${bundle.size} byte ESM bundle; packed install verified).`);

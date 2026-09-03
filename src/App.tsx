@@ -132,6 +132,7 @@ export default function App() {
           unexpectedChanges: proof.unexpectedChanges.length,
           invariantViolations: proof.invariantViolations.length,
           regressionId: proof.regressionCase.id,
+          regressionArtifact: createRegressionArtifact(proof),
         };
         return typeof toolResult === "object" && toolResult !== null && !Array.isArray(toolResult)
           ? { ...toolResult, effectGate }

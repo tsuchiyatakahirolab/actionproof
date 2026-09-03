@@ -14,7 +14,7 @@ npm pack
 npm install ./exactdelta-0.1.0.tgz
 ```
 
-The package audit imports the built distribution from an external consumer fixture; it is not a source-level demo import.
+The package audit creates the tarball, installs it into a fresh temporary project, and runs a third support-ticket workflow through defect detection and identical repair replay. It is not a source-level demo import.
 After the repository is public, Git-based installation also builds the SDK through the package `prepare` lifecycle. Registry publication remains an owner-controlled release decision.
 
 Each write action needs four inputs:
