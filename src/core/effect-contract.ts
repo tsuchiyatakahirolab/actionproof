@@ -7,7 +7,7 @@ import type {
   StateChange,
   ToolCallRecord,
   VerificationResult,
-} from "./types";
+} from "./types.js";
 
 const cloneRecord = (record: EntityRecord): EntityRecord => ({ ...record });
 

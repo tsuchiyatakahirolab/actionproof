@@ -1,18 +1,18 @@
 
 Running 9 tests using 1 worker
 
-  ok 1 tests\browser\silent-proof.spec.ts:5:1 › the seeded defect is silently legible and the repaired run passes (5.5s)
-  ok 2 tests\browser\silent-proof.spec.ts:75:1 › an external browser-agent call enters the same effect gate (1.4s)
+  ok 1 tests\browser\silent-proof.spec.ts:5:1 › the seeded defect is silently legible and the repaired run passes (4.7s)
+  ok 2 tests\browser\silent-proof.spec.ts:75:1 › an external browser-agent call enters the same effect gate (1.6s)
   ok 3 tests\browser\silent-proof.spec.ts:106:1 › a repeated external call cannot turn an already-mutated state into proof (1.6s)
-  ok 4 tests\browser\silent-proof.spec.ts:139:1 › concurrent external writes fail closed instead of bypassing the gate (1.3s)
-  ok 5 tests\browser\silent-proof.spec.ts:162:1 › the judge path remains usable without horizontal overflow at 1280 by 720 (1.5s)
-  ok 6 tests\browser\silent-proof.spec.ts:184:1 › the initial and blocked proof states have no automated WCAG A or AA violations (3.8s)
-  ok 7 tests\browser\silent-proof.spec.ts:205:1 › the second workflow uses the same UI and verifier (1.7s)
-  ok 8 tests\browser\silent-proof.spec.ts:235:1 › the repair regression never displays PASS before verification completes (3.1s)
-  ok 9 tests\browser\silent-proof.spec.ts:249:1 › a human can change the visible target and the native tool contract follows it (1.6s)
+  ok 4 tests\browser\silent-proof.spec.ts:139:1 › concurrent external writes fail closed instead of bypassing the gate (1.5s)
+  ok 5 tests\browser\silent-proof.spec.ts:162:1 › the judge path remains usable without horizontal overflow at 1280 by 720 (1.8s)
+  ok 6 tests\browser\silent-proof.spec.ts:184:1 › the initial and blocked proof states have no automated WCAG A or AA violations (5.5s)
+  ok 7 tests\browser\silent-proof.spec.ts:205:1 › the second workflow uses the same UI and verifier (2.4s)
+  ok 8 tests\browser\silent-proof.spec.ts:235:1 › the repair regression never displays PASS before verification completes (3.3s)
+  ok 9 tests\browser\silent-proof.spec.ts:249:1 › a human can change the visible target and the native tool contract follows it (1.8s)
 
-  9 passed (27.1s)
-[WebServer] (node:21252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+  9 passed (31.1s)
+[WebServer] (node:50632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-(node:20844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:51840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)

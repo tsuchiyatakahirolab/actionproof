@@ -4,6 +4,8 @@
 
 **ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.**
 
+The verifier is also built as a typed, zero-runtime-dependency ESM SDK. Its public `runEffectGate()` API accepts an application-owned intent/snapshot adapter and action binding; `runRegressionWithAdapter()` replays the exported JSON against a consumer adapter with identity and contract validation before the write. The package audit type-checks a NodeNext consumer, imports the built distribution from a separate support-ticket fixture, and requires `ACTION_PROVEN`.
+
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
 
 The deterministic staging demo registers native WebMCP write tools for two fictional workflows. In each one, the tool name and arguments are correct and the tool returns success, but a seeded handler defect also changes an unselected neighboring record. ExactDelta generates the required and forbidden effects from the visible selection and pre-action state, observes the resulting state, blocks the effect gate, exports a versioned regression artifact, and re-executes that exact JSON in CI against the defect and repair.
@@ -97,6 +99,15 @@ npm run regression:ci:all
 npm run regression:ci -- path/to/artifact.json --implementation repaired --expect ACTION_PROVEN
 ```
 
+Build and smoke-test the distributable package:
+
+```bash
+npm run audit:package
+# Produces a dry-run package manifest and runs examples/package-consumer.mjs
+```
+
+The package is distribution-ready but intentionally not published to a registry before the owner-approved release window. That is packaging evidence, not adoption or production-readiness evidence.
+
 ## Local setup
 
 Requirements: Node.js 20+ and Chrome 149+.
@@ -140,18 +151,18 @@ npm run submission:images # Regenerate five native-Chrome Devpost gallery images
 
 Current deterministic suite:
 
-- 25 unit tests pass, including both native `executeTool()` input dialects, exactly-once application-write enforcement in each dialect, artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, entity/field and identity-set delimiter collisions, external-argument, wrong-value, and timeout controls.
+- 28 unit tests pass, including both native `executeTool()` input dialects, exactly-once application-write enforcement in each dialect, artifact schema/contract/identity drift rejection, JSON re-execution, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, entity/field and identity-set delimiter collisions, external-argument, wrong-value, timeout controls, a consumer adapter independent of `ScenarioStore`, generic repaired-artifact replay, and consumer argument-drift rejection before write.
 - 9 native Chrome UI/E2E tests pass, including real target reselection with context-matched tool-schema rebinding, direct and repeated external WebMCP invocations, concurrent-call fail-closed behavior, a 1280×720 judge-path overflow control, hero Effect Trace state, a temporal guard that forbids regression `PASS` before verification completes, and automated WCAG A/AA checks in both initial and blocked states.
 - Four CI runner executions pass: each committed JSON detects its seeded defect and proves its repaired implementation with identical identity, intent, arguments, and contract.
 - Both workflows reproduce defect → detection → repair → identical regression PASS.
 - Console errors are collected in the primary order flow and must remain empty.
 - The expected failing manual-Playwright defect run is captured as benchmark evidence; the unchanged suite passes after repair.
-- The deterministic production-build gate keeps all emitted JavaScript at 70,272 gzip bytes and CSS at 5,824 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
-- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 54.2 ms, FCP and LCP are 1,564 ms, TBT is 18 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
+- The deterministic production-build gate keeps all emitted JavaScript at 70,524 gzip bytes and CSS at 5,942 gzip bytes, loads no cross-origin runtime assets, emits no source maps, and verifies the 1280×720 PNG social card and metadata.
+- The held local build passes three cold Chrome desktop lab runs under declared 40 ms / 10 Mbps conditions; worst-run TTFB is 31.2 ms, FCP and LCP are 1,444 ms, TBT is 0 ms, CLS is 0.0007, and automated WCAG A/AA violations, cross-origin runtime requests, and console errors are all zero. These are bounded lab results, not field data or a Lighthouse score.
 
 ### Rebuild the submission video
 
-Video generation additionally requires Python 3 and network access for the pinned [`edge-tts` 7.2.8](https://github.com/rany2/edge-tts) build tool. It is used only to render the narration asset; it is not a product runtime dependency. The timeline renders every sentence as a separate `en-US-AndrewMultilingualNeural` clip and rejects the build unless every measured inter-sentence pause is at least 500 ms.
+Video generation additionally requires Python 3 and network access for the pinned [`edge-tts` 7.2.8](https://github.com/rany2/edge-tts) build tool. It is used only to render the narration asset; it is not a product runtime dependency. The timeline renders every sentence as a separate `en-US-AndrewMultilingualNeural` clip and rejects the build unless every measured inter-sentence pause is at least 600 ms.
 
 ```bash
 npm run demo:record  # build, neural narration, pause audit, browser recording, mux
@@ -161,6 +172,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 ## Repository map
 
 - `src/core/effect-contract.ts` — contract generation, state diff, verification, retained regression
+- `src/core/gate.ts` / `src/exactdelta.ts` — application-owned adapter boundary and public package API
 - `src/core/regression.ts` — versioned artifact validation, identity checks, and JSON-driven re-execution
 - `src/core/scenario.ts` — two fictional application bindings and deterministic defect/repair handlers
 - `src/webmcp/bridge.ts` — native imperative WebMCP lifecycle/execution, safe object/JSON-string input-mode detection, same-origin exposure, and labeled local fallback
@@ -171,6 +183,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 - `tests/browser/` — native Chrome end-to-end proof
 - `scripts/narration-timeline.json` — sentence-level neural voice and deterministic timing source
 - `scripts/run-regression.ts` / `regressions/` — CI runner and committed versioned fixtures
+- `examples/package-consumer.mjs` / `scripts/audit-package.mjs` — built-package consumer and distribution gate
 - `scripts/audit-build.mjs` / `scripts/audit-runtime.mjs` — deterministic distribution budget and bounded cold-browser quality gates
 - `submission/` — final video script, Devpost copy, evidence map, and owner checklist
 - `submission/GALLERY.md` — deterministic Devpost image order, captions, and regeneration command
@@ -189,7 +202,7 @@ npm run demo:audit   # narration timing plus final H.264/AAC media audit
 ## Submission evidence
 
 - [Formal GO decision](GO_DECISION.md)
-- [Current top-10 release specification v0.6](WINNING_SPEC_v0.6.md)
+- [Current product-evidence specification v0.7](WINNING_SPEC_v0.7.md)
 - [Dated competitive review](COMPETITIVE_REVIEW.md)
 - [Objective adversarial review](OBJECTIVE_ADVERSARIAL_REVIEW.md)
 - [Final internal top-10 scorecard](TOP10_FINAL_REVIEW.md)

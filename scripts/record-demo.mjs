@@ -104,8 +104,6 @@ try {
   await waitUntil(77_000);
 
   await page.locator(".benchmark-evidence").scrollIntoViewIfNeeded();
-  await waitUntil(87_000);
-  await page.locator(".hero").scrollIntoViewIfNeeded();
   await waitUntil(91_000);
 
   await settleBounded(context.close().catch(() => undefined), 5_000);

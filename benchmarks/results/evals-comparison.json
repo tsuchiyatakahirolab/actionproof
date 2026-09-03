@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-03T05:47:38.296Z",
+  "measuredAt": "2026-09-03T07:22:39.985Z",
   "method": "Native Chrome WebMCP execution scored by the official webmcp-evals trajectory matcher; state read independently after the call.",
   "webmcpEvalsVersion": "0.0.4",
   "results": [

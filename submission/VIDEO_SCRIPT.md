@@ -15,8 +15,8 @@ Target duration: 86–90 seconds. English neural narration. No music is required
 | 39–56s | Observed table; 1042 required, 1043 unexpected; gate blocked | “The seeded handler cancelled both orders.” [pause] “ExactDelta observes application state independently of the return payload.” [pause] “Requested one.” [pause] “Changed two.” [pause] “The release gate blocks.” |
 | 56–70s | Repaired version; lifecycle and gate become PASS | “We repair only the handler.” [pause] “The identical Effect Contract and regression run again.” [pause] “This time, exactly one record changes.” [pause] “The gate passes.” |
 | 70–77s | Permission tab demonstrates the same core | “The same verification core catches collateral permission changes.” [pause] “Two workflows.” [pause] “One generated effect boundary.” |
-| 77–89s | Identical permission regression PASS and measured comparison cards | “Official Evals accepted both correct calls.” [pause] “Both collateral effects remained.” [pause] “ExactDelta caught both.” |
-| 89–90s | Hero | “Prove the effect.” |
+| 77–89s | Identical permission regression PASS, measured comparison, and package-integration rail | “Official Evals accepted both correct calls.” [pause] “Both collateral effects remained.” [pause] “ExactDelta caught both.” [pause] “It ships as a typed SDK.” |
+| 89–90s | Comparison/package rail | Silent evidence hold. |
 
 ## Recording requirements
 
@@ -28,3 +28,4 @@ Target duration: 86–90 seconds. English neural narration. No music is required
 - Show `EFFECT GATE BLOCKED` and later `EFFECT GATE PASSED`.
 - Show the lifecycle ending in `IDENTICAL REGRESSION PASS`.
 - Keep the benchmark limitation line legible or state it in narration.
+- Keep the package rail legible; it is distribution evidence, not an npm-publication or adoption claim.

@@ -19,8 +19,8 @@ Upload in this order. All five images are deterministic 1440×900 captures of th
    The permission workflow detects Bob's unrequested role change using the same Effect Contract pipeline.
 
 5. **`gallery-05-measured-comparison.png`**  
-   Caption: **Evals accepted both correct calls. The collateral effects remained.**  
-   The image closes on the identical permission regression PASS and the bounded Evals + Playwright comparison.
+   Caption: **Measured against Evals and Playwright. Install, bind, gate, and replay.**
+   The image closes on the identical permission regression PASS, the bounded Evals + Playwright comparison, and the consumer-tested typed SDK integration path.
 
 Regenerate and console-check the set with:
 

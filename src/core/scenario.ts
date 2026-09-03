@@ -1,12 +1,12 @@
-import { cloneSnapshot, generateEffectContract, verifyEffect } from "./effect-contract";
+import { cloneSnapshot } from "./effect-contract.js";
+import { runEffectGate, type ToolExecutor } from "./gate.js";
 import type {
   EntityRecord,
   ExplicitIntent,
   Scalar,
   Snapshot,
-  ToolCallRecord,
   VerificationResult,
-} from "./types";
+} from "./types.js";
 
 export type ScenarioDefinition = {
   id: "orders" | "permissions";
@@ -145,11 +145,7 @@ export class ScenarioStore {
   }
 }
 
-export type ToolExecutor = (
-  name: string,
-  argumentsRecord: Record<string, Scalar>,
-  options?: { signal?: AbortSignal },
-) => Promise<unknown>;
+export type { ToolExecutor } from "./gate.js";
 
 export async function runExactDelta(input: {
   store: ScenarioStore;
@@ -160,66 +156,19 @@ export async function runExactDelta(input: {
 }): Promise<VerificationResult> {
   const { store, executeTool, timeoutMs = 5_000 } = input;
   const toolArguments = input.toolArguments ?? store.toolArguments();
-  const before = store.snapshot();
-  const intent = store.explicitIntent();
-  const contract = generateEffectContract(intent, before);
-  let toolCall: ToolCallRecord;
-
-  try {
-    if (input.signal?.aborted) {
-      throw new Error("WebMCP action aborted by the client.");
-    }
-    const controller = new AbortController();
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-    let abortFromClient: (() => void) | undefined;
-    const timeoutPromise = new Promise<never>((_resolve, reject) => {
-      timeout = globalThis.setTimeout(
-        () => {
-          controller.abort();
-          reject(new Error(`WebMCP action timed out after ${timeoutMs} ms.`));
-        },
-        timeoutMs,
-      );
-    });
-    const clientAbortPromise = new Promise<never>((_resolve, reject) => {
-      if (!input.signal) return;
-      abortFromClient = () => {
-        controller.abort(input.signal?.reason);
-        reject(new Error("WebMCP action aborted by the client."));
-      };
-      input.signal.addEventListener("abort", abortFromClient, { once: true });
-    });
-    const result = await Promise.race([
-      executeTool(
-        store.definition.toolName,
-        toolArguments,
-        { signal: controller.signal },
-      ),
-      timeoutPromise,
-      clientAbortPromise,
-    ]).finally(() => {
-      if (timeout !== undefined) globalThis.clearTimeout(timeout);
-      if (abortFromClient) {
-        input.signal?.removeEventListener("abort", abortFromClient);
-      }
-    });
-    toolCall = {
-      name: store.definition.toolName,
+  return runEffectGate({
+    adapter: {
+      readIntent: () => store.explicitIntent(),
+      readSnapshot: () => store.snapshot(),
+    },
+    action: {
+      toolName: store.definition.toolName,
       arguments: toolArguments,
-      status: "PASSED",
-      result,
-    };
-  } catch (error) {
-    toolCall = {
-      name: store.definition.toolName,
-      arguments: toolArguments,
-      status: "FAILED",
-      error: error instanceof Error ? error.message : String(error),
-    };
-  }
-
-  const after = store.snapshot();
-  return verifyEffect({ intent, contract, before, after, toolCall });
+      execute: executeTool,
+    },
+    timeoutMs,
+    signal: input.signal,
+  });
 }
 
 export const scenarioDefinitions: ScenarioDefinition[] = [

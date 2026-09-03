@@ -11,19 +11,20 @@
 |---|---|
 | `npm ci` | PASS — 206 packages installed from lockfile; 207 packages audited; 0 vulnerabilities reported |
 | `npm run check` | PASS — TypeScript project check |
-| `npm test` | PASS — 25/25 unit tests, including both native input dialects, exactly-once application-write enforcement in each dialect, JSON artifact parsing/re-execution, contract/identity-drift fail-before-write, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, entity/field and identity-set delimiter collisions, external-argument, wrong-value, and timeout controls |
+| `npm test` | PASS — 28/28 unit tests, including both native input dialects, exactly-once application-write enforcement, JSON artifact parsing/re-execution, contract/identity-drift fail-before-write, repeated no-op rejection, post-mutation failure, client abort, snapshot identity/invariant, delimiter collisions, external-argument controls, generic consumer-adapter execution/replay, and consumer argument-drift rejection before write |
 | `npm run build` | PASS — production Vite build |
 | `npm run test:ui` | PASS — 9/9 native Chrome WebMCP E2E tests, including concrete `#1042 only` versus `#1042 + #1043` hero proof assertions, permission-workflow equivalents, human target reselection with native schema rebinding, direct and repeated external-call gates, concurrent-call fail-closed control, 1280×720 first-viewport layout, no premature regression PASS, and zero automated WCAG A/AA violations in initial and blocked states |
 | `npm run regression:ci:all` | PASS — four JSON-driven executions: both artifacts detect the seeded defect and prove the repair with identical intent, arguments, contract, and regression identity |
-| `npm run audit:build` | PASS — 70,272 gzip bytes total emitted JS, 5,824 gzip bytes CSS, 797 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
-| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 54.2 ms, FCP/LCP 1,564 ms, TBT 18 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
+| `npm run audit:build` | PASS — 70,524 gzip bytes total emitted JS, 5,942 gzip bytes CSS, 795 gzip bytes HTML; no external runtime assets or source maps; complete social metadata and valid 1280×720 PNG card |
+| `npm run audit:package` | PASS — NodeNext consumer typecheck, typed zero-runtime-dependency ESM distribution, 10,804-byte bundle, generated declarations, external consumer `ACTION_PROVEN`, and `npm pack --dry-run` (15.7 KB tarball estimate) |
+| `npm run audit:runtime` | PASS — three cold Chrome desktop runs at declared 40 ms / 10 Mbps / 1x CPU; worst TTFB 31.2 ms, FCP/LCP 1,444 ms, TBT 0 ms, CLS 0.0007; zero cross-origin runtime requests, automated WCAG A/AA violations, or console errors |
 | `npm run benchmark` | PASS — controlled comparison succeeded |
 | `node scripts/record-demo.mjs` | PASS — regenerated the held UI as a 90.00-second H.264/AAC demo with the existing audited sentence-level neural narration |
 | `npm run demo:audit` | PASS — 26/26 sentence clips preserve ≥600 ms pauses; final-media codec, duration, volume, and audible-pause checks pass |
 | `npm run submission:images` | PASS — five 1440×900 native-Chrome judge images regenerated from live defect/repair flows with zero console errors |
 | `npm run audit:production` | RELEASE GATE — rerun after the held build is promoted |
 | `npm audit --audit-level=high` | PASS — 0 vulnerabilities |
-| dependency/license inventory | REVIEWED after clean install — runtime React packages are MIT; development tooling including `tsx` is recorded; non-runtime MPL/GPL build tools are disclosed in `THIRD_PARTY_NOTICES.md`; no dependency directory or tool binary is tracked |
+| dependency/license inventory | REVIEWED after clean install — the SDK manifest has zero runtime dependencies; React is bundled into the demo application from development dependencies; tooling including `tsx` is recorded; non-runtime MPL/GPL build tools are disclosed in `THIRD_PARTY_NOTICES.md`; no dependency directory or tool binary is tracked |
 | credential-pattern scan | PASS — no credential-shaped matches |
 | `git diff --check` | PASS |
 | GitHub Actions CI | RELEASE GATE — held revision has not been pushed |
@@ -48,12 +49,20 @@ The existing `submission/PRODUCTION_AUDIT.json` records the previous public revi
 
 ## Delivery-quality evidence
 
-- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,272 gzip bytes JS, 5,824 gzip bytes CSS, and 797 gzip bytes HTML.
+- The distribution budget measures every emitted JavaScript and CSS asset, rather than only the entry chunk. The current totals are 70,524 gzip bytes JS, 5,942 gzip bytes CSS, and 795 gzip bytes HTML.
 - The build has no externally loaded runtime scripts/styles, no production source maps, complete description/Open Graph/Twitter metadata, and a signature/dimension-validated 1280×720 PNG social card.
-- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 54.2 ms, FCP/LCP 1,564 ms, TBT 18 ms, and CLS 0.0007.
+- Three independent cold Chrome desktop contexts were measured at 1440×900 with 40 ms latency, 10 Mbps down, 5 Mbps up, and 1x CPU. The gate uses the worst run: TTFB 31.2 ms, FCP/LCP 1,444 ms, TBT 0 ms, and CLS 0.0007.
 - axe-core reports zero automated WCAG A/AA violations in the initial and blocked proof states. The interactive record grid now has complete table/row/header/cell semantics and all detected contrast failures were repaired.
 - The first viewport now names the accepted native call, renders the allowed target (`#1042 only`) beside the observed target set (`#1042 + #1043`), marks the collateral ID independently, and states the stopped-release consequence. A one-shot staged reveal uses only transform and outline emphasis—never faded text—and honors reduced-motion preferences.
 - These values are bounded local lab evidence, not field telemetry, a Lighthouse score, or a guarantee for every device/network.
+
+## Package and external-consumer evidence
+
+- `src/exactdelta.ts` exposes `runEffectGate()`, the Effect Contract primitives, artifact parsing/creation, and `runRegressionWithAdapter()` as a typed ESM API.
+- The demo's `runExactDelta()` now delegates to the same public gate instead of owning a fixture-only verification implementation.
+- A separate support-ticket consumer imports `package-dist/exactdelta.js` and reaches `ACTION_PROVEN` without using `ScenarioStore`.
+- Generic artifact replay rejects consumer argument drift before invoking the write and passes the identical artifact against a repaired external adapter.
+- The distribution bundle is 10,804 bytes raw (3.34 KB gzip), has generated declarations and no runtime dependencies, passes a strict NodeNext consumer typecheck, and produces a 15.7 KB dry-run package manifest. This is distribution evidence, not npm publication, customer adoption, production certification, or measured demand.
 
 ## Benchmark evidence
 
@@ -72,15 +81,15 @@ Machine-readable result: `benchmarks/results/latest.json`.
 - Duration: 90.00 seconds
 - Video: H.264 High, 1440×900, 25 fps
 - Audio: AAC-LC, English `en-US-AndrewMultilingualNeural` narration generated with pinned `edge-tts` 7.2.8
-- Audio level: mean −22.3 dB, peak −2.8 dB
-- Sentence timing: 26 separate clips; 25 gaps are 600 ms and the final tail is 1,310 ms; 27 final-video silence intervals ≥350 ms detected
-- SHA-256: `67DA7A180B55AEF584BE1829AA7F3B4483FBB134864DE01D1C4B04B1E1256A23`
+- Audio level: mean −22.4 dB, peak −3.2 dB
+- Sentence timing: 26 separate clips; all 25 inter-sentence gaps are 600 ms and the final tail is 640 ms; 28 final-video silence intervals ≥350 ms detected
+- SHA-256: `45ACA26A42371CDC561BCBA7025009FD955E0926BD54196D79891503B701F836`
 - 16:9 upload thumbnail: `submission/youtube-thumbnail-v2.png` (deterministically rendered from the native held build after the external seeded call; the hero Effect Trace and release decision are visible in one frame)
 - Thumbnail SHA-256: `17294087DCEA3A8F2176D12891F321BE8AA63E54068C939FFD6207F1BBD475EE`
 - Silent-audit source screen: `submission/thumbnail.png`
 - Devpost gallery order and captions: `submission/GALLERY.md`; five current-UI images cover the hook, full failure proof, identical repair, second workflow, and measured comparison.
 
-Representative-frame review confirmed the seeded Effect Trace at 2 seconds, the full external-call order failure proof by 15 seconds, `VERIFYING` rather than premature `PASS` during repair at 57 seconds, the permission failure at 70 seconds, the identical permission regression PASS and comparison cards at 79 seconds, and the final composition. The narration text and starts are fixed in `scripts/narration-timeline.json`; `scripts/audit-narration.mjs` measures the generated files rather than trusting scheduled timings.
+Representative-frame review confirmed the seeded Effect Trace at 2 seconds, the full external-call order failure proof by 15 seconds, `VERIFYING` rather than premature `PASS` during repair at 57 seconds, the permission failure at 70 seconds, and the identical permission regression PASS, comparison cards, and package-integration rail at 79–89 seconds. The narration text and starts are fixed in `scripts/narration-timeline.json`; `scripts/audit-narration.mjs` measures the generated files rather than trusting scheduled timings.
 
 `edge-tts` is an online, third-party build tool for the video asset, not an ExactDelta runtime integration. The final MP4 is committed, so judges do not need Python, the package, or network TTS access to watch or run the product.
 

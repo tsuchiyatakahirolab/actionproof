@@ -1,6 +1,6 @@
 # ExactDelta final top-10 review
 
-2026-08-29 JST / internal adversarial scorecard / not an official judging result
+2026-09-03 JST / internal adversarial scorecard / not an official judging result
 
 ## Verdict
 
@@ -13,10 +13,10 @@ No score or implementation can guarantee a top-10 result. The remaining mandator
 | Official criterion | Internal score | Concrete evidence | Residual deduction |
 |---|---:|---|---|
 | WebMCP Leverage | 9.5–9.9 / 10 | Native context-matched registration/discovery/execution; direct in-app-browser call; one-write dialect-safe bridge; actual arguments recorded; independent gate verdict returned to the agent; two tool lifecycles | Demonstrated against two owned staging fixtures rather than a third-party production integration |
-| Execution | 9.5–9.9 / 10 | First-viewport Effect Trace; coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; 25 unit tests; 9 native E2E tests; zero automated WCAG A/AA violations; deterministic build/performance gates; audited video; five-image static judge path; social preview | Release promotion is deliberately owner-held; external-system persistence remains outside the bounded prototype |
-| Potential Impact | 8.8–9.5 / 10 | Specific developer/QA release decision; standards-derived trust gap; measured manual-assertion baseline; executable regression; explicit human-agent collaboration and integration boundary | Demonstrated impact is bounded to two action classes and does not quantify production-scale efficiency |
+| Execution | 9.6–9.9 / 10 | First-viewport Effect Trace; coherent release decision; defect → block → repair → identical regression PASS; executable JSON CI artifact; typed zero-runtime-dependency SDK; external consumer/package audit; 28 unit tests; 9 native E2E tests; zero automated WCAG A/AA violations; deterministic build/performance gates; audited video; five-image static judge path; social preview | Release promotion is deliberately owner-held; authenticated external-system persistence remains outside the bounded prototype |
+| Potential Impact | 9.0–9.5 / 10 | Specific developer/QA release decision; standards-derived trust gap; measured manual-assertion baseline; executable regression; explicit human-agent collaboration; consumer-tested SDK and integration boundary | Live demonstrated impact is bounded to two action classes and does not quantify production-scale efficiency or adoption |
 | Creativity & Ambition | 9.1–9.7 / 10 | Visible selection becomes a generated exact allowed-delta boundary; all current unselected records gain unchanged obligations; ownable Effect Trace; same artifact returns to agent and survives as repair regression | Outcome, UI, stateful, and explicit assertion verification already exist separately in adjacent products |
-| **Total** | **36.9–39.0 / 40** | **All controllable submission-readiness gates pass; strong top-10 evidence even if judges do not test the live app** | **Not a guaranteed official score or placement** |
+| **Total** | **37.2–39.0 / 40** | **All controllable submission-readiness gates pass; strong top-10 evidence even if judges do not test the live app** | **Not a guaranteed official score or placement** |
 
 ## Controllable readiness gate
 
@@ -48,10 +48,22 @@ No score or implementation can guarantee a top-10 result. The remaining mandator
 
 ## Competitor conclusion
 
-- **webmcpify** is the strongest direct developer-tool alternative and is broader at integration plus declared UI verification.
-- **Postcept** is stronger for persistent system-of-record receipts and production connectors.
-- **GoogleChromeLabs WebMCP Evals** is the relevant official tool-selection layer.
-- **ExactDelta's defensible space** is the in-page, human-selected exact-delta release boundary: generated unchanged obligations, external WebMCP invocation, separate action/effect truths, and identical repair regression.
+- **SheetCanvas** is stronger in broad daily-product depth: 26 tools, durable data work, connectors, activity trail, and rewind.
+- **VT** is stronger in authenticated external-workspace integration and path/digest hardening.
+- **Redini-Atelier** is stronger in pre-commit negotiation, visual delight, undo/redo, and test-count optics.
+- **2D WebMCP** is stronger in a research-backed, emotionally legible human-impact case.
+- **MCPencil** is stronger in immediate novelty, visual memorability, and multi-user live interaction.
+- **ExactDelta's defensible space** is the post-call trust boundary none of those public descriptions demonstrates as its core: correct native call, independently observed wrong effect, human-selected exact allowed delta, automatic unchanged obligations, and the identical failed contract replayed after repair. The typed package and external consumer now make that a reusable product primitive rather than fixture-only source.
+
+### Field-relative stress test
+
+| Failure mode in judging | Best visible rival | ExactDelta response | Residual exposure |
+|---|---|---|---|
+| “This is not a complete product” | SheetCanvas / VT | Installable package shape, application-owned adapter, external consumer, CI artifact, polished live gate, docs, tests, and audited media | No authenticated third-party deployment or adoption evidence |
+| “WebMCP is decorative” | SheetCanvas / MCPencil | External browser-client invocation enters the same effect gate and receives the independent verdict; context changes rebind the one exposed tool | Core verifier can also operate outside WebMCP, so the submission must keep the native boundary visible |
+| “Existing tests already do this” | Redini / Playwright / webmcpify | Controlled benchmark concedes manual assertions work, then demonstrates selected-only obligations generated from two bindings and retained as identical regressions | No measured authoring-time or maintenance reduction |
+| “The impact is abstract” | 2D WebMCP / VT | One accepted order call visibly changes the wrong customer and stops a release; permission changes prove a second high-risk class | Synthetic staging data and no production-scale outcome measurement |
+| “I will forget it after the video” | MCPencil / Redini | The one-frame contradiction—`success: true`, requested `1`, observed `2`, `RELEASE BLOCKED`—is repeated in thumbnail, hero, gallery, and narration | Developer-tool category is inherently less playful |
 
 The submission must not claim that Playwright or these products cannot catch collateral effects. The measured claim is that ExactDelta generated the demonstrated record-level obligations from two action bindings rather than four manually authored per-record assertions.
 

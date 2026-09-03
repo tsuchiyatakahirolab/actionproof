@@ -6,6 +6,17 @@ The application—not ExactDelta—must own authorization, tool semantics, and t
 
 ## Minimum integration
 
+The repository now builds a typed ESM distribution from `src/exactdelta.ts`. Before registry publication, it can be packed and installed directly from a checkout:
+
+```bash
+npm run audit:package
+npm pack
+npm install ./exactdelta-0.1.0.tgz
+```
+
+The package audit imports the built distribution from an external consumer fixture; it is not a source-level demo import.
+After the repository is public, Git-based installation also builds the SDK through the package `prepare` lifecycle. Registry publication remains an owner-controlled release decision.
+
 Each write action needs four inputs:
 
 1. **Visible intent:** the currently selected resource IDs and requested transition.
@@ -13,34 +24,35 @@ Each write action needs four inputs:
 3. **Action binding:** tool name, arguments, and the single intended field/value transition for that action class.
 4. **Native WebMCP executor:** the registered page tool discovered with `getTools()` and invoked with `executeTool()`.
 
-The core flow used by the demo is equivalent to:
+The public SDK flow used by the demo is equivalent to:
 
 ```ts
-const before = stateAdapter.snapshot();
-const intent = {
-  workflowId: "orders",
-  resourceLabel: "order",
-  selectedIds: visibleSelection.orderIds,
-  summary: "Cancel selected orders",
-  mutation: { field: "status", value: "cancelled" },
-};
+import { runEffectGate } from "exactdelta";
 
-const contract = generateEffectContract(intent, before);
-
-const toolCall = await invokeNativeWebMcpTool(
-  "cancel_order",
-  { order_id: visibleSelection.orderIds[0] },
-);
-
-const after = stateAdapter.snapshot();
-const result = verifyEffect({ intent, contract, before, after, toolCall });
+const result = await runEffectGate({
+  adapter: {
+    readIntent: () => ({
+      workflowId: "orders",
+      resourceLabel: "order",
+      selectedIds: visibleSelection.orderIds,
+      summary: "Cancel selected orders",
+      mutation: { field: "status", value: "cancelled" },
+    }),
+    readSnapshot: () => stateAdapter.snapshot(),
+  },
+  action: {
+    toolName: "cancel_order",
+    arguments: { order_id: visibleSelection.orderIds[0] },
+    execute: invokeNativeWebMcpTool,
+  },
+});
 
 if (result.verdict !== "ACTION_PROVEN") {
   blockEffectGate(result.regressionCase);
 }
 ```
 
-In this repository, `runExactDelta()` composes the same steps around `ScenarioStore`, while `createWebMcpBridge()` performs native registration, discovery, execution, timeout cancellation, and explicit fallback labeling.
+In this repository, the UI's `runExactDelta()` is a thin demo adapter over this public function, while `createWebMcpBridge()` performs native registration, discovery, execution, timeout cancellation, and explicit fallback labeling.
 
 ## What is generated
 
@@ -69,7 +81,7 @@ To gate one exported artifact against an application adapter:
 npm run regression:ci -- path/to/artifact.json --implementation repaired --expect ACTION_PROVEN
 ```
 
-The included CLI maps the two demo workflow IDs to their `ScenarioStore` adapters. A real integration supplies the corresponding authorized store adapter and executor while retaining the same parser and runner. The demo proves that one loaded artifact fails against the seeded handler and passes after the only code-path difference—the reviewed repair.
+The SDK's `runRegressionWithAdapter()` accepts an application-owned replay adapter and applies the same fail-before-write validation. The included CLI maps the two demo workflow IDs to their `ScenarioStore` adapters. A real integration supplies the corresponding authorized adapter and executor while retaining the same parser and runner. The consumer test proves that this API operates without `ScenarioStore`; the UI demo separately proves that one loaded artifact fails against the seeded handler and passes after the only code-path difference—the reviewed repair.
 
 The artifact is evidence for this bounded effect contract. It is not an application-wide security certificate.
 

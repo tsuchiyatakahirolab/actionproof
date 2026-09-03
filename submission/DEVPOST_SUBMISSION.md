@@ -32,6 +32,8 @@ The browser agent then directly invokes the registered native WebMCP tool. The i
 
 The demo uses two fictional workflows—order cancellation and permission change—with the same verification core.
 
+That core is not tied to the demo store. The repository builds a typed, zero-runtime-dependency ESM SDK whose `runEffectGate()` accepts an application-owned intent/snapshot adapter and action binding. Its generic regression API applies the same schema, identity, argument, and regenerated-contract checks before replaying a write. A package audit type-checks a NodeNext consumer, imports the built distribution from a separate fixture, and requires `ACTION_PROVEN`; registry publication is not claimed.
+
 ## Why this is a WebMCP use case
 
 ExactDelta wraps the page-exposed action boundary that WebMCP creates. It registers only the tool relevant to the visible workflow with `document.modelContext.registerTool()`, disposes it when context changes, discovers it with `getTools()`, and invokes it with `executeTool()`. Exact schema enums bind the target and requested value to visible intent, while same-origin exposure narrows who can invoke it. A call from the browser client enters the verifier automatically; the deterministic Run control invokes the same native path as a stable judge fallback.
@@ -54,10 +56,12 @@ Before this flow, a QA engineer could inspect an agent trace and separately auth
 - Read-only native input-mode detection for Chrome and in-app-browser `executeTool()` dialects, with exactly one application write
 - Context-matched tool lifecycle, exact visible-intent schemas, and same-origin exposure
 - Typed Effect Contract generation from explicit selection and pre-state
+- Distribution-ready typed ESM SDK with a public application-owned adapter API
 - Deterministic snapshot diff for required, unexpected, and invariant changes
 - Two in-memory fake-data action bindings with seeded defect/repair toggles
 - Visible pre-release gate state and downloadable `exactdelta.regression.v1` CI artifact
 - JSON-driven CI runner with schema, intent, arguments, contract, and regression-identity enforcement
+- External consumer/package smoke that runs without the demo `ScenarioStore`
 - Vitest unit coverage, Playwright native-Chrome E2E coverage, and axe-core WCAG A/AA regression checks
 - Deterministic production-build budgets and a three-cold-run Chrome desktop quality gate
 - Controlled comparison using the official `webmcp-evals` 0.0.4 trajectory matcher plus manual Playwright state assertions
@@ -85,6 +89,7 @@ We also kept native and fallback evidence separate: the UI labels harness mode, 
 - The same downloaded JSON artifact can be loaded and executed as a CI release gate
 - A reproducible, source-visible Evals + Playwright comparison
 - A deterministic five-image judge gallery generated from the native held build
+- A built-package consumer proof and dry-run package manifest
 - Zero automated WCAG A/AA violations in initial and blocked states, with bounded build and cold-browser performance gates
 - No credentials, external writes, or private data
 
@@ -94,7 +99,7 @@ An invocation trace answers “what did the agent ask the page to do?” An Effe
 
 ## What's next
 
-A production-oriented version would add application-owned server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, and authorization-aware contract scopes. Those extensions are intentionally outside this submission.
+A production-oriented deployment would add authenticated server-state adapters, bounded polling for delayed effects, normalization for volatile metadata, and authorization-aware contract scopes. Those extensions are intentionally outside this submission; the current SDK proves the integration boundary without claiming production adoption.
 
 ## Links
 

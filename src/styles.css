@@ -317,6 +317,12 @@ button:focus-visible, a:focus-visible { outline: 3px solid #16866f; outline-offs
 .benchmark-cards article > strong { display: block; margin: 7px 0 5px; font-size: 17px; letter-spacing: -.02em; }
 .benchmark-cards article > p { margin: 0; color: #59635e; font-size: 11px; line-height: 1.45; }
 .benchmark-cards .benchmark-exactdelta { background: #e8f4ef; border-color: #abd6c6; }
+.product-proof { margin-top: 10px; padding: 13px 15px; display: grid; grid-template-columns: minmax(330px,1fr) auto auto; align-items: center; gap: 15px; color: #dcebe5; background: #17211d; border: 1px solid #304139; border-radius: 11px; }
+.product-proof > div { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.product-proof > div > span { color: #89cbb4; font-size: 8px; font-weight: 900; letter-spacing: .12em; }
+.product-proof > div > strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.product-proof code { padding: 7px 9px; color: #c8f0df; background: #26342e; border: 1px solid #43574e; border-radius: 7px; font-size: 10px; }
+.package-pass { padding: 7px 9px; color: #075943; background: #dff2e9; border-radius: 999px; font-size: 8px; font-weight: 900; letter-spacing: .08em; white-space: nowrap; }
 .benchmark-limit { margin: 9px 2px 0; color: #59635e; font-size: 9px; }
 
 @media (max-width: 1240px) {
@@ -331,4 +337,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #16866f; outline-offs
   .proof-node { min-width: 125px; }
   .proof-header { grid-template-columns: minmax(330px, 1fr) auto; }
   .proof-actions { grid-column: 1 / -1; justify-content: flex-end; }
+  .product-proof { grid-template-columns: 1fr auto; }
+  .package-pass { grid-column: 1 / -1; justify-self: start; }
 }

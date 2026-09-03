@@ -5,7 +5,7 @@ import { loadNarration } from "./narration.mjs";
 
 const root = process.cwd();
 const narration = await loadNarration(root);
-const minimumPauseMs = 500;
+const minimumPauseMs = 600;
 const targetDurationMs = 90_000;
 let failed = false;
 

@@ -10,6 +10,8 @@ The agent did everything right. The result was still wrong.
 
 ExactDelta turns the visible selected target into the only permitted application-state delta. A browser agent directly invokes the one context-matched native WebMCP tool; ExactDelta observes application state independently, blocks collateral changes, and returns the original `success: true` payload together with the separate `effectGate` verdict.
 
+The same verifier builds as a typed ESM SDK with an application-owned adapter API and reusable JSON regression runner.
+
 Live demo: https://actionproof.vercel.app
 Open-source repository: https://github.com/tsuchiyatakahirolab/actionproof
 

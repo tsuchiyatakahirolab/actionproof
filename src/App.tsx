@@ -738,6 +738,14 @@ export default function App() {
             <p>Two action bindings generated the required and unchanged checks.</p>
           </article>
         </div>
+        <div className="product-proof" aria-label="Reusable package evidence">
+          <div>
+            <span>FROM DEMO TO INTEGRATION</span>
+            <strong>Install · bind owned state · gate WebMCP writes · replay failures in CI</strong>
+          </div>
+          <code>runEffectGate({`{ adapter, action }`})</code>
+          <span className="package-pass">PACKED SDK · CONSUMER PASS</span>
+        </div>
         <p className="benchmark-limit">Measured with native Chrome WebMCP and deterministic fake data. This comparison measures detection coverage only.</p>
       </section>
     </main>

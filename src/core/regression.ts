@@ -1,12 +1,17 @@
-import { buildRegressionId, generateEffectContract } from "./effect-contract";
-import { runExactDelta, type ScenarioStore, type ToolExecutor } from "./scenario";
+import { buildRegressionId, generateEffectContract } from "./effect-contract.js";
+import {
+  runEffectGate,
+  type EffectGateAdapter,
+  type ToolExecutor,
+} from "./gate.js";
+import type { ScenarioStore } from "./scenario.js";
 import type {
   EffectContract,
   EntityRecord,
   ExplicitIntent,
   Scalar,
   VerificationResult,
-} from "./types";
+} from "./types.js";
 
 export const REGRESSION_SCHEMA_VERSION = "exactdelta.regression.v1" as const;
 
@@ -14,6 +19,16 @@ export type RegressionArtifact = {
   schemaVersion: typeof REGRESSION_SCHEMA_VERSION;
   generatedAt?: string;
   regressionCase: VerificationResult["regressionCase"];
+};
+
+export type RegressionReplayAdapter = EffectGateAdapter & {
+  workflowId: string;
+  toolName: string;
+  prepare: (
+    regressionCase: RegressionArtifact["regressionCase"],
+  ) => void | Promise<void>;
+  readToolArguments: () => Record<string, Scalar>;
+  executeTool: ToolExecutor;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -118,32 +133,86 @@ export function parseRegressionArtifact(input: unknown): RegressionArtifact {
   return structuredClone(value) as RegressionArtifact;
 }
 
+/**
+ * Replays an exported regression against an application-owned adapter.
+ * All identity, intent, argument and contract checks happen before the write.
+ */
+export async function runRegressionWithAdapter(input: {
+  artifact: unknown;
+  adapter: RegressionReplayAdapter;
+  timeoutMs?: number;
+}): Promise<VerificationResult> {
+  const artifact = parseRegressionArtifact(input.artifact);
+  const regression = artifact.regressionCase;
+  const { adapter } = input;
+
+  assert(
+    regression.workflowId === adapter.workflowId,
+    `workflow ${regression.workflowId} does not match adapter workflow ${adapter.workflowId}.`,
+  );
+  assert(
+    regression.toolName === adapter.toolName,
+    `tool ${regression.toolName} does not match ${adapter.toolName}.`,
+  );
+
+  await adapter.prepare(regression);
+  const replayIntent = adapter.readIntent();
+  const replayArguments = adapter.readToolArguments();
+  assert(
+    sameRegressionValue(regression.intent, replayIntent),
+    "explicit intent no longer matches the artifact.",
+  );
+  assert(
+    sameRegressionValue(regression.arguments, replayArguments),
+    "tool arguments no longer match the artifact.",
+  );
+  assert(
+    regression.id === buildRegressionId(regression.intent),
+    "regression ID no longer matches the recorded intent.",
+  );
+
+  const before = await adapter.readSnapshot();
+  const generatedContract = generateEffectContract(replayIntent, before);
+  assert(
+    sameRegressionValue(regression.contract, generatedContract),
+    "generated Effect Contract no longer matches the artifact.",
+  );
+
+  const result = await runEffectGate({
+    adapter,
+    action: {
+      toolName: adapter.toolName,
+      arguments: replayArguments,
+      execute: adapter.executeTool,
+    },
+    beforeSnapshot: before,
+    timeoutMs: input.timeoutMs,
+  });
+  assert(
+    sameRegressionValue(result.regressionCase, regression),
+    "executed regression identity differs from the loaded artifact.",
+  );
+  return result;
+}
+
 export async function runRegressionArtifact(input: {
   artifact: unknown;
   store: ScenarioStore;
   executeTool: ToolExecutor;
   timeoutMs?: number;
 }): Promise<VerificationResult> {
-  const artifact = parseRegressionArtifact(input.artifact);
-  const regression = artifact.regressionCase;
   const { store } = input;
-  assert(regression.workflowId === store.definition.id, `workflow ${regression.workflowId} does not match runner workflow ${store.definition.id}.`);
-  assert(regression.toolName === store.definition.toolName, `tool ${regression.toolName} does not match ${store.definition.toolName}.`);
-
-  store.select(regression.intent.selectedIds[0]);
-  assert(sameRegressionValue(regression.intent, store.explicitIntent()), "explicit intent no longer matches the artifact.");
-  assert(sameRegressionValue(regression.arguments, store.toolArguments()), "tool arguments no longer match the artifact.");
-  assert(regression.id === buildRegressionId(regression.intent), "regression ID no longer matches the recorded intent.");
-
-  const generatedContract = generateEffectContract(store.explicitIntent(), store.snapshot());
-  assert(sameRegressionValue(regression.contract, generatedContract), "generated Effect Contract no longer matches the artifact.");
-
-  const result = await runExactDelta({
-    store,
-    executeTool: input.executeTool,
-    toolArguments: regression.arguments,
+  return runRegressionWithAdapter({
+    artifact: input.artifact,
+    adapter: {
+      workflowId: store.definition.id,
+      toolName: store.definition.toolName,
+      prepare: (regression) => store.select(regression.intent.selectedIds[0]),
+      readIntent: () => store.explicitIntent(),
+      readToolArguments: () => store.toolArguments(),
+      readSnapshot: () => store.snapshot(),
+      executeTool: input.executeTool,
+    },
     timeoutMs: input.timeoutMs,
   });
-  assert(sameRegressionValue(result.regressionCase, regression), "executed regression identity differs from the loaded artifact.");
-  return result;
 }

@@ -1,11 +1,48 @@
 {
   "name": "exactdelta",
-  "private": true,
-  "version": "0.0.1",
+  "private": false,
+  "version": "0.1.0",
   "type": "module",
+  "description": "An application-owned effect gate and retained regression SDK for state-changing WebMCP tools.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsuchiyatakahirolab/actionproof.git"
+  },
+  "homepage": "https://github.com/tsuchiyatakahirolab/actionproof#readme",
+  "bugs": {
+    "url": "https://github.com/tsuchiyatakahirolab/actionproof/issues"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "webmcp",
+    "agent-testing",
+    "effect-verification",
+    "regression-testing"
+  ],
+  "main": "./package-dist/exactdelta.js",
+  "types": "./package-dist/types/exactdelta.d.ts",
+  "exports": {
+    ".": {
+      "types": "./package-dist/types/exactdelta.d.ts",
+      "import": "./package-dist/exactdelta.js"
+    }
+  },
+  "files": [
+    "package-dist",
+    "examples/package-consumer.mjs",
+    "examples/package-consumer.ts",
+    "docs/INTEGRATION.md",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:sdk",
+    "build:sdk": "vite build --config vite.sdk.config.ts && tsc -p tsconfig.sdk.json",
     "check": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,6 +51,9 @@
     "regression:ci": "tsx scripts/run-regression.ts",
     "regression:ci:all": "npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/orders__1042__status__to-cancelled.json --implementation repaired --expect ACTION_PROVEN && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation defect --expect FAILED_EFFECT && npm run regression:ci -- regressions/permissions__alice__role__to-editor.json --implementation repaired --expect ACTION_PROVEN",
     "audit:build": "npm run build && node scripts/audit-build.mjs",
+    "audit:package": "npm run build:sdk && node scripts/audit-package.mjs && npm pack --dry-run",
+    "prepack": "npm run build:sdk && node scripts/audit-package.mjs",
+    "prepare": "npm run build:sdk",
     "audit:runtime": "node scripts/audit-runtime.mjs",
     "audit:production": "node scripts/audit-production.mjs",
     "demo:audio": "powershell -ExecutionPolicy Bypass -File scripts/generate-narration.ps1 && node scripts/audit-narration.mjs",
@@ -23,10 +63,6 @@
     "submission:images": "npm run build && node scripts/render-submission-gallery.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
-  "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.62.1",
@@ -34,6 +70,8 @@
     "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react": "^6.1.0",
     "ffmpeg-static": "^5.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2",
     "vite": "^8.2.2",

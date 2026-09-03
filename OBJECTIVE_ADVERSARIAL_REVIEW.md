@@ -1,6 +1,6 @@
 # ExactDelta objective adversarial review
 
-**Review date:** 2026-08-29 JST
+**Review date:** 2026-09-03 JST
 **Purpose:** determine what survives reproducible technical review, current public-source comparison, and the official judging rubric. This is not a win prediction and does not use participant opinions as proof of correctness or demand.
 
 ## Evidence hierarchy
@@ -24,8 +24,8 @@
 | Can a failed tool mutate state and evade the gate? | The earlier failure branch returned `NOT_EVALUATED` even when a partial mutation had occurred. The verifier now preserves observed changes, marks the effect failed when a failed call changed state, and every non-proven outcome blocks the release gate. | **FIXED and covered** by a unit regression test. |
 | Can identity ambiguity or delimiter collision hide an unexpected change? | Duplicate selections, mutable `id`, malformed snapshot identity, and composite string-key collisions were tested adversarially. | **FIXED and covered.** Required-effect matching now compares entity and field independently rather than concatenating them. |
 | Does this stop or roll back a bad write? | The application observes state after execution and makes a pre-release decision. There is no transaction rollback. | **NO—and not claimed.** Copy must say it blocks release approval, not that it prevents the already-executed fixture mutation. |
-| Is this a complete production SaaS? | Two deterministic in-memory fixtures, no authentication, no external connector, and no delayed-effect polling. | **NO.** It is a coherent pre-release developer product prototype, not production infrastructure. This is the largest Execution/Impact deduction. |
-| Can the current challenge field be fully compared? | The official gallery still says it has not been published. Public repositories and indexed projects can be reviewed; private drafts cannot. | **UNKNOWN.** No “first,” “only,” or guaranteed top-10 claim is supportable. |
+| Is this only fixture-bound source code? | The UI still uses two deterministic in-memory fixtures, but the verifier now builds as a typed zero-runtime-dependency ESM package; a separate NodeNext consumer type-checks and imports it, and generic regression replay runs without `ScenarioStore`. | **NO.** The integration surface is real and consumer-tested. It is still not authenticated production infrastructure, and no adoption claim is made. |
+| Can the current challenge field be fully compared? | Public entries including SheetCanvas, VT, Redini-Atelier, 2D WebMCP, and MCPencil were visible and re-reviewed on 2026-09-03. Private drafts, late submissions, unavailable live behavior, and unindexed materials remain unknowable. | **NO.** The strongest visible field can be stress-tested, but no “first,” “only,” or guaranteed top-10 claim is supportable. |
 
 ## Strongest public alternatives
 
@@ -46,12 +46,12 @@ The official criteria are equally weighted. A range is more honest than a self-a
 | Criterion | Defensible range | Evidence that raises it | Evidence that caps it |
 |---|---:|---|---|
 | WebMCP Leverage | **9.5–9.9 / 10** | Native context lifecycle, strict visible-intent schema, direct external call, dialect-safe one-write bridge, separate gate result returned to agent, two workflows | The owned state adapter and tools are bounded fixtures rather than a third-party production integration |
-| Execution | **9.5–9.9 / 10** | First-viewport Effect Trace, coherent release decision, defect → block → repair → identical PASS, executable JSON artifact, 25 unit and 9 native-browser tests, zero automated WCAG A/AA violations, deterministic build/cold-runtime gates, audited video, gallery, and social preview | External-system persistence remains outside the prototype; public release remains owner-held |
-| Potential Impact | **8.8–9.5 / 10** | Specific developer/QA release decision, standards-derived trust gap, measured manual-assertion baseline, executable retained regression, explicit human-agent roles, and bounded integration guide | Demonstrated impact covers two action classes and does not quantify production-scale efficiency |
+| Execution | **9.6–9.9 / 10** | First-viewport Effect Trace, coherent release decision, defect → block → repair → identical PASS, executable JSON artifact, typed zero-runtime-dependency SDK, external consumer smoke, 28 unit and 9 native-browser tests, zero automated WCAG A/AA violations, deterministic build/cold-runtime gates, audited video, gallery, and social preview | Authenticated external-system persistence remains outside the prototype; public release remains owner-held |
+| Potential Impact | **9.0–9.5 / 10** | Specific developer/QA release decision, standards-derived trust gap, measured manual-assertion baseline, executable retained regression, explicit human-agent roles, consumer-tested SDK, and bounded integration guide | Demonstrated impact covers two UI action classes and does not quantify production-scale efficiency or adoption |
 | Creativity & Ambition | **9.1–9.7 / 10** | Exact allowed-delta generation, ownable requested-versus-observed Effect Trace, and retained repair contract are visually and technically distinct | Outcome/UI/state verification already exists separately in several adjacent tools |
-| **Total** | **36.9–39.0 / 40** | **10/10 controllable submission-readiness gates pass, including a no-live-test judge path** | **Not a guaranteed official score or top-10 result** |
+| **Total** | **37.2–39.0 / 40** | **10/10 controllable submission-readiness gates pass, including package and no-live-test judge paths** | **Not a guaranteed official score or top-10 result** |
 
-The entry's strongest axis is WebMCP Leverage. Its narrowest axis is Potential Impact because the demonstrated scope is two staging action classes. Expanding scope or adding unsupported projections would reduce clarity rather than increase the defensible score.
+The entry's strongest axis is WebMCP Leverage. Its narrowest axis remains Potential Impact because the live experience uses two staging action classes and has no adoption evidence. The SDK removes the fixture-lock objection; adding a copied public dataset would not remove the production/adoption limitation and would weaken the safe-write story.
 
 ## Objective release gates
 

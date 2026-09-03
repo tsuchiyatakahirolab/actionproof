@@ -20,4 +20,5 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
+      - run: npm run audit:package
       - run: npm run regression:ci:all
