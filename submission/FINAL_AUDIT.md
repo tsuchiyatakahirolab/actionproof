@@ -3,7 +3,7 @@
 **Audit date:** 2026-09-04 JST
 **Production:** https://actionproof.vercel.app
 **Repository:** https://github.com/tsuchiyatakahirolab/actionproof
-**Result:** the release build passes implementation, build, native-browser, benchmark, dependency, media, secret, CI, deployment, and production checks. The public repository, production application, and audited YouTube demo are live; Devpost synchronization is in progress.
+**Result:** the release build passes implementation, build, native-browser, benchmark, dependency, media, secret, CI, deployment, and production checks. The public repository, production application, audited YouTube demo, and Devpost submission are synchronized.
 
 ## Clean-install verification
 

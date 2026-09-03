@@ -20,6 +20,10 @@ The WebMCP security discussion explicitly says a tool's declared intent is not g
 
 We wanted one failure to be understandable without background knowledge: **the agent did everything right; the result was still wrong.**
 
+**Approval proves what an agent may attempt. ExactDelta proves what the application actually changed.** Schemas validate arguments, approval gates authorize requests, and traces record calls. Those controls are necessary, but none establishes that the handler changed only the state the human authorized. ExactDelta begins at that missing post-action boundary.
+
+The target user is a developer or QA engineer shipping browser-agent writes into commerce, support, administration, or access-control workflows, where an accepted action can still alter the wrong order, permission, or customer record. ExactDelta turns that failure into a visible release decision and an executable repair regression rather than leaving the team to reconstruct it from a trace.
+
 ## What it does
 
 In an owned staging environment, the human selects one target in the application UI. Before the action, ExactDelta turns that visible intent and the pre-action snapshot into an Effect Contract:

@@ -4,6 +4,10 @@
 
 **ExactDelta turns the visible selected target into the only permitted application-state delta, blocks release when the external WebMCP call changes anything else, and retains that identical contract as the repair regression.**
 
+**Approval proves what an agent may attempt. ExactDelta proves what the application actually changed.** Schemas can validate arguments, approval gates can authorize a request, and traces can record the call; those controls are necessary, but they do not establish that the handler changed only the state the human authorized. ExactDelta begins at that post-action boundary.
+
+It is designed for developers and QA engineers shipping browser-agent writes into commerce, support, administration, and access-control workflows, where one accepted action can still alter the wrong order, permission, or customer record. The release decision is therefore based on observed application state rather than the tool's success response.
+
 The verifier is also built as a typed, zero-runtime-dependency ESM SDK. Its public `runEffectGate()` API accepts an application-owned intent/snapshot adapter and action binding; `runRegressionWithAdapter()` replays the exported JSON against a consumer adapter with identity and contract validation before the write. The package audit type-checks a NodeNext consumer, packs the SDK, installs that tarball into a fresh temporary project, and requires a separate support-ticket workflow to detect `FAILED_EFFECT` before the identical artifact reaches `ACTION_PROVEN` after repair.
 
 This is an active WebMCP trust boundary, not an invented incident. The standards repository explicitly discusses the gap between a tool's declared intent and its actual behavior, while Chrome's Evals guidance separately recommends deterministic testing of UI updates and intentional side effects. ExactDelta turns that necessary effect test into an inspectable, generated contract that can be rerun after repair.
