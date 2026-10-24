@@ -81,7 +81,7 @@ test("an external browser-agent call enters the same effect gate", async ({ page
 
   const toolResult = await page.evaluate(async () => {
     const tool = (await document.modelContext!.getTools())[0];
-    return document.modelContext!.executeTool(tool, JSON.stringify({ order_id: "#1042" }));
+    return document.modelContext!.executeTool(tool, { order_id: "#1042" });
   });
 
   const parsedToolResult = typeof toolResult === "string" ? JSON.parse(toolResult) : toolResult;
@@ -117,7 +117,7 @@ test("a repeated external call cannot turn an already-mutated state into proof",
 
   const results = await page.evaluate(async () => {
     const tool = (await document.modelContext!.getTools())[0];
-    const input = JSON.stringify({ order_id: "#1042" });
+    const input = { order_id: "#1042" };
     const first = await document.modelContext!.executeTool(tool, input);
     const second = await document.modelContext!.executeTool(tool, input);
     return [first, second].map((result) => typeof result === "string" ? JSON.parse(result) : result);
@@ -150,7 +150,7 @@ test("concurrent external writes fail closed instead of bypassing the gate", asy
 
   const calls = await page.evaluate(async () => {
     const tool = (await document.modelContext!.getTools())[0];
-    const input = JSON.stringify({ order_id: "#1042" });
+    const input = { order_id: "#1042" };
     const settled = await Promise.allSettled([
       document.modelContext!.executeTool(tool, input),
       document.modelContext!.executeTool(tool, input),
